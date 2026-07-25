@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рекомендации AI — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/nav', { activeNav: 'assistant' }) %>
+
+  <div class="page-wrap recommendations-page-wrap">
+    <a href="/assistant" class="back-link">&larr; Назад к ассистенту</a>
+    <h1 class="page-title">Рекомендации AI</h1>
+    <p class="page-subtitle">Модели с пояснениями от аналитической модели.</p>
+
+    <div id="recommendationsContent">
+      <div class="page-card" style="text-align:center; color:var(--text-muted);">Загрузка…</div>
+    </div>
+  </div>
+
+  <%- include('partials/admin-auth-init') %>
+  <script src="/recommendations.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

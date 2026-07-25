@@ -1,0 +1,21 @@
+node_modules/
+dist/
+
+# Local data & secrets
+data/
+backups/
+.env
+.env.*
+!.env.example
+!.env.docker.example
+*.db
+*.db-shm
+*.db-wal
+
+# Local tooling
+.cursor/
+.hermes/
+.docs/
+.DS_Store
+*.log
+coverage/

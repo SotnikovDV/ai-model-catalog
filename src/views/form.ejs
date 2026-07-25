@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= model ? model.name : 'Новая модель' %> — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/nav', { activeNav: 'new' }) %>
+  <div class="page-wrap" style="max-width:900px;">
+    <div class="page-title-row">
+      <h1 class="page-title"><%= model ? 'Редактировать модель' : 'Добавить модель' %></h1>
+      <% if (model) { %>
+        <a href="/" class="page-title-close" aria-label="Отмена" title="Отмена">×</a>
+      <% } %>
+    </div>
+
+    <form id="modelForm" class="page-card">
+      <input type="hidden" name="id" value="<%= model ? model.id : '' %>">
+
+      <div class="form-field">
+        <label>
+          <%- include('partials/field-hint', { fieldKey: 'name' }) %>
+        </label>
+        <input type="text" name="name" required value="<%= model ? model.name : '' %>">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'family' }) %>
+          </label>
+          <input type="text" name="family" required value="<%= model ? model.family : '' %>">
+        </div>
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'provider' }) %>
+          </label>
+          <select name="provider" required>
+            <% for (const p of providers) { %>
+              <option value="<%= p.name %>" <%= model && model.provider === p.name ? 'selected' : (!model && p.slug === 'bothub' ? 'selected' : '') %>><%= p.name %></option>
+            <% } %>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'modality' }) %>
+          </label>
+          <select name="modality">
+            <option value="text" <%= model && model.modality === 'text' ? 'selected' : '' %>>text</option>
+            <option value="image" <%= model && model.modality === 'image' ? 'selected' : '' %>>image</option>
+            <option value="audio" <%= model && model.modality === 'audio' ? 'selected' : '' %>>audio</option>
+            <option value="video" <%= model && model.modality === 'video' ? 'selected' : '' %>>video</option>
+            <option value="multimodal" <%= model && model.modality === 'multimodal' ? 'selected' : '' %>>multimodal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'context_window' }) %>
+          </label>
+          <input type="number" name="context_window" value="<%= model ? model.context_window : '' %>">
+        </div>
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'max_output_tokens' }) %>
+          </label>
+          <input type="number" name="max_output_tokens" value="<%= model ? model.max_output_tokens : '' %>">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'input_price_per_mtok' }) %>
+          </label>
+          <input type="number" step="0.01" name="input_price_per_mtok" value="<%= model ? model.input_price_per_mtok : '' %>">
+        </div>
+        <div class="form-field">
+          <label>
+            <%- include('partials/field-hint', { fieldKey: 'output_price_per_mtok' }) %>
+          </label>
+          <input type="number" step="0.01" name="output_price_per_mtok" value="<%= model ? model.output_price_per_mtok : '' %>">
+        </div>
+      </div>
+
+      <div class="form-checks">
+        <label>
+          <input type="checkbox" name="is_favorite" value="1" <%= model && model.is_favorite ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'is_favorite' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="is_hidden" value="1" <%= model && model.is_hidden ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'is_hidden' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="supports_vision" value="1" <%= model && model.supports_vision ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'supports_vision' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="supports_function_calling" value="1" <%= model && model.supports_function_calling ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'supports_function_calling' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="supports_json_mode" value="1" <%= model && model.supports_json_mode ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'supports_json_mode' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="supports_streaming" value="1" <%= model && model.supports_streaming ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'supports_streaming' }) %>
+        </label>
+        <label>
+          <input type="checkbox" name="supports_web_search" value="1" <%= model && model.supports_web_search ? 'checked' : '' %>>
+          <%- include('partials/field-hint', { fieldKey: 'supports_web_search' }) %>
+        </label>
+      </div>
+
+      <div class="form-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+        <%
+          const ratingLabelsDefault = {
+            1: '1 — очень низко',
+            2: '2 — низко',
+            3: '3 — средне',
+            4: '4 — высоко',
+            5: '5 — очень высоко',
+          };
+          const ratingLabelsLatency = {
+            1: '1 — очень медленно',
+            2: '2 — медленно',
+            3: '3 — средне',
+            4: '4 — быстро',
+            5: '5 — мгновенно',
+          };
+          const ratingLabelsHallucinations = {
+            1: '1 — часто',
+            2: '2 — заметно',
+            3: '3 — средне',
+            4: '4 — редко',
+            5: '5 — очень редко',
+          };
+          const ratingFields = [
+            ['reasoning', ratingLabelsDefault],
+            ['task_quality', ratingLabelsDefault],
+            ['latency', ratingLabelsLatency],
+            ['generation_speed', ratingLabelsDefault],
+            ['hallucinations', ratingLabelsHallucinations],
+            ['instruction_following', ratingLabelsDefault],
+            ['code_quality', ratingLabelsDefault],
+            ['multilingual_quality', ratingLabelsDefault],
+            ['robustness', ratingLabelsDefault],
+            ['rag_compatibility', ratingLabelsDefault],
+          ];
+        %>
+        <% ratingFields.forEach(([key, labels]) => { %>
+          <% const current = model ? model[key] : 3; %>
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: key }) %>
+            </label>
+            <select name="<%= key %>">
+              <% for (let v = 1; v <= 5; v++) { %>
+                <option value="<%= v %>" <%= Number(current) === v ? 'selected' : '' %>><%= labels[v] %></option>
+              <% } %>
+            </select>
+          </div>
+        <% }) %>
+      </div>
+
+      <div class="form-field">
+        <label>
+          <%- include('partials/field-hint', { fieldKey: 'release_date' }) %>
+        </label>
+        <input type="date" name="release_date" value="<%= model ? model.release_date : '' %>">
+      </div>
+      <div class="form-field">
+        <label>
+          <%- include('partials/field-hint', { fieldKey: 'description' }) %>
+        </label>
+        <textarea name="description" rows="3"><%= model ? model.description : '' %></textarea>
+      </div>
+
+      <div class="form-tabs" id="modelFormTabs">
+        <div class="form-tabs-nav" role="tablist" aria-label="Дополнительные данные модели">
+          <button type="button" class="form-tab-btn active" role="tab" aria-selected="true" aria-controls="formTabUseCases" data-tab="use-cases">Сценарии</button>
+          <button type="button" class="form-tab-btn" role="tab" aria-selected="false" aria-controls="formTabProsCons" data-tab="pros-cons">Плюсы и минусы</button>
+          <button type="button" class="form-tab-btn" role="tab" aria-selected="false" aria-controls="formTabBenchmarks" data-tab="benchmarks">Бенчмарки</button>
+          <button type="button" class="form-tab-btn" role="tab" aria-selected="false" aria-controls="formTabTags" data-tab="tags">Теги</button>
+        </div>
+
+        <div class="form-tab-panel active" id="formTabUseCases" role="tabpanel" data-tab-panel="use-cases">
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: 'use_cases' }) %>
+            </label>
+            <textarea name="use_cases" rows="6" class="form-json-input"><%= model ? JSON.stringify(model.use_cases) : '[]' %></textarea>
+            <p class="form-hint">Допустимые значения — канонические сценарии из справочника категорий (см. <code>src/data/useCaseTaxonomy.json</code>). При сохранении значения нормализуются автоматически.</p>
+          </div>
+        </div>
+
+        <div class="form-tab-panel" id="formTabProsCons" role="tabpanel" data-tab-panel="pros-cons" hidden>
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: 'pros' }) %>
+            </label>
+            <textarea name="pros" rows="6" class="form-json-input"><%= model ? JSON.stringify(model.pros) : '[]' %></textarea>
+          </div>
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: 'cons' }) %>
+            </label>
+            <textarea name="cons" rows="6" class="form-json-input"><%= model ? JSON.stringify(model.cons) : '[]' %></textarea>
+          </div>
+        </div>
+
+        <div class="form-tab-panel" id="formTabBenchmarks" role="tabpanel" data-tab-panel="benchmarks" hidden>
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: 'benchmarks' }) %>
+            </label>
+            <textarea name="benchmarks" rows="6" class="form-json-input"><%= model ? JSON.stringify(model.benchmarks) : '{}' %></textarea>
+          </div>
+        </div>
+
+        <div class="form-tab-panel" id="formTabTags" role="tabpanel" data-tab-panel="tags" hidden>
+          <div class="form-field">
+            <label>
+              <%- include('partials/field-hint', { fieldKey: 'tags' }) %>
+            </label>
+            <textarea name="tags" rows="6" class="form-json-input"><%= model ? JSON.stringify(model.tags) : '[]' %></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:8px;">
+        <button type="submit" class="btn btn-primary"><%= model ? 'Сохранить' : 'Создать' %></button>
+        <a href="/" class="btn btn-secondary">Отмена</a>
+      </div>
+    </form>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

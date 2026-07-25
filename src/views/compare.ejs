@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнение моделей — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/nav', { activeNav: 'compare' }) %>
+
+  <div class="page-wrap compare-page-wrap">
+    <a href="/" class="back-link">&larr; Назад к каталогу</a>
+    <h1 class="page-title">Сравнение моделей</h1>
+    <p class="page-subtitle">Таблица характеристик выбранных моделей.</p>
+
+    <% if (models.length === 0) { %>
+      <div class="page-card" style="text-align:center;">
+        <p style="color:var(--text-muted); margin-bottom:16px;">Модели для сравнения не выбраны.</p>
+        <p style="font-size:13px; color:var(--text-dim); margin-bottom:24px;">На главной странице добавьте модели в сравнение кнопкой ⚖ и откройте раздел «Сравнение» в меню.</p>
+        <a href="/" class="btn btn-primary">Перейти к каталогу</a>
+      </div>
+    <% } else { %>
+      <div class="compare-toolbar">
+        <button
+          type="button"
+          class="btn btn-secondary compare-clear-btn"
+          id="compareClearBtn"
+        >Очистить список сравнения</button>
+        <button
+          type="button"
+          class="btn btn-secondary compare-diff-toggle"
+          id="compareDiffOnlyBtn"
+          aria-pressed="false"
+        >Показать только различия</button>
+      </div>
+      <div class="compare-table-wrap">
+        <p class="compare-empty-diff" id="compareEmptyDiff" hidden>У выбранных моделей нет различий по отображаемым характеристикам.</p>
+        <table class="compare-table">
+          <colgroup>
+            <col class="compare-col-label">
+            <% models.forEach(() => { %><col class="compare-col-model"><% }) %>
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="row-label">Характеристика</th>
+              <% models.forEach(model => { %>
+                <th>
+                  <div class="compare-th-name">
+                    <a href="/models/<%= model.id %>" target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none;"><%= model.name %></a>
+                    <button
+                      type="button"
+                      class="compare-favorite-btn<%= model.is_favorite ? ' active' : '' %>"
+                      data-id="<%= model.id %>"
+                      aria-pressed="<%= model.is_favorite ? 'true' : 'false' %>"
+                      title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
+                      aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
+                    >★</button>
+                  </div>
+                  <div style="font-size:11px; font-weight:400; color:var(--text-dim); margin-top:4px;"><%= model.family %></div>
+                  <button type="button" class="compare-remove-btn" data-id="<%= model.id %>">Исключить</button>
+                </th>
+              <% }) %>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="row-label">Семейство</td><% models.forEach(model => { %><td><%= model.family %></td><% }) %></tr>
+            <tr><td class="row-label">Статус доступности</td><% models.forEach(model => { %>
+              <td>
+                <span class="availability-badge <%= model.availability_badge_class %>" title="<%= model.availability_status_label %>"><%= model.availability_status_label %></span>
+              </td>
+            <% }) %></tr>
+            <tr><td class="row-label">Скорость ответа (inference)</td><% models.forEach(model => { %>
+              <td>
+                <% if (model.inference_response_label) { %>
+                  <span class="compare-meta-badge" title="<%= model.inference_response_title %>"><%= model.inference_response_label %></span>
+                <% } else { %>—<% } %>
+              </td>
+            <% }) %></tr>
+            <tr><td class="row-label">Провайдер</td><% models.forEach(model => { %><td><%= model.provider %></td><% }) %></tr>
+            <tr><td class="row-label">Модальность</td><% models.forEach(model => { %><td><%= model.modality %></td><% }) %></tr>
+            <tr><td class="row-label">Контекстное окно</td><% models.forEach(model => { %><td><%= model.context_window.toLocaleString('ru-RU') %></td><% }) %></tr>
+            <tr><td class="row-label">Max output tokens</td><% models.forEach(model => { %><td><%= model.max_output_tokens.toLocaleString('ru-RU') %></td><% }) %></tr>
+            <tr><td class="row-label">Цена input (₽/M)</td><% models.forEach(model => { %><td><%= model.input_price_per_mtok %></td><% }) %></tr>
+            <tr><td class="row-label">Цена output (₽/M)</td><% models.forEach(model => { %><td><%= model.output_price_per_mtok %></td><% }) %></tr>
+            <tr><td class="row-label">Vision</td><% models.forEach(model => { %><td><%= model.supports_vision ? '✓' : '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Function calling</td><% models.forEach(model => { %><td><%= model.supports_function_calling ? '✓' : '—' %></td><% }) %></tr>
+            <tr><td class="row-label">JSON mode</td><% models.forEach(model => { %><td><%= model.supports_json_mode ? '✓' : '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Streaming</td><% models.forEach(model => { %><td><%= model.supports_streaming ? '✓' : '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Поиск в интернете</td><% models.forEach(model => { %><td><%= model.supports_web_search ? '✓' : '—' %></td><% }) %></tr>
+            <tr class="compare-group-row">
+              <td class="row-label compare-group-label" colspan="<%= models.length + 1 %>">
+                <%- include('partials/field-hint', { fieldKey: 'ratings' }) %>
+              </td>
+            </tr>
+            <% ratingFields.forEach(({ key }) => { %>
+              <tr>
+                <td class="row-label">
+                  <%- include('partials/field-hint', { fieldKey: key }) %>
+                </td>
+                <% models.forEach(model => { %>
+                  <% const value = Number(model[key]) || 3; %>
+                  <td>
+                    <div class="compare-rating-cell">
+                      <div class="compare-rating-bar-wrap">
+                        <div class="compare-rating-bar" style="width: <%= value * 20 %>%"></div>
+                      </div>
+                      <span class="compare-rating-value"><%= value %>/5</span>
+                    </div>
+                  </td>
+                <% }) %>
+              </tr>
+            <% }) %>
+            <tr><td class="row-label">Дата релиза</td><% models.forEach(model => { %><td><%= model.release_date || '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Описание</td><% models.forEach(model => { %><td><%= model.description || '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Теги</td><% models.forEach(model => { %><td><%= model.tags && model.tags.length ? model.tags.join(', ') : '—' %></td><% }) %></tr>
+            <tr><td class="row-label">Плюсы</td><% models.forEach(model => { %>
+              <td>
+                <% if (model.pros && model.pros.length) { %>
+                  <ul class="modal-list"><% model.pros.forEach(item => { %><li><%= item %></li><% }) %></ul>
+                <% } else { %>—<% } %>
+              </td>
+            <% }) %></tr>
+            <tr><td class="row-label">Минусы</td><% models.forEach(model => { %>
+              <td>
+                <% if (model.cons && model.cons.length) { %>
+                  <ul class="modal-list limits"><% model.cons.forEach(item => { %><li><%= item %></li><% }) %></ul>
+                <% } else { %>—<% } %>
+              </td>
+            <% }) %></tr>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+  <%- include('partials/admin-auth-init') %>
+  <script src="/app.js"></script>
+</body>
+</html>

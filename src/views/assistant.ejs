@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="ru" class="light">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI-ассистент — AI Model Catalog</title>
+
+  <%- include('partials/theme-init') %>
+
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+
+</head>
+
+<body class="detail-page-layout chat-page-layout assistant-page">
+
+  <%- include('partials/nav', { showStats: true, totalCount, shownCount, activeNav: 'assistant' }) %>
+
+
+
+  <div class="sidebar-overlay" id="assistantSidebarOverlay"></div>
+
+
+
+  <div class="layout assistant-layout">
+
+    <aside class="sidebar assistant-sidebar" id="assistantSidebar" aria-label="История чатов">
+
+      <div class="sidebar-inner assistant-sidebar-inner">
+
+        <div class="sidebar-mobile-header">
+
+          <span class="sidebar-mobile-title">История чатов</span>
+
+          <button type="button" class="sidebar-mobile-close" id="assistantSidebarCloseBtn" aria-label="Закрыть меню">&times;</button>
+
+        </div>
+
+
+
+        <div class="assistant-sidebar-brand">
+
+          <span class="assistant-sidebar-brand-title">AI-ассистент</span>
+
+        </div>
+
+
+
+        <button type="button" class="btn btn-primary assistant-new-chat-btn" id="assistantNewChatBtn">+ Новый чат</button>
+
+
+
+        <div class="assistant-chat-list-wrap">
+
+          <div class="sidebar-title">Сохранённые чаты</div>
+
+          <ul class="assistant-chat-list" id="assistantChatList" aria-label="Список чатов"></ul>
+
+          <p class="assistant-chat-list-empty muted" id="assistantChatListEmpty" hidden>Чатов пока нет</p>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+
+    <main class="main assistant-main">
+
+      <div class="assistant-page-wrap">
+
+        <div class="assistant-toolbar">
+
+          <button type="button" class="assistant-sidebar-open-btn" id="assistantSidebarOpenBtn" aria-label="Открыть историю чатов">☰ История</button>
+
+          <a href="/" class="back-link">&larr; Назад к каталогу</a>
+
+        </div>
+
+
+
+        <header class="detail-hero page-card chat-hero">
+
+          <div class="detail-hero-top">
+
+            <div class="detail-hero-main">
+
+              <h1 class="detail-hero-title">AI-ассистент</h1>
+
+              <p class="detail-hero-updated muted">
+
+                Опишите задачу на естественном языке — аналитическая модель из админки подберёт подходящие модели из каталога.
+
+              </p>
+
+              <p class="assistant-status muted" id="assistantStatus" hidden></p>
+
+            </div>
+
+          </div>
+
+        </header>
+
+
+
+        <section class="page-card chat-panel assistant-panel" aria-label="AI-ассистент подбора моделей">
+
+          <div class="chat-messages assistant-messages" id="assistantMessages" aria-live="polite">
+
+            <div class="chat-empty" id="assistantEmpty">
+
+              Например: «Нужна недорогая модель для RAG на русском с большим контекстом» или «Лучшая модель для кодогенерации».
+
+            </div>
+
+          </div>
+
+          <div class="chat-error" id="assistantError" hidden role="alert"></div>
+
+          <form class="chat-form" id="assistantForm">
+
+            <textarea
+
+              class="chat-input"
+
+              id="assistantInput"
+
+              rows="3"
+
+              placeholder="Опишите, какую модель вы ищете…"
+
+              aria-label="Запрос на подбор моделей"
+
+              required
+
+            ></textarea>
+
+            <div class="chat-form-actions">
+
+              <button type="button" class="btn btn-secondary" id="assistantClearBtn">Очистить</button>
+
+              <button type="submit" class="btn btn-primary" id="assistantSendBtn">Подобрать модели</button>
+
+            </div>
+
+          </form>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+
+  <script>
+
+    window.ASSISTANT_META = <%- JSON.stringify({
+
+      modelName: aiConfig.modelAnalytics,
+
+      modelId: analyticsModel?.id ?? null,
+
+      inputPricePerMTok: analyticsModel?.input_price_per_mtok ?? null,
+
+      outputPricePerMTok: analyticsModel?.output_price_per_mtok ?? null,
+
+    }).replace(/</g, '\\u003c') %>;
+
+  </script>
+
+  <%- include('partials/admin-auth-init') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+
+  <script src="/markdown.js"></script>
+
+  <script src="/chat-common.js"></script>
+
+  <script src="/recommendationStore.js"></script>
+
+  <script src="/assistant.js"></script>
+
+  <script src="/app.js"></script>
+
+</body>
+
+</html>
+

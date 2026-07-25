@@ -1,0 +1,33 @@
+<%
+  const metaMap = typeof meta !== 'undefined' ? meta : (typeof MODEL_FIELD_META !== 'undefined' ? MODEL_FIELD_META : {});
+  const syncMap = typeof SYNC_PARAM_META !== 'undefined' ? SYNC_PARAM_META : {};
+  const sectionMap = typeof DETAIL_SECTION_META !== 'undefined' ? DETAIL_SECTION_META : {};
+  let resolvedLabel = typeof label !== 'undefined' ? label : '';
+  let resolvedDescription = typeof description !== 'undefined' ? description : '';
+  if (typeof fieldKey !== 'undefined' && fieldKey) {
+    const m = metaMap[fieldKey] || syncMap[fieldKey] || sectionMap[fieldKey];
+    if (m) {
+      resolvedLabel = resolvedLabel || m.label;
+      resolvedDescription = resolvedDescription || m.description;
+    }
+  }
+%>
+<span class="field-hint-wrap">
+  <span class="field-label-row">
+    <% if (resolvedLabel) { %>
+      <span class="field-label-text"><%= resolvedLabel %></span>
+    <% } %>
+    <% if (resolvedDescription) { %>
+      <button
+        type="button"
+        class="field-hint-btn"
+        aria-label="Подсказка: <%= resolvedLabel %>"
+        aria-expanded="false"
+        data-hint="<%= resolvedDescription %>"
+      >i</button>
+    <% } %>
+  </span>
+  <% if (resolvedDescription) { %>
+    <span class="field-hint-popover" role="tooltip" hidden><%= resolvedDescription %></span>
+  <% } %>
+</span>

@@ -1,0 +1,6860 @@
+[
+  {
+    "id": "gpt",
+    "providerAliases": null,
+    "label": "ChatGPT",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "gpt",
+    "parentId": null,
+    "messageColor": "#734AD3",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 1,
+    "usedCount": 1680125,
+    "custom": true,
+    "popularityScore": 97958,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:44:29.940Z",
+    "params": null,
+    "iconId": "b0d75e4f-6a63-46dc-80cb-83d8bffdf58b",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "b0d75e4f-6a63-46dc-80cb-83d8bffdf58b",
+      "type": "IMAGE",
+      "name": "152ba935-29c3-43ba-b927-7b580366101c.svg",
+      "url": null,
+      "path": "production-timeweb/files/5265c2c8-b59e-4586-8988-5ff4bbcf9332.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:18:10.722Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "gpt-5.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4749
+      },
+      {
+        "id": "gpt-5.4",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4066
+      },
+      {
+        "id": "gpt-5.5-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2120
+      },
+      {
+        "id": "gpt-5.4-mini",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 844
+      },
+      {
+        "id": "gpt-5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "VERBOSITY",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 688
+      },
+      {
+        "id": "gpt-5.2",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "CHAIN_OF_THOUGHT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 607
+      },
+      {
+        "id": "gpt-5.4-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 563
+      },
+      {
+        "id": "gpt-4.1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 63313,
+        "popularityScore": 147
+      },
+      {
+        "id": "gpt-5.3-codex",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 130
+      },
+      {
+        "id": "gpt-4o",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 475842,
+        "popularityScore": 84
+      },
+      {
+        "id": "o3",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 3745,
+        "popularityScore": 75
+      },
+      {
+        "id": "o3-deep-research",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 61
+      },
+      {
+        "id": "gpt-4o-mini",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 650938,
+        "popularityScore": 58
+      },
+      {
+        "id": "gpt-4.1-mini",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 10116,
+        "popularityScore": 56
+      },
+      {
+        "id": "gpt-5-mini",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "VERBOSITY",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 49
+      },
+      {
+        "id": "gpt-4o-search-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_WEB_SEARCH",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 406,
+        "popularityScore": 47
+      },
+      {
+        "id": "o4-mini",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 2216,
+        "popularityScore": 20
+      },
+      {
+        "id": "gpt-5.3-chat",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "REASONING",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 19
+      },
+      {
+        "id": "gpt-3.5-turbo",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 71355,
+        "popularityScore": 18
+      },
+      {
+        "id": "o1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 11781,
+        "popularityScore": 10
+      },
+      {
+        "id": "gpt-5.2-codex",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 9
+      },
+      {
+        "id": "gpt-5.4-nano",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 9
+      },
+      {
+        "id": "o4-mini-deep-research",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 8
+      },
+      {
+        "id": "gpt-5-nano",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "EFFORT",
+          "VERBOSITY",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 6
+      },
+      {
+        "id": "o4-mini-high",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 4635,
+        "popularityScore": 5
+      },
+      {
+        "id": "gpt-4.1-nano",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 103221,
+        "popularityScore": 3
+      },
+      {
+        "id": "gpt-5.1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "CHAIN_OF_THOUGHT",
+          "EFFORT",
+          "VERBOSITY",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      },
+      {
+        "id": "gpt-5.2-chat",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "gpt-4-turbo-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 3000,
+        "popularityScore": 1
+      },
+      {
+        "id": "gpt-oss-120b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "gpt-5-codex",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "EFFORT",
+          "VERBOSITY",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gpt-oss-120b:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gpt-5-chat",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "EFFORT",
+          "VERBOSITY",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "FREE",
+    "isDefault": false
+  },
+  {
+    "id": "claude",
+    "providerAliases": null,
+    "label": "Claude",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "CHAIN_OF_THOUGHT",
+      "IMAGE_TO_TEXT",
+      "TOOLS"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "claude",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 2,
+    "usedCount": 403786,
+    "custom": true,
+    "popularityScore": 19579,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:00:01.586Z",
+    "params": null,
+    "iconId": "b048e0b5-9f5c-402b-a987-cfc274d2c557",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "b048e0b5-9f5c-402b-a987-cfc274d2c557",
+      "type": "IMAGE",
+      "name": "68b70c45-1fd8-452b-b175-c82cb1033267.svg",
+      "url": null,
+      "path": "production-timeweb/files/cb7ca0ea-1502-4069-8db6-1925ec31b008.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:33:43.866Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "claude-opus-4.8",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "REASONING",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 10741
+      },
+      {
+        "id": "claude-opus-4.6",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4161
+      },
+      {
+        "id": "claude-opus-4.7",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 3194
+      },
+      {
+        "id": "claude-sonnet-4.6",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 3106
+      },
+      {
+        "id": "claude-sonnet-5",
+        "features": [
+          "BATCH",
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1855
+      },
+      {
+        "id": "claude-fable-5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1821
+      },
+      {
+        "id": "claude-sonnet-4.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 973
+      },
+      {
+        "id": "claude-haiku-4.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 697
+      },
+      {
+        "id": "claude-opus-4.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 239
+      },
+      {
+        "id": "claude-opus-4.8-fast",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 75
+      },
+      {
+        "id": "claude-sonnet-4",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 38
+      },
+      {
+        "id": "claude-3-haiku",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 10,
+        "popularityScore": 11
+      },
+      {
+        "id": "claude-opus-4.7-fast",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 10
+      },
+      {
+        "id": "claude-opus-4",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "google-gemini",
+    "providerAliases": null,
+    "label": "Gemini",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "google-gemini",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 25,
+    "usedCount": 79332,
+    "custom": true,
+    "popularityScore": 18938,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:00:01.586Z",
+    "params": null,
+    "iconId": "c8a5e5b3-e862-48c8-80bc-62ca19ef9ef9",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "c8a5e5b3-e862-48c8-80bc-62ca19ef9ef9",
+      "type": "IMAGE",
+      "name": "da5ce38b-e50e-4118-8d7e-3a48a168dfe2.svg",
+      "url": null,
+      "path": "production-timeweb/files/e401f298-ac0c-4b1f-b611-390dd0f8ceb6.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:35:18.122Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "gemini-3.1-pro-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 3723
+      },
+      {
+        "id": "gemini-3.5-flash",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 753
+      },
+      {
+        "id": "gemini-3-flash-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 668
+      },
+      {
+        "id": "gemini-2.5-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 477
+      },
+      {
+        "id": "gemini-3.1-flash-lite-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "AUDIO_TO_TEXT",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 328
+      },
+      {
+        "id": "gemini-2.5-flash",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 210
+      },
+      {
+        "id": "gemma-4-31b-it",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 20
+      },
+      {
+        "id": "gemini-2.5-pro-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 3047,
+        "popularityScore": 16
+      },
+      {
+        "id": "gemini-3.1-flash-lite",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 6
+      },
+      {
+        "id": "gemini-2.5-flash-lite",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      },
+      {
+        "id": "gemini-2.5-flash-lite-preview-09-2025",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "gemini-2.5-pro-preview-05-06",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-3-27b-it",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 1480,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-3-12b-it",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 98,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-3-4b-it",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 40,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-3n-e4b-it",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-4-31b-it:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemini-2.5-flash-native-audio-preview-09-2025",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "TEXT_TO_AUDIO"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemini-2.5-flash-native-audio-preview-12-2025",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "TEXT_TO_AUDIO"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemma-4-26b-a4b-it",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "BATCH"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "replicate-flux",
+    "providerAliases": null,
+    "label": "Flux",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "replicate-flux",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 13,
+    "usedCount": 33086,
+    "custom": true,
+    "popularityScore": 15487,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T16:41:57.774Z",
+    "params": null,
+    "iconId": "74112fcb-c8d9-4183-9d58-d7b7e8f35a6b",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "74112fcb-c8d9-4183-9d58-d7b7e8f35a6b",
+      "type": "IMAGE",
+      "name": "b41dcb04-c988-4cbf-b09b-05374b7bda96.svg",
+      "url": null,
+      "path": "production-timeweb/files/c02c442f-a059-4f27-9f39-c8aa2ffb7f31.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:42:03.904Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "flux-kontext-max",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 46
+      },
+      {
+        "id": "flux-1.1-pro-ultra",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 2424,
+        "popularityScore": 16
+      },
+      {
+        "id": "flux-schnell",
+        "features": ["TEXT_TO_IMAGE"],
+        "usedCount": 29357,
+        "popularityScore": 15
+      },
+      {
+        "id": "flux-kontext-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 8
+      },
+      {
+        "id": "flux-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 485,
+        "popularityScore": 7
+      },
+      {
+        "id": "flux-canny-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "flux-1.1-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 823,
+        "popularityScore": 2
+      },
+      {
+        "id": "flux-fill-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "flux-krea-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "flux-depth-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "flux-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 386,
+        "popularityScore": 0
+      },
+      {
+        "id": "flux-fill-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "flux-depth-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "flux-redux-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "flux-schnell-lora",
+        "features": ["TEXT_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "flux-kontext-dev",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "FREE",
+    "isDefault": false
+  },
+  {
+    "id": "openrouter-deepseek",
+    "providerAliases": null,
+    "label": "Deepseek",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "openrouter-deepseek",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 15,
+    "usedCount": 124716,
+    "custom": true,
+    "popularityScore": 3483,
+    "deletedAt": null,
+    "createdAt": "2024-12-30T09:53:43.807Z",
+    "params": null,
+    "iconId": "854fb5c2-cc73-4664-abef-2a0e5a2fa6fb",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "854fb5c2-cc73-4664-abef-2a0e5a2fa6fb",
+      "type": "IMAGE",
+      "name": "37b18d02-0f64-4cc3-af5b-97aa47b2661b.svg",
+      "url": null,
+      "path": "production-timeweb/files/549d66a4-dc22-4c5a-8c75-0b600505f79e.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:46:30.149Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "deepseek-v4-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1110
+      },
+      {
+        "id": "deepseek-v4-flash",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 168
+      },
+      {
+        "id": "deepseek-v3.2",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 44
+      },
+      {
+        "id": "deepseek-r1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "CHAIN_OF_THOUGHT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 18186,
+        "popularityScore": 5
+      },
+      {
+        "id": "deepseek-chat",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 86703,
+        "popularityScore": 3
+      },
+      {
+        "id": "deepseek-v3.2-exp",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "CHAIN_OF_THOUGHT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "deepseek-chat-v3.1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "deepseek-chat-v3-0324",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 10586,
+        "popularityScore": 0
+      },
+      {
+        "id": "deepseek-r1-0528",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "CHAIN_OF_THOUGHT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "grok",
+    "providerAliases": null,
+    "label": "Grok",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "EFFORT",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "grok",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 16,
+    "usedCount": 19588,
+    "custom": true,
+    "popularityScore": 1308,
+    "deletedAt": null,
+    "createdAt": "2024-10-18T09:14:50.864Z",
+    "params": null,
+    "iconId": "4fbea137-1781-4b54-8263-c0a5bbb76628",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "4fbea137-1781-4b54-8263-c0a5bbb76628",
+      "type": "IMAGE",
+      "name": "grok.svg",
+      "url": null,
+      "path": "production-timeweb/files/c6d58559-ae29-44d7-b174-0cc89e44381e.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:40:55.292Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "grok-4.20",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "EFFORT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 307
+      },
+      {
+        "id": "grok-4.3",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "EFFORT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 109
+      },
+      {
+        "id": "grok-4.20-multi-agent",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "EFFORT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 11
+      },
+      {
+        "id": "grok-imagine-image-quality",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "EFFORT",
+          "TEXT_TO_IMAGE",
+          "IMAGE_TO_IMAGE"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "veo",
+    "providerAliases": null,
+    "label": "Veo",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+    "vectorDimensions": null,
+    "ownedBy": "veo",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 71,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 969,
+    "deletedAt": null,
+    "createdAt": "2025-05-28T06:34:11.958Z",
+    "params": null,
+    "iconId": "f059c220-c1a2-417f-90e5-2a30f54f700e",
+    "providerId": "googletemp",
+    "childProviderId": null,
+    "icon": {
+      "id": "f059c220-c1a2-417f-90e5-2a30f54f700e",
+      "type": "IMAGE",
+      "name": "veo.png",
+      "url": null,
+      "path": "production-timeweb/images/17e77700-7866-408b-a4dd-76dbf465782c.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-05-26T11:03:55.637Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "veo-3.1-fast",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 569
+      },
+      {
+        "id": "veo-3.1",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 558
+      },
+      {
+        "id": "veo-3.1-lite",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 128
+      },
+      {
+        "id": "veo-3",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 54
+      },
+      {
+        "id": "veo-3-fast",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 40
+      }
+    ],
+    "providers": [
+      {
+        "id": "googletemp",
+        "name": "Google/Temp",
+        "label": null,
+        "disabled": false,
+        "order": 0,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-03-25T03:03:22.218Z",
+        "parentId": null,
+        "fallbackId": "googlegemini"
+      },
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "tts",
+    "providerAliases": null,
+    "label": "TTS",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_AUDIO"],
+    "vectorDimensions": null,
+    "ownedBy": "tts",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 29,
+    "usedCount": 402,
+    "custom": true,
+    "popularityScore": 937,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:03:07.062Z",
+    "params": null,
+    "iconId": "e6c1f98c-6fea-4423-a4f8-85be78837e57",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "e6c1f98c-6fea-4423-a4f8-85be78837e57",
+      "type": "IMAGE",
+      "name": "da77c0a9-b18e-4e10-aaca-4ebdade1ff46.svg",
+      "url": null,
+      "path": "production-timeweb/files/aa47acf2-6908-4f40-94ca-8bae4cb4b9a2.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:40:04.004Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "tts-1-hd",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 254,
+        "popularityScore": 1
+      },
+      {
+        "id": "tts-1",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 34,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "FREE",
+    "isDefault": false
+  },
+  {
+    "id": "runway",
+    "providerAliases": null,
+    "label": "Runway",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["IMAGE_TO_VIDEO", "TEXT_TO_VIDEO"],
+    "vectorDimensions": null,
+    "ownedBy": "runway",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 62,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 626,
+    "deletedAt": null,
+    "createdAt": "2025-05-28T06:29:14.949Z",
+    "params": null,
+    "iconId": "1ed27bae-4c79-46c8-9415-49b7742675a3",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "1ed27bae-4c79-46c8-9415-49b7742675a3",
+      "type": "IMAGE",
+      "name": "e97674a1-7596-408c-be87-232ca709053c.svg",
+      "url": null,
+      "path": "production-timeweb/files/a766a55e-e7fc-4de1-a7fd-58f0f76c7ab3.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:51:18.487Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "gen4_turbo",
+        "features": ["IMAGE_TO_VIDEO", "TEXT_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 27
+      },
+      {
+        "id": "gen3a_turbo",
+        "features": ["IMAGE_TO_VIDEO", "TEXT_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 8
+      }
+    ],
+    "providers": [
+      {
+        "id": "runway",
+        "name": "Runway",
+        "label": "Runway",
+        "disabled": false,
+        "order": 13,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2025-05-28T06:29:14.848Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "perplexity",
+    "providerAliases": null,
+    "label": "Perplexity",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "perplexity/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "NATIVE_WEB_SEARCH"],
+    "vectorDimensions": null,
+    "ownedBy": "perplexity",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 24,
+    "usedCount": 524,
+    "custom": true,
+    "popularityScore": 449,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.031Z",
+    "params": null,
+    "iconId": "bbf3b1bb-5e38-4a32-a12f-ad503d832869",
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": {
+      "id": "bbf3b1bb-5e38-4a32-a12f-ad503d832869",
+      "type": "IMAGE",
+      "name": "1f14f257-3f6a-4ef3-8343-930eb1ee2930.svg",
+      "url": null,
+      "path": "production-timeweb/files/82c64fdf-6d53-4c98-a3b4-979edc8c7def.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:47:15.465Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "sonar-deep-research",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "NATIVE_WEB_SEARCH",
+          "REASONING",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 24,
+        "popularityScore": 189
+      },
+      {
+        "id": "sonar",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_WEB_SEARCH"
+        ],
+        "usedCount": 400,
+        "popularityScore": 20
+      },
+      {
+        "id": "sonar-pro-search",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 16
+      },
+      {
+        "id": "sonar-reasoning-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_WEB_SEARCH",
+          "REASONING"
+        ],
+        "usedCount": 5,
+        "popularityScore": 16
+      },
+      {
+        "id": "sonar-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "NATIVE_WEB_SEARCH"
+        ],
+        "usedCount": 17,
+        "popularityScore": 6
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "qwen",
+    "providerAliases": null,
+    "label": "Qwen",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "qwen/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "qwen",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 26,
+    "usedCount": 7986,
+    "custom": true,
+    "popularityScore": 435,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.024Z",
+    "params": null,
+    "iconId": "88499ada-456b-4c25-8df0-470419e26507",
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": {
+      "id": "88499ada-456b-4c25-8df0-470419e26507",
+      "type": "IMAGE",
+      "name": "61f642a7-afa0-4aa9-8bd5-1ee04d891b4a.svg",
+      "url": null,
+      "path": "production-timeweb/files/dc00f434-7e93-4f14-8e8b-3e6fd9f0efe1.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:44:36.706Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "qwen3.7-plus",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1071
+      },
+      {
+        "id": "qwen3-coder-next",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 243
+      },
+      {
+        "id": "qwen3.7-max",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 220
+      },
+      {
+        "id": "qwen3-235b-a22b-thinking-2507",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 84
+      },
+      {
+        "id": "qwen3.6-35b-a3b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 33
+      },
+      {
+        "id": "qwen3.6-plus",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 14
+      },
+      {
+        "id": "qwen3-coder",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 13
+      },
+      {
+        "id": "qwen3.5-27b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 5
+      },
+      {
+        "id": "qwen3-235b-a22b-2507",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "qwen3.5-397b-a17b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "qwen3.5-9b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "qwen3-coder-plus",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      },
+      {
+        "id": "qwen3.5-35b-a3b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      },
+      {
+        "id": "qwen3-30b-a3b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 21,
+        "popularityScore": 2
+      },
+      {
+        "id": "qwen3.5-122b-a10b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 2
+      },
+      {
+        "id": "qwen3-coder-30b-a3b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "qwen3-max-thinking",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "qwen3.5-flash-02-23",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "qwen-2.5-7b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 63,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen2.5-vl-72b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 13,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-reranker-8b:1fb2f6046d0f044dd6b3a13cc7ff61d33973619716991b25d346b455972cec99",
+        "features": ["RERANKER"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-235b-a22b-fp8/latest",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-coder:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-next-80b-a3b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-vl-235b-a22b-thinking",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-vl-235b-a22b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-coder-flash",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-next-80b-a3b-instruct:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-235b-a22b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 84,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "dall-e",
+    "providerAliases": null,
+    "label": "DALL-E",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "dall-e",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": true,
+    "disabledApi": true,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 22,
+    "usedCount": 3001,
+    "custom": true,
+    "popularityScore": 384,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:00:01.586Z",
+    "params": null,
+    "iconId": "7acba6db-640e-4ca8-8d29-d66178f4114c",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "7acba6db-640e-4ca8-8d29-d66178f4114c",
+      "type": "IMAGE",
+      "name": "0ae689a7-8b0b-4b6c-985f-8617967e0998.svg",
+      "url": null,
+      "path": "production-timeweb/files/a257c438-64bc-4d12-b329-443a1d8242fa.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:32:52.800Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "assembly-ai",
+    "providerAliases": null,
+    "label": "Assembly AI",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "assembly-ai",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 32,
+    "usedCount": 206,
+    "custom": true,
+    "popularityScore": 271,
+    "deletedAt": null,
+    "createdAt": "2025-04-16T05:23:14.727Z",
+    "params": null,
+    "iconId": "efb060c5-9da5-4533-9dbd-421ad2fce404",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "efb060c5-9da5-4533-9dbd-421ad2fce404",
+      "type": "IMAGE",
+      "name": "b61188b9-002c-40c2-bdf5-d823e1a06162.svg",
+      "url": null,
+      "path": "production-timeweb/files/59db2ecb-244e-4256-9316-af4fd83d44ad.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:43:22.385Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "assembly-ai-best",
+        "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+        "usedCount": 97,
+        "popularityScore": 221
+      },
+      {
+        "id": "assembly-ai-nano",
+        "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+        "usedCount": 103,
+        "popularityScore": 3
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "FREE",
+    "isDefault": false
+  },
+  {
+    "id": "stable-diffusion",
+    "providerAliases": null,
+    "label": "Stable Diffusion",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "stable-diffusion/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "stable-diffusion",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 28,
+    "usedCount": 1086,
+    "custom": true,
+    "popularityScore": 156,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:34.748Z",
+    "params": null,
+    "iconId": "77ee10a4-ef7d-431b-a522-2af4fe1ffd03",
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": {
+      "id": "77ee10a4-ef7d-431b-a522-2af4fe1ffd03",
+      "type": "IMAGE",
+      "name": "966885da-bcb3-4b06-9051-16f2ce706266.svg",
+      "url": null,
+      "path": "production-timeweb/files/b26a5e84-0eb6-4261-b608-fb262c6d139b.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:42:39.185Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "stable-diffusion-3",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 1428,
+        "popularityScore": 7
+      },
+      {
+        "id": "stable-diffusion-3.5-large-turbo",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "stable-diffusion-3.5-large",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "stable-diffusion-3.5-medium",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      }
+    ],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "YandexGPT",
+    "providerAliases": null,
+    "label": "YandexGPT",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 32000,
+    "maxTokens": 32000,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "YandexGPT",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 70,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 102,
+    "deletedAt": null,
+    "createdAt": "2025-09-17T05:51:39.948Z",
+    "params": null,
+    "iconId": "3b4c4cf9-5034-4909-a34e-8a17bcd39c52",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "3b4c4cf9-5034-4909-a34e-8a17bcd39c52",
+      "type": "IMAGE",
+      "name": "2605360e-2ee1-4e7a-8622-9753dfb2ea8d.jpg",
+      "url": null,
+      "path": "production-timeweb/images/0c5e2487-5e17-44a2-b65f-517567834a73.jpg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:51:44.674Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "yandexgpt/rc",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 34
+      },
+      {
+        "id": "yandexgpt",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 10
+      },
+      {
+        "id": "yandexgpt-lite",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "midjourney",
+    "providerAliases": null,
+    "label": "Midjourney",
+    "description": null,
+    "pricing": {
+      "discount": 1,
+      "fastMode": 52000,
+      "relaxMode": 26000,
+      "turboMode": 104000
+    },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE", "IMAGE_TO_TEXT", "IMAGE_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "midjourney",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 20,
+    "usedCount": 11883,
+    "custom": true,
+    "popularityScore": 98,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T13:00:02.009Z",
+    "params": null,
+    "iconId": "1aea413d-feb7-4f08-af3f-4a26aaee50f3",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "1aea413d-feb7-4f08-af3f-4a26aaee50f3",
+      "type": "IMAGE",
+      "name": "119621fa-5017-48d2-a518-7161b2ea9fbc.svg",
+      "url": null,
+      "path": "production-timeweb/files/4e984a0c-9843-445a-a5af-0358f7a89e35.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:32:29.919Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [
+      {
+        "id": "describe",
+        "name": "describe",
+        "label": "Describe",
+        "isDefault": false,
+        "features": null,
+        "order": 0,
+        "usedCount": 1281,
+        "createdAt": "2024-03-20T10:31:40.493Z",
+        "modelId": "midjourney"
+      },
+      {
+        "id": "imagine",
+        "name": "imagine",
+        "label": "Imagine",
+        "isDefault": true,
+        "features": null,
+        "order": 0,
+        "usedCount": 124816,
+        "createdAt": "2024-03-20T10:31:40.493Z",
+        "modelId": "midjourney"
+      }
+    ],
+    "children": [],
+    "providers": [
+      {
+        "id": "midjourney",
+        "name": "Midjourney",
+        "label": null,
+        "disabled": false,
+        "order": 10,
+        "supportedAccounts": true,
+        "supportedAccountQueueTypes": ["INTERVAL"],
+        "createdAt": "2024-10-16T05:12:54.219Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "llama",
+    "providerAliases": null,
+    "label": "Llama",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "llama",
+    "parentId": null,
+    "messageColor": "#734AD3",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 27,
+    "usedCount": 7203,
+    "custom": true,
+    "popularityScore": 83,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:00:01.586Z",
+    "params": null,
+    "iconId": "63175421-9297-4da9-b1a5-d51cf7a2ba93",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "63175421-9297-4da9-b1a5-d51cf7a2ba93",
+      "type": "IMAGE",
+      "name": "994b1639-66c9-4343-a0dd-b9cf9fde2400.svg",
+      "url": null,
+      "path": "production-timeweb/files/c82f1f9b-e6f6-4d06-9881-dd34b94c3b57.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:39:10.387Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "llama-3.3-70b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 2634,
+        "popularityScore": 27
+      },
+      {
+        "id": "llama-4-maverick",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 408,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "mistral",
+    "providerAliases": null,
+    "label": "Mistral",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "mistral",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 30,
+    "usedCount": 3878,
+    "custom": true,
+    "popularityScore": 63,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:00:01.586Z",
+    "params": null,
+    "iconId": "5c5bd3f1-84ae-4c8c-8649-bf4fef722bb8",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "5c5bd3f1-84ae-4c8c-8649-bf4fef722bb8",
+      "type": "IMAGE",
+      "name": "65520364-f878-4669-b0f4-e52cf6b604d2.svg",
+      "url": null,
+      "path": "production-timeweb/files/a9d17781-32ad-4d16-bc85-c978e748fa72.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:36:23.013Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "mistral-large",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 19,
+        "popularityScore": 3
+      },
+      {
+        "id": "mistral-large-2407",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 8,
+        "popularityScore": 1
+      },
+      {
+        "id": "mistral-medium-3.1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-small-2603",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-saba",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT"
+        ],
+        "usedCount": 2,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-medium-3",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 2,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-medium-3-5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-small-3.1-24b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 19,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-small-3.2-24b-instruct",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-large-2512",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TOOLS",
+          "NATIVE_DOCUMENT_TO_TEXT",
+          "FILE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-small-24b-instruct-2501",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 46,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-nemo",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 1527,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "amazon",
+    "providerAliases": null,
+    "label": "Amazon",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "amazon/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "TOOLS", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "amazon",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 21,
+    "usedCount": 775,
+    "custom": true,
+    "popularityScore": 16,
+    "deletedAt": null,
+    "createdAt": "2024-12-05T23:00:04.565Z",
+    "params": null,
+    "iconId": "e5e67519-ef79-4542-8101-bd61cc52ccb6",
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": {
+      "id": "e5e67519-ef79-4542-8101-bd61cc52ccb6",
+      "type": "IMAGE",
+      "name": "5d0e1415-6c83-42ac-9b9e-521c83c38b83.svg",
+      "url": null,
+      "path": "production-timeweb/files/6fd1e5e9-cfd9-4164-8695-a6fcf82a88c3.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:45:40.379Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "whisper",
+    "providerAliases": null,
+    "label": "Whisper",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "whisper",
+    "parentId": null,
+    "messageColor": "#313E62",
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 34,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 13,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T15:03:07.062Z",
+    "params": null,
+    "iconId": "4e37bfc6-3a33-42ac-bb19-c9ebe4aa6048",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "4e37bfc6-3a33-42ac-bb19-c9ebe4aa6048",
+      "type": "IMAGE",
+      "name": "ea8afe2b-77c4-4e6e-b99b-025b2925029a.svg",
+      "url": null,
+      "path": "production-timeweb/files/07e18f74-a4a1-4c6b-b7bc-5108c8ee7582.svg",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:48:56.166Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "whisper-1",
+        "features": ["AUDIO_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 26
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "gpt-image",
+    "providerAliases": null,
+    "label": "GPT Image",
+    "description": null,
+    "pricing": {
+      "input": 1,
+      "output": 1,
+      "request": 0,
+      "discount": 1,
+      "webSearch": { "low": 0, "high": 0, "medium": 0 },
+      "inputImage": 1,
+      "outputImage": 1
+    },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_IMAGE",
+      "TEXT_TO_IMAGE_LLM",
+      "IMAGE_TO_IMAGE",
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "gpt-image",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 18,
+    "usedCount": 7429,
+    "custom": true,
+    "popularityScore": 3,
+    "deletedAt": null,
+    "createdAt": "2025-04-30T05:07:01.997Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "gpt-image-2",
+        "features": ["TEXT_TO_IMAGE", "TEXT_TO_IMAGE_LLM", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 328
+      },
+      {
+        "id": "gpt-image-1",
+        "features": ["TEXT_TO_IMAGE", "TEXT_TO_IMAGE_LLM", "IMAGE_TO_IMAGE"],
+        "usedCount": 8571,
+        "popularityScore": 6
+      },
+      {
+        "id": "gpt-image-1.5",
+        "features": ["TEXT_TO_IMAGE", "TEXT_TO_IMAGE_LLM", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "gpt-image-1-mini",
+        "features": ["TEXT_TO_IMAGE", "TEXT_TO_IMAGE_LLM", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 3
+      }
+    ],
+    "providers": [
+      {
+        "id": "openai",
+        "name": "Azure/OpenAI",
+        "label": null,
+        "disabled": false,
+        "order": 5,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": "openrouter"
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "ibm-granite",
+    "providerAliases": null,
+    "label": "IBM",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "ibm-granite/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "ibm-granite",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 3,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-04-30T20:00:03.867Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "bytedance-seed",
+    "providerAliases": null,
+    "label": "ByteDance Seed",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "bytedance-seed/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "REASONING",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "bytedance-seed",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 4,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-23T16:00:03.340Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "poolside",
+    "providerAliases": null,
+    "label": "Poolside",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "poolside/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "REASONING",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "poolside",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 5,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-04-28T16:00:04.752Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "relace",
+    "providerAliases": null,
+    "label": "Relace",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "relace/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "relace",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 6,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-08T18:00:02.989Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "stepfun",
+    "providerAliases": null,
+    "label": "StepFun",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "stepfun/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "REASONING",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "stepfun",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 7,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-02-11T04:00:02.715Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "openrouter",
+    "providerAliases": null,
+    "label": "Quasar",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "openrouter/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "openrouter",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 8,
+    "usedCount": 68,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-04-03T19:00:02.603Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "nex-agi",
+    "providerAliases": null,
+    "label": "Nex AGI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "nex-agi/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "IMAGE_TO_TEXT",
+      "IMAGE_TO_TEXT",
+      "REASONING"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "nex-agi",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 9,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-06-22T01:00:06.573Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "nex-n2-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "inclusionai",
+    "providerAliases": null,
+    "label": "inclusionAI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "inclusionai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "TOOLS", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "inclusionai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 9,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-10-17T15:00:03.205Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "ring-2.6-1t",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "z-ai",
+    "providerAliases": null,
+    "label": "Z.AI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "z-ai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "TOOLS",
+      "REASONING",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "z-ai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 10,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-07-28T14:00:03.107Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "glm-5.2",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 751
+      },
+      {
+        "id": "glm-5.1",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 69
+      },
+      {
+        "id": "glm-5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 23
+      },
+      {
+        "id": "glm-4.7",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 5
+      },
+      {
+        "id": "glm-5-turbo",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "morph",
+    "providerAliases": null,
+    "label": "Morph",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "morph/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "morph",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 11,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-07-07T19:00:02.994Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "xiaomi",
+    "providerAliases": null,
+    "label": "Xiaomi",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "xiaomi/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "REASONING",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "xiaomi",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 12,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-01-15T15:00:03.829Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "mimo-v2.5-pro",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 24
+      },
+      {
+        "id": "mimo-v2.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "ELITE",
+    "isDefault": false
+  },
+  {
+    "id": "minimax",
+    "providerAliases": null,
+    "label": "MiniMax",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "minimax/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "minimax",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": false,
+    "order": 14,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-06-17T22:00:03.015Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "minimax-m3",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 69
+      },
+      {
+        "id": "minimax-m2.7",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "assemblyai",
+    "providerAliases": null,
+    "label": "AssemblyAI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "assemblyai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 17,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-09-17T05:00:56.985Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "assemblyai",
+        "name": "AssemblyAI",
+        "label": null,
+        "disabled": false,
+        "order": 11,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2025-09-17T05:00:54.714Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "deepseek",
+    "providerAliases": null,
+    "label": "deepseek",
+    "description": null,
+    "pricing": { "input": 1, "output": 1, "discount": 1, "inputImage": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "deepseek/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "other",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 19,
+    "usedCount": 27,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-12-05T16:00:04.168Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "tencent",
+    "providerAliases": null,
+    "label": "Tencent",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "tencent/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "REASONING",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "tencent",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 23,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-07-15T18:00:04.053Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "hy3-preview",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 5
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "rekaai",
+    "providerAliases": null,
+    "label": "Reka",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "rekaai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "rekaai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 31,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-07-15T18:00:04.067Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "thenlper",
+    "providerAliases": null,
+    "label": "Thenlper",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "thenlper/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["EMBEDDING"],
+    "vectorDimensions": null,
+    "ownedBy": "thenlper",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 33,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-03T05:01:33.799Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "intfloat",
+    "providerAliases": null,
+    "label": "Intfloat",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "intfloat/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["EMBEDDING"],
+    "vectorDimensions": null,
+    "ownedBy": "intfloat",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 35,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-03T05:01:33.799Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "arcee-ai",
+    "providerAliases": null,
+    "label": "Arcee AI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "arcee-ai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "arcee-ai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 36,
+    "usedCount": 5,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-05-05T21:00:02.006Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "gigachat",
+    "providerAliases": null,
+    "label": "GigaChat",
+    "description": null,
+    "pricing": { "input": 1, "output": 1, "discount": 1, "inputImage": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "gigachat",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 37,
+    "usedCount": 2,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:44:30.096Z",
+    "params": null,
+    "iconId": "d64f7bac-0eb1-417e-896b-a3ada1a8bb30",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "d64f7bac-0eb1-417e-896b-a3ada1a8bb30",
+      "type": "IMAGE",
+      "name": "1aa144e5-b1f6-402b-8a50-73957cd7223b.png",
+      "url": null,
+      "path": "production-timeweb/images/8a2109b6-fc2b-4c1c-885e-58ba5001840c.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:52:28.276Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "GigaChat-2-Max",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 7
+      },
+      {
+        "id": "GigaChat",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-2",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-2-Pro",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-Max",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-Max-preview",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-Plus",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-Pro",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-Pro-preview",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaChat-preview",
+        "features": ["TEXT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "moonshotai",
+    "providerAliases": null,
+    "label": "Moonshot AI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "moonshotai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "TOOLS", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "moonshotai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 38,
+    "usedCount": 8,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-04-10T18:00:02.966Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "kimi-k2.7-code",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 14
+      },
+      {
+        "id": "kimi-k2.5",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 5
+      },
+      {
+        "id": "kimi-k2.6",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "kimi-k2",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "sentence-transformers",
+    "providerAliases": null,
+    "label": "Sentence Transformers",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "sentence-transformers/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["EMBEDDING"],
+    "vectorDimensions": null,
+    "ownedBy": "sentence-transformers",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 39,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-03T05:01:33.800Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "paraphrase-minilm-l6-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "baai",
+    "providerAliases": null,
+    "label": "BAAI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "baai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["EMBEDDING"],
+    "vectorDimensions": null,
+    "ownedBy": "baai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 40,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-12-03T05:01:33.800Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "recraft",
+    "providerAliases": null,
+    "label": "Recraft",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "recraft/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "IMAGE_TO_TEXT",
+      "TEXT_TO_IMAGE",
+      "IMAGE_TO_IMAGE"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "recraft",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 41,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-05-27T00:46:04.974Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "recraft-v3",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "TEXT_TO_IMAGE",
+          "IMAGE_TO_IMAGE"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "sourceful",
+    "providerAliases": null,
+    "label": "Sourceful",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "sourceful/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "IMAGE_TO_TEXT",
+      "TEXT_TO_IMAGE",
+      "IMAGE_TO_IMAGE"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "sourceful",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 42,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-05-27T00:46:04.975Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "black-forest-labs",
+    "providerAliases": null,
+    "label": "Black Forest Labs",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "black-forest-labs/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_IMAGE",
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "IMAGE_TO_TEXT",
+      "IMAGE_TO_IMAGE"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "black-forest-labs",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 43,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-11-12T05:01:36.186Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      },
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "stability-ai",
+    "providerAliases": null,
+    "label": "Stability AI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "stability-ai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "stability-ai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 44,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-01-28T08:45:48.378Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "kwaivgi",
+    "providerAliases": null,
+    "label": "Kwaivgi",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "kwaivgi/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+    "vectorDimensions": null,
+    "ownedBy": "kwaivgi",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 45,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-04-17T04:16:13.998Z",
+    "params": null,
+    "iconId": "6722706e-da12-4040-9d0b-8c9cb50cab27",
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": {
+      "id": "6722706e-da12-4040-9d0b-8c9cb50cab27",
+      "type": "IMAGE",
+      "name": "kwaivgi.png",
+      "url": null,
+      "path": "production-timeweb/images/7641aaf4-65b4-4a3c-a2d3-a054df5888e4.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-05-26T11:06:48.851Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "kling-v3-omni-video",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO", "VIDEO_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 219
+      },
+      {
+        "id": "kling-v3-video",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 156
+      },
+      {
+        "id": "kling-v2.1",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 40
+      },
+      {
+        "id": "kling-v3-motion-control",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO", "VIDEO_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 11
+      },
+      {
+        "id": "kling-v2.6",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 8
+      },
+      {
+        "id": "kling-v1.6-standard",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 6
+      },
+      {
+        "id": "kling-v1.6-pro",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 5
+      },
+      {
+        "id": "kling-v2.5-turbo-pro",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "kling-v2.6-motion-control",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO", "VIDEO_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "aion-labs",
+    "providerAliases": null,
+    "label": "AionLabs",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "aion-labs/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "aion-labs",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 46,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-02-06T04:00:02.964Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "liquid",
+    "providerAliases": null,
+    "label": "Liquid",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "liquid/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "liquid",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 47,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-01-25T13:00:03.029Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "openai-sora",
+    "providerAliases": null,
+    "label": "Sora",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "openai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+    "vectorDimensions": null,
+    "ownedBy": "openai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 48,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-03-25T03:03:24.834Z",
+    "params": null,
+    "iconId": "a080a79e-ddfd-4298-85f0-1a80c73c23b3",
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": {
+      "id": "a080a79e-ddfd-4298-85f0-1a80c73c23b3",
+      "type": "IMAGE",
+      "name": "6af00074-7f9e-4c0e-847a-79299a7bc699.png",
+      "url": null,
+      "path": "production-timeweb/images/11245f96-376a-42b8-a69b-399ff7ddd9d2.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:53:17.026Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "sora-2-pro",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 374
+      },
+      {
+        "id": "sora-2",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 22
+      }
+    ],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "PREMIUM",
+    "isDefault": false
+  },
+  {
+    "id": "tbank_voicekit",
+    "providerAliases": null,
+    "label": "tbank_voicekit",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "tbank_voicekit",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 49,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-02-25T05:26:48.852Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "tbank_voicekit",
+        "name": "TBank VoiceKit",
+        "label": null,
+        "disabled": false,
+        "order": 0,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-02-25T05:26:45.476Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "thedrummer",
+    "providerAliases": null,
+    "label": "Unslopnemo",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "thedrummer/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "thedrummer",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 50,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-11-13T00:00:03.201Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "rocinante-12b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "unslopnemo-12b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "qwen-replicate",
+    "providerAliases": null,
+    "label": "Qwen Image",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "qwen/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "qwen-replicate",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": false,
+    "order": 51,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-06-10T03:17:48.191Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "qwen-image-2-pro",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 23
+      },
+      {
+        "id": "qwen-image-edit-plus-lora",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 7
+      },
+      {
+        "id": "qwen-image-2",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "qwen-image-edit-2511",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "qwen-image-2512",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen-image",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen-image-edit-plus",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen-image-edit",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "inflection",
+    "providerAliases": null,
+    "label": "Inflection",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "inflection/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "inflection",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 52,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-10-12T20:00:03.359Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "lightricks",
+    "providerAliases": null,
+    "label": "Lightricks",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "lightricks/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+    "vectorDimensions": null,
+    "ownedBy": "lightricks",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 53,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-06-10T03:17:48.191Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "ltx-2.3-pro",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 200
+      },
+      {
+        "id": "ltx-2-pro",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 14
+      },
+      {
+        "id": "ltx-2.3-fast",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "ltx-2-retake",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "ltx-2-fast",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "ltx-video-0.9.7",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 3
+      },
+      {
+        "id": "ltx-video",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "ltx-video-0.9.7-distilled",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "ltx-2-distilled",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "audio-to-video",
+        "features": ["TEXT_TO_VIDEO", "IMAGE_TO_VIDEO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "suno",
+    "providerAliases": null,
+    "label": "Suno",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_MUSIC"],
+    "vectorDimensions": null,
+    "ownedBy": "suno",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 54,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-05-13T04:06:32.830Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "suno",
+        "name": "Suno",
+        "label": null,
+        "disabled": false,
+        "order": 0,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-05-13T03:51:17.523Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "openai",
+    "providerAliases": null,
+    "label": "OpenAI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "openai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "openai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 55,
+    "usedCount": 102,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.015Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openai",
+        "name": "Azure/OpenAI",
+        "label": null,
+        "disabled": false,
+        "order": 5,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": "openrouter"
+      },
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "elevenlabs",
+    "providerAliases": null,
+    "label": "Eleven Labs",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_AUDIO"],
+    "vectorDimensions": null,
+    "ownedBy": "elevenlabs",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 56,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-05-13T04:06:32.831Z",
+    "params": null,
+    "iconId": "6e4fc6ff-05d5-407f-aa1d-3314070efe98",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "6e4fc6ff-05d5-407f-aa1d-3314070efe98",
+      "type": "IMAGE",
+      "name": "02dffda5508e3d9bee0e5e04f40c2dc8.png",
+      "url": null,
+      "path": "production-timeweb/images/736b1a45-705e-46a2-b880-2e2811970b6a.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-05-26T11:08:48.842Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "eleven_v3",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 9
+      },
+      {
+        "id": "eleven_turbo_v2_5",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "eleven_multilingual_v2",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_flash_v2_5",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_turbo_v2",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_flash_v2",
+        "features": ["TEXT_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "elevenlabs",
+        "name": "Elevenlabs",
+        "label": null,
+        "disabled": false,
+        "order": 0,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-05-13T03:51:17.526Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "cohere",
+    "providerAliases": null,
+    "label": "Cohere",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "cohere/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "cohere",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 57,
+    "usedCount": 1,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.024Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "google",
+    "providerAliases": null,
+    "label": "Google",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "google/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "TEXT_TO_VIDEO",
+      "IMAGE_TO_VIDEO"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "google",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 58,
+    "usedCount": 637,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.027Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "googlegemini",
+        "name": "Google/Gemini",
+        "label": null,
+        "disabled": false,
+        "order": 2,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-01-14T05:36:58.068Z",
+        "parentId": null,
+        "fallbackId": "openrouter"
+      },
+      {
+        "id": "googletemp",
+        "name": "Google/Temp",
+        "label": null,
+        "disabled": false,
+        "order": 0,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2026-03-25T03:03:22.218Z",
+        "parentId": null,
+        "fallbackId": "googlegemini"
+      },
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      },
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "sao10k",
+    "providerAliases": null,
+    "label": "Llama",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "sao10k/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "sao10k",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 59,
+    "usedCount": 1,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.028Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "l3.1-euryale-70b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "l3-lunaris-8b",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "microsoft",
+    "providerAliases": null,
+    "label": "Phi",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "microsoft/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "microsoft",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 60,
+    "usedCount": 5,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.030Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "phi-4",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "nousresearch",
+    "providerAliases": null,
+    "label": "Nous",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "nousresearch/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "nousresearch",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 61,
+    "usedCount": 5,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.031Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "hermes-3-llama-3.1-405b",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "hermes-3-llama-3.1-405b:free",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "other",
+    "providerAliases": null,
+    "label": "Other",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "other",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 63,
+    "usedCount": 25,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.033Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "kat-coder-pro-v2",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 23
+      },
+      {
+        "id": "aliceai-llm",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 6
+      },
+      {
+        "id": "magnum-v4-72b",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "ernie-4.5-vl-424b-a47b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mythomax-l2-13b",
+        "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "EmbeddingsGigaR",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "GigaEmbeddings-3B-2025-09",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "nvidia",
+    "providerAliases": null,
+    "label": "NVIDIA",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "nvidia/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "nvidia",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 64,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-02-03T23:00:02.977Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "nemotron-3-ultra-550b-a55b:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "nemotron-3.5-content-safety:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "nemotron-3-super-120b-a12b:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "IMAGE_TO_TEXT",
+          "REASONING",
+          "TOOLS"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "nemotron-3-ultra-550b-a55b",
+        "features": [
+          "TEXT_TO_TEXT",
+          "DOCUMENT_TO_TEXT",
+          "REASONING",
+          "TOOLS",
+          "IMAGE_TO_TEXT"
+        ],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "x-ai",
+    "providerAliases": null,
+    "label": "xAI",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "x-ai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": [
+      "TEXT_TO_TEXT",
+      "DOCUMENT_TO_TEXT",
+      "EFFORT",
+      "TOOLS",
+      "IMAGE_TO_TEXT"
+    ],
+    "vectorDimensions": null,
+    "ownedBy": "x-ai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 65,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-11-19T05:00:05.143Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "meta-llama",
+    "providerAliases": null,
+    "label": "Meta",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "meta-llama/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "meta-llama",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 66,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.031Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "mistralai",
+    "providerAliases": null,
+    "label": "Mistral",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "mistralai/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "mistralai",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 67,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.020Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "lucataco",
+    "providerAliases": null,
+    "label": "Lucataco",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "lucataco/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE"],
+    "vectorDimensions": null,
+    "ownedBy": "lucataco",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": true,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 68,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-10-08T05:02:03.117Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "replicate",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "replicate",
+        "name": "Replicate",
+        "label": null,
+        "disabled": false,
+        "order": 9,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.228Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": null,
+    "isDefault": false
+  },
+  {
+    "id": "anthropic",
+    "providerAliases": null,
+    "label": "Anthropic",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "anthropic/",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_TEXT", "DOCUMENT_TO_TEXT", "IMAGE_TO_TEXT", "TOOLS"],
+    "vectorDimensions": null,
+    "ownedBy": "anthropic",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 69,
+    "usedCount": 0,
+    "custom": false,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2024-09-17T14:36:35.032Z",
+    "params": null,
+    "iconId": null,
+    "providerId": "openrouter",
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [],
+    "providers": [
+      {
+        "id": "anthropic",
+        "name": "Anthropic",
+        "label": null,
+        "disabled": false,
+        "order": 1,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2025-12-17T05:03:39.266Z",
+        "parentId": null,
+        "fallbackId": "openrouter"
+      },
+      {
+        "id": "openrouter",
+        "name": "OpenRouter",
+        "label": null,
+        "disabled": false,
+        "order": 7,
+        "supportedAccounts": false,
+        "supportedAccountQueueTypes": [],
+        "createdAt": "2024-09-17T13:39:40.224Z",
+        "parentId": null,
+        "fallbackId": null
+      }
+    ],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "embeddings",
+    "providerAliases": null,
+    "label": "Embeddings",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["EMBEDDING"],
+    "vectorDimensions": null,
+    "ownedBy": "embeddings",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 72,
+    "usedCount": 3,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2025-04-03T08:28:13.701Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "text-embedding-3-large",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 4
+      },
+      {
+        "id": "text-embedding-3-small",
+        "features": ["EMBEDDING"],
+        "usedCount": 3,
+        "popularityScore": 1
+      },
+      {
+        "id": "text-embedding-ada-002",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 1
+      },
+      {
+        "id": "e5-large-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gte-base",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gte-large",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "all-minilm-l12-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "text-embedding-ada-002-2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "e5-base-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "multilingual-e5-large",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "multi-qa-mpnet-base-dot-v1",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "bge-m3",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "all-mpnet-base-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "all-minilm-l6-v2",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "bge-reranker-v2-m3:8481b243cdbb358d1fcba5e82745c316d3420c0bbf76224757aa0b5bc7df0084",
+        "features": ["RERANKER"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "gemini-embedding-001",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "mistral-embed-2312",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "codestral-embed-2505",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-embedding-8b",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "qwen3-embedding-4b",
+        "features": ["EMBEDDING"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "FREE",
+    "isDefault": false
+  },
+  {
+    "id": "tbank",
+    "providerAliases": null,
+    "label": "T-Bank",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+    "vectorDimensions": null,
+    "ownedBy": "tbank",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": true,
+    "disabledTelegram": true,
+    "order": 73,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-02-25T07:08:42.057Z",
+    "params": null,
+    "iconId": "c02195d4-418f-4ee1-89c5-e627ea6af7f8",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "c02195d4-418f-4ee1-89c5-e627ea6af7f8",
+      "type": "IMAGE",
+      "name": "0ebc5186-3527-4480-94bb-314fe41f4d9e.png",
+      "url": null,
+      "path": "production-timeweb/images/f22b93d4-58a8-4f49-919a-706c25d5d634.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-06-11T03:52:47.847Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "tbank-voicekit-stt",
+        "features": ["AUDIO_TO_TEXT", "BIG_AUDIO_TO_TEXT"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  },
+  {
+    "id": "Elevenlabs-sts",
+    "providerAliases": null,
+    "label": "Eleven Labs voice clone",
+    "description": null,
+    "pricing": { "discount": 1 },
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["AUDIO_TO_AUDIO"],
+    "vectorDimensions": null,
+    "ownedBy": "Elevenlabs-sts",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 74,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-05-13T12:39:08.088Z",
+    "params": null,
+    "iconId": "46c09e0e-0fa9-4029-97b7-c6c763521bb2",
+    "providerId": null,
+    "childProviderId": null,
+    "icon": {
+      "id": "46c09e0e-0fa9-4029-97b7-c6c763521bb2",
+      "type": "IMAGE",
+      "name": "02dffda5508e3d9bee0e5e04f40c2dc8.png",
+      "url": null,
+      "path": "production-timeweb/images/38d363f9-a688-46ac-93d7-17f709b4dd9c.png",
+      "size": 0,
+      "isEncrypted": false,
+      "createdAt": "2026-05-26T11:08:58.426Z",
+      "deletedAt": null
+    },
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "eleven_v3_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_multilingual_v2_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_flash_v2_5_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_turbo_v2_5_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_turbo_v2_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      },
+      {
+        "id": "eleven_flash_v2_ivc",
+        "features": ["AUDIO_TO_AUDIO"],
+        "usedCount": 0,
+        "popularityScore": 0
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "ELITE",
+    "isDefault": false
+  },
+  {
+    "id": "gemini-image",
+    "providerAliases": null,
+    "label": "Gemini-image",
+    "description": null,
+    "pricing": null,
+    "autoUpdatePricing": true,
+    "prefix": "",
+    "contextLength": 4095,
+    "maxTokens": 4096,
+    "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE", "TEXT_TO_IMAGE_LLM"],
+    "vectorDimensions": null,
+    "ownedBy": "gemini-image",
+    "parentId": null,
+    "messageColor": null,
+    "disabled": false,
+    "disabledApi": false,
+    "disabledWeb": false,
+    "disabledTelegram": true,
+    "order": 75,
+    "usedCount": 0,
+    "custom": true,
+    "popularityScore": 0,
+    "deletedAt": null,
+    "createdAt": "2026-06-26T08:00:03.683Z",
+    "params": null,
+    "iconId": null,
+    "providerId": null,
+    "childProviderId": null,
+    "icon": null,
+    "parent": null,
+    "functions": [],
+    "children": [
+      {
+        "id": "gemini-3-pro-image-preview",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE", "TEXT_TO_IMAGE_LLM"],
+        "usedCount": 0,
+        "popularityScore": 1820
+      },
+      {
+        "id": "gemini-3.1-flash-image-preview",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE", "TEXT_TO_IMAGE_LLM"],
+        "usedCount": 0,
+        "popularityScore": 502
+      },
+      {
+        "id": "gemini-2.5-flash-image",
+        "features": ["TEXT_TO_IMAGE", "IMAGE_TO_IMAGE", "TEXT_TO_IMAGE_LLM"],
+        "usedCount": 0,
+        "popularityScore": 58
+      }
+    ],
+    "providers": [],
+    "isAllowed": false,
+    "allowedPlanType": "BASIC",
+    "isDefault": false
+  }
+]

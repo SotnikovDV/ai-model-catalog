@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= model.name %> — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="detail-page-layout">
+  <%- include('partials/nav', { showStats: true, totalCount, shownCount, activeNav: 'catalog', showFilterLink: true }) %>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="layout">
+    <%- include('partials/sidebar') %>
+
+    <main class="main detail-main">
+      <div class="detail-page">
+        <div class="detail-toolbar">
+          <a href="/" class="back-link detail-back-link">&larr; Назад к каталогу</a>
+        </div>
+
+    <header class="detail-hero page-card">
+      <div class="detail-hero-top">
+        <div class="detail-hero-main">
+          <div class="detail-hero-kicker"><%= model.family %> · <%= model.provider %></div>
+          <div class="detail-hero-title-row">
+            <h1 class="detail-hero-title"><%= model.name %></h1>
+            <button
+              type="button"
+              class="rec-copy-name-btn"
+              id="detailCopyNameBtn"
+              data-copy-text="<%= model.name %>"
+              title="Копировать название"
+              aria-label="Копировать название"
+            ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          </div>
+          <div class="detail-badges">
+            <span class="availability-badge <%= model.availability_badge_class %>" id="detailAvailabilityBadge"><%= model.availability_status_label %></span>
+            <span
+              class="assistant-preview-meta-badge"
+              id="detailInferenceSpeedBadge"
+              <% if (!model.inference_speed_label) { %>hidden<% } %>
+              <% if (model.inference_speed_title) { %>title="<%= model.inference_speed_title %>"<% } %>
+            ><%= model.inference_speed_label || '' %></span>
+            <span
+              class="assistant-preview-meta-badge chat-rating-badge"
+              id="detailChatRatingBadge"
+              <% if (!model.chat_rating_label) { %>hidden<% } %>
+              <% if (model.chat_rating_title) { %>title="<%= model.chat_rating_title %>"<% } %>
+            ><%= model.chat_rating_label || '' %></span>
+            <span class="detail-badge accent"><%= model.modality %></span>
+            <span class="detail-badge"><%= model.price_label %></span>
+            <% if (model.is_favorite) { %>
+              <span class="detail-badge favorite">⭐ Избранное</span>
+            <% } %>
+            <% if (model.is_hidden) { %>
+              <span class="detail-badge">Скрытая</span>
+            <% } %>
+            <% if (model.release_date) { %>
+              <span class="detail-badge">Релиз: <%= model.release_date %></span>
+            <% } %>
+          </div>
+          <p class="detail-hero-updated<%= model.info_updated_formatted || model.updated_at_formatted ? '' : ' muted' %>">
+            <% if (model.info_updated_formatted) { %>
+              Актуализация: <%= model.info_updated_formatted %>
+            <% } else if (model.updated_at_formatted) { %>
+              Актуализация: <%= model.updated_at_formatted %>
+            <% } else { %>
+              Актуализация не указана
+            <% } %>
+          </p>
+          <p class="detail-hero-availability<%= model.availability_checked_formatted ? '' : ' muted' %>" id="detailAvailabilityStatus">
+            <% if (model.availability_checked_formatted) { %>
+              Доступность: <%= model.availability_checked_formatted %><% if (model.availability_response_ms != null) { %> · <%= model.availability_response_ms %> мс<% } %>
+            <% } else { %>
+              Доступность не проверялась
+            <% } %>
+          </p>
+          <p class="detail-hero-auto-eval<%= autoBenchmarkRating ? '' : ' muted' %>" id="detailAutoEvalStatus">
+            <% if (autoBenchmarkRating) { %>
+              Автооценка: <%= new Date(autoBenchmarkRating.ratedAt).toLocaleDateString('ru-RU') %> · <%= autoBenchmarkRating.score %>/5
+            <% } else { %>
+              Автооценка не выполнялась
+            <% } %>
+          </p>
+          <% if (autoBenchmarkRating && autoBenchmarkRating.comment) { %>
+            <pre class="detail-auto-eval-comment" id="detailAutoEvalComment"><%= autoBenchmarkRating.comment %></pre>
+          <% } else { %>
+            <pre class="detail-auto-eval-comment" id="detailAutoEvalComment" hidden></pre>
+          <% } %>
+        </div>
+        <div class="detail-hero-actions card-actions">
+          <% const needsAdmin = adminAuthEnabled && !isAdminAuthenticated; %>
+          <a href="<%= protectedHrefs.chat %>" class="card-chat-btn" title="Чат с моделью" aria-label="Чат с моделью">
+            <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </a>
+          <% if (needsAdmin) { %>
+          <a href="<%= protectedHrefs.detail %>" class="card-avail-btn" title="Быстрая проверка доступности" aria-label="Быстрая проверка доступности">
+            <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </a>
+          <a href="<%= protectedHrefs.detail %>" class="card-avail-btn card-avail-inference-btn" title="Проверка inference" aria-label="Проверка inference">
+            <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </a>
+          <a href="<%= protectedHrefs.detail %>" class="card-sync-btn" title="Обновить из источников" aria-label="Обновить из источников">
+            <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+          </a>
+          <a href="<%= protectedHrefs.edit %>" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
+          <a href="<%= protectedHrefs.detail %>" class="card-hidden-btn" title="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>" aria-label="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"></a>
+          <a href="<%= protectedHrefs.detail %>" class="card-favorite-btn<%= model.is_favorite ? ' active' : '' %>" title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>" aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>">★</a>
+          <% } else { %>
+          <button type="button" class="card-avail-btn" id="detailAvailCatalogBtn" data-model-id="<%= model.id %>" title="Быстрая проверка доступности" aria-label="Быстрая проверка доступности">
+            <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="card-avail-spinner" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="card-avail-btn card-avail-inference-btn" id="detailAvailInferenceBtn" data-model-id="<%= model.id %>" title="Проверка inference" aria-label="Проверка inference">
+            <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span class="card-avail-spinner" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="card-avail-btn card-eval-btn" id="detailEvalBtn" data-model-id="<%= model.id %>" title="Автооценка (бенчмарк)" aria-label="Автооценка (бенчмарк)">
+            <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="card-avail-spinner" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="card-sync-btn" id="detailSyncBtn" data-model-id="<%= model.id %>" title="Обновить из источников" aria-label="Обновить из источников">
+            <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+          </button>
+          <a href="<%= protectedHrefs.edit %>" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
+          <button type="button" class="card-hidden-btn" id="detailHiddenBtn" data-id="<%= model.id %>" title="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>" aria-label="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"></button>
+          <button type="button" class="card-favorite-btn<%= model.is_favorite ? ' active' : '' %>" id="detailFavoriteBtn" data-id="<%= model.id %>" title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>" aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>">★</button>
+          <% } %>
+          <button type="button" class="card-compare-btn detail-compare-btn" id="detailCompareBtn" data-id="<%= model.id %>" title="Добавить к сравнению" aria-label="Добавить к сравнению" aria-pressed="false">
+            <span class="compare-btn-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+
+      <% if (model.description) { %>
+        <div class="detail-hero-desc chat-message-content--markdown" id="detailDescription"></div>
+      <% } else { %>
+        <p class="detail-empty-inline">Описание не заполнено. <a href="/models/<%= model.id %>/edit">Добавить в редакторе</a></p>
+      <% } %>
+
+      <div class="detail-specs">
+        <div class="detail-spec-tile">
+          <div class="detail-spec-label">
+            <%- include('partials/field-hint', { fieldKey: 'modality' }) %>
+          </div>
+          <div class="detail-spec-value"><%= model.modality %></div>
+        </div>
+        <div class="detail-spec-tile">
+          <div class="detail-spec-label">
+            <%- include('partials/field-hint', { fieldKey: 'context_window' }) %>
+          </div>
+          <div class="detail-spec-value"><%= model.context_formatted %></div>
+          <div class="detail-spec-sub"><%= model.context_window.toLocaleString('ru-RU') %> токенов</div>
+        </div>
+        <div class="detail-spec-tile">
+          <div class="detail-spec-label">
+            <%- include('partials/field-hint', { fieldKey: 'max_output_tokens' }) %>
+          </div>
+          <div class="detail-spec-value"><%= model.output_formatted %></div>
+          <div class="detail-spec-sub"><%= model.max_output_tokens.toLocaleString('ru-RU') %> токенов</div>
+        </div>
+        <div class="detail-spec-tile">
+          <div class="detail-spec-label">
+            <%- include('partials/field-hint', { fieldKey: 'input_price_per_mtok' }) %>
+          </div>
+          <div class="detail-spec-value <%= model.is_free ? 'free' : 'price' %>"><%= model.input_price_per_mtok %> ₽</div>
+        </div>
+        <div class="detail-spec-tile">
+          <div class="detail-spec-label">
+            <%- include('partials/field-hint', { fieldKey: 'output_price_per_mtok' }) %>
+          </div>
+          <div class="detail-spec-value <%= model.is_free ? 'free' : 'price' %>"><%= model.output_price_per_mtok %> ₽</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="detail-grid">
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title">
+          <%- include('partials/field-hint', { fieldKey: 'capabilities' }) %>
+        </h2>
+        <div class="detail-capabilities">
+          <% const capabilities = [
+            ['Vision', model.supports_vision],
+            ['Function calling', model.supports_function_calling],
+            ['JSON mode', model.supports_json_mode],
+            ['Streaming', model.supports_streaming],
+            ['Поиск в интернете', model.supports_web_search],
+          ]; %>
+          <% capabilities.forEach(([label, enabled]) => { %>
+            <div class="detail-capability<%= enabled ? ' enabled' : '' %>">
+              <span class="detail-capability-icon" aria-hidden="true"><%= enabled ? '✓' : '—' %></span>
+              <span><%= label %></span>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title">
+          <%- include('partials/field-hint', { fieldKey: 'ratings' }) %>
+        </h2>
+        <div class="detail-ratings">
+          <% ratingFields.forEach(({ key, label }) => { %>
+            <% const value = Number(model[key]) || 3; %>
+            <div class="detail-rating-row">
+              <div class="detail-rating-label">
+                <%- include('partials/field-hint', { fieldKey: key }) %>
+              </div>
+              <div class="detail-rating-bar-wrap">
+                <div class="detail-rating-bar" style="width: <%= value * 20 %>%"></div>
+              </div>
+              <div class="detail-rating-value"><%= value %>/5</div>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    </div>
+
+    <div class="detail-grid">
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title">
+          <%- include('partials/field-hint', { fieldKey: 'use_cases_section' }) %>
+        </h2>
+        <% if (model.use_cases && model.use_cases.length > 0) { %>
+          <div class="detail-chip-list">
+            <% model.use_cases.forEach(item => { %>
+              <span class="detail-chip">📌 <%= item %></span>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="detail-empty">Сценарии не указаны.</p>
+        <% } %>
+      </section>
+
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title">
+          <%- include('partials/field-hint', { fieldKey: 'tags_section' }) %>
+        </h2>
+        <% if (model.tags && model.tags.length > 0) { %>
+          <div class="detail-badges" style="margin:0;">
+            <% model.tags.forEach(tag => { %>
+              <span class="detail-badge"><%= tag %></span>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="detail-empty">Теги не указаны.</p>
+        <% } %>
+      </section>
+    </div>
+
+    <div class="detail-grid">
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title pros">
+          <%- include('partials/field-hint', { fieldKey: 'pros_section' }) %>
+        </h2>
+        <% if (model.pros && model.pros.length > 0) { %>
+          <ul class="modal-list">
+            <% model.pros.forEach(item => { %>
+              <li><%= item %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="detail-empty">Плюсы не заполнены.</p>
+        <% } %>
+      </section>
+
+      <section class="page-card detail-section">
+        <h2 class="detail-section-title cons">
+          <%- include('partials/field-hint', { fieldKey: 'cons_section' }) %>
+        </h2>
+        <% if (model.cons && model.cons.length > 0) { %>
+          <ul class="modal-list limits">
+            <% model.cons.forEach(item => { %>
+              <li><%= item %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="detail-empty">Минусы не заполнены.</p>
+        <% } %>
+      </section>
+    </div>
+
+    <section class="page-card detail-section">
+      <h2 class="detail-section-title">
+        <%- include('partials/field-hint', { fieldKey: 'benchmarks_section' }) %>
+      </h2>
+      <% if (model.benchmarks && Object.keys(model.benchmarks).length > 0) { %>
+        <div class="detail-benchmarks">
+          <% Object.entries(model.benchmarks).forEach(([name, score]) => { %>
+            <div class="detail-benchmark-item">
+              <div class="detail-benchmark-name"><%= name %></div>
+              <div class="detail-benchmark-score"><%= score %></div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="detail-empty">Бенчмарки не указаны.</p>
+      <% } %>
+    </section>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="detailSyncOverlay">
+    <div class="modal sync-modal" role="dialog" aria-labelledby="detailSyncTitle">
+      <div class="modal-header">
+        <div class="modal-header-top">
+          <div class="modal-header-text">
+            <h2 class="modal-title" id="detailSyncTitle">Обновить из источников</h2>
+            <p class="sync-modal-model-name" id="detailSyncModelName"><%= model.family %>/<%= model.name %></p>
+          </div>
+          <button type="button" class="modal-close" id="detailSyncClose" aria-label="Закрыть">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">
+          Данные будут загружены из BotHub, OpenRouter и RouterAI.
+        </p>
+        <label class="form-check-inline" style="margin-bottom:16px; display:flex;" for="detailSyncOnlyEmpty">
+          <input type="checkbox" id="detailSyncOnlyEmpty" value="1">
+          <%- include('partials/field-hint', { fieldKey: 'onlyEmpty' }) %>
+        </label>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+          <div class="sync-fields-header">
+            <%- include('partials/field-hint', { fieldKey: 'syncFields' }) %>
+          </div>
+          <div class="sync-fields-actions">
+            <button type="button" class="btn btn-secondary btn-sm" id="detailSyncSelectAllBtn">Выбрать все</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="detailSyncDeselectAllBtn">Снять все отметки</button>
+          </div>
+        </div>
+        <div id="detailSyncFieldGroups" class="sync-field-groups"></div>
+        <div id="detailSyncPreview" class="sync-report-details" hidden></div>
+        <div id="detailSyncProgress" class="sync-progress" hidden aria-live="polite"></div>
+        <p id="detailSyncStatus" class="form-status" hidden></p>
+      </div>
+      <div class="modal-footer" style="display:flex; gap:12px; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary" id="detailSyncPreviewBtn">Предпросмотр</button>
+        <button type="button" class="btn btn-primary" id="detailSyncApplyBtn">Применить</button>
+        <button type="button" class="btn btn-secondary" id="detailSyncCancelBtn">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.MODELS_DATA = <%- JSON.stringify(models).replace(/</g, '\\u003c') %>;
+    window.USE_CASE_CATEGORIES = <%- JSON.stringify(useCaseCategories).replace(/</g, '\\u003c') %>;
+    window.DETAIL_DESCRIPTION = <%- JSON.stringify(model.description || '') %>;
+    window.DETAIL_PAGE = {
+      isHidden: <%= model.is_hidden ? 'true' : 'false' %>,
+    };
+  </script>
+  <%- include('partials/admin-auth-init') %>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+  <script src="/markdown.js"></script>
+  <script src="/catalog.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

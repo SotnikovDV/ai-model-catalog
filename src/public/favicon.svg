@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="AI Model Catalog">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c63ff"/>
+      <stop offset="100%" stop-color="#00d4aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <rect x="7" y="8" width="11" height="2.5" rx="1.25" fill="#fff" opacity="0.95"/>
+  <rect x="7" y="14.75" width="15" height="2.5" rx="1.25" fill="#fff" opacity="0.88"/>
+  <rect x="7" y="21.5" width="13" height="2.5" rx="1.25" fill="#fff" opacity="0.8"/>
+  <circle cx="23.5" cy="10.5" r="1.6" fill="#fff"/>
+  <path d="M23.5 6.8v1.6M23.5 12.6v1.6M21.3 10.5h1.6M25.7 10.5h1.6" stroke="#fff" stroke-width="1.35" stroke-linecap="round"/>
+</svg>

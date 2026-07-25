@@ -1,0 +1,91 @@
+<aside class="sidebar" id="filterSidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-mobile-header">
+      <span class="sidebar-mobile-title">Фильтр</span>
+      <button type="button" class="sidebar-mobile-close" id="filterCloseBtn" aria-label="Закрыть фильтр">&times;</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Поиск по названию модели..." />
+      <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="Очистить поиск" hidden>&times;</button>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Избранное</div>
+      <div class="price-chips" id="favoriteFilter"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Ценовая категория</div>
+      <div class="price-chips" id="priceFilters"></div>
+    </div>
+
+    <div class="filter-section" id="familyFilterSection">
+      <div class="sidebar-title">Семейство</div>
+      <div class="family-filter-wrap">
+        <div class="family-list family-list-collapsed" id="familyFilters"></div>
+        <button type="button" class="family-filter-toggle" id="familyFiltersToggle" hidden>показать все</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Модальность</div>
+      <div class="family-list" id="modalityFilters"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Возможности</div>
+      <div class="family-list" id="capabilityFilters"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Год издания</div>
+      <div class="family-list" id="yearFilters"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Доступность</div>
+      <div class="price-chips" id="availabilityFilters"></div>
+    </div>
+
+    <div class="filter-section" id="qualityFilterSection">
+      <div class="sidebar-title">Качество</div>
+      <div class="quality-filter">
+        <label class="quality-filter-label" for="chatRatingRangeMin">Оценка в чате</label>
+        <div class="dual-range" data-empty-label="Не оценивалась">
+          <div class="dual-range-track" aria-hidden="true">
+            <div class="dual-range-fill"></div>
+          </div>
+          <span class="dual-range-thumb-label" data-thumb="min" title="Не оценивалась">—</span>
+          <span class="dual-range-thumb-label" data-thumb="max" title="5/5">5</span>
+          <input type="range" class="dual-range-min" id="chatRatingRangeMin" min="0" max="5" step="1" value="0" aria-label="Минимальная оценка в чате">
+          <input type="range" class="dual-range-max" id="chatRatingRangeMax" min="0" max="5" step="1" value="5" aria-label="Максимальная оценка в чате">
+        </div>
+      </div>
+      <div class="quality-filter">
+        <label class="quality-filter-label" for="inferenceSpeedRangeMin">Скорость ответа</label>
+        <div class="dual-range" data-empty-label="Не замерялась">
+          <div class="dual-range-track" aria-hidden="true">
+            <div class="dual-range-fill"></div>
+          </div>
+          <span class="dual-range-thumb-label" data-thumb="min" title="Не замерялась">—</span>
+          <span class="dual-range-thumb-label" data-thumb="max" title="5/5">5</span>
+          <input type="range" class="dual-range-min" id="inferenceSpeedRangeMin" min="0" max="5" step="1" value="0" aria-label="Минимальная скорость ответа">
+          <input type="range" class="dual-range-max" id="inferenceSpeedRangeMax" min="0" max="5" step="1" value="5" aria-label="Максимальная скорость ответа">
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Видимость</div>
+      <div class="price-chips" id="hiddenFilter"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="sidebar-title">Категории применения</div>
+      <div class="family-list" id="catFilters"></div>
+    </div>
+
+    <button type="button" class="reset-btn" id="resetFiltersBtn">✕ Сбросить все фильтры</button>
+  </div>
+</aside>

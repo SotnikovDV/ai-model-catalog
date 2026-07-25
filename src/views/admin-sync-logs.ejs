@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Журнал обновлений — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'sync-logs' }) %>
+    <%- include('partials/admin-user-bar') %>
+
+    <h1 class="page-title">Журнал обновлений</h1>
+    <p class="page-subtitle">
+      История пакетных и одиночных синхронизаций. Всего записей: <strong style="color:var(--accent2);"><%= totalCount %></strong>.
+    </p>
+
+    <div class="page-card">
+      <% if (!logs.length) { %>
+        <p class="detail-empty">Записей пока нет. Запустите обновление каталога, чтобы журнал начал заполняться.</p>
+      <% } else { %>
+        <div class="sync-log-table-wrap">
+          <table class="sync-log-table">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Статус</th>
+                <th>Модель</th>
+                <th>Итог</th>
+                <th>Длительность</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% logs.forEach((log) => { %>
+                <tr>
+                  <td><%= formatSyncLogDate(log.startedAt) %></td>
+                  <td>
+                    <%= kindLabels[log.kind] %>
+                    <% if (log.dryRun) { %><span class="sync-log-tag">предпросмотр</span><% } %>
+                  </td>
+                  <td><span class="sync-log-status sync-log-status--<%= log.status %>"><%= statusLabels[log.status] %></span></td>
+                  <td><%= log.modelName || '—' %></td>
+                  <td class="sync-log-summary">
+                    +<%= log.summary.updated + log.summary.created %>
+                    / проп. <%= log.summary.skipped %>
+                    / ош. <%= log.summary.errors %>
+                  </td>
+                  <td><%= formatDuration(log.durationMs) %></td>
+                  <td><a href="/admin/sync/logs/<%= log.id %>" class="btn btn-secondary btn-sm">Подробнее</a></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  <%- include('partials/admin-layout-close') %>
+  <script src="/authFetch.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

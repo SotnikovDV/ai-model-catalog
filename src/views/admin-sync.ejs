@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обновление каталога — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'sync' }) %>
+    <%- include('partials/admin-user-bar') %>
+
+    <h1 class="page-title">Обновление каталога</h1>
+    <p class="page-subtitle">
+      Загрузка реквизитов из BotHub, OpenRouter и RouterAI. В каталоге сейчас
+      <strong style="color:var(--accent2);"><%= modelCount %></strong> моделей.
+    </p>
+
+    <div class="page-card">
+      <form id="adminSyncForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="syncMode">
+              <%- include('partials/field-hint', { fieldKey: 'mode' }) %>
+            </label>
+            <select name="mode" id="syncMode">
+              <option value="update" selected>Обновить существующие</option>
+              <option value="import">Добавить новые из BotHub</option>
+              <option value="both">Обновить и добавить</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="syncFilter">
+              <%- include('partials/field-hint', { fieldKey: 'filter' }) %>
+            </label>
+            <select name="filter" id="syncFilter">
+              <option value="all" selected>Все модели</option>
+              <option value="empty_description">Только с пустым описанием</option>
+              <option value="provider">По провайдеру</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="syncProviderField" hidden>
+            <label for="syncProvider">
+              <%- include('partials/field-hint', { fieldKey: 'provider' }) %>
+            </label>
+            <input type="text" name="provider" id="syncProvider" value="BotHub" placeholder="BotHub">
+          </div>
+
+          <div class="form-field">
+            <label for="syncStaleness">
+              <%- include('partials/field-hint', { fieldKey: 'staleness' }) %>
+            </label>
+            <select name="staleness" id="syncStaleness">
+              <option value="" selected>Любой</option>
+              <option value="never">Не обновлялась</option>
+              <option value="week">Неделя</option>
+              <option value="month">Месяц</option>
+              <option value="half_year">Полгода</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="syncFamily">
+              <%- include('partials/field-hint', { fieldKey: 'family' }) %>
+            </label>
+            <select name="family" id="syncFamily">
+              <option value="" selected>Все</option>
+              <% families.forEach((family) => { %>
+                <option value="<%= family %>"><%= family %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-top:16px;">
+          <label class="form-check-inline" for="syncOnlyEmpty">
+            <input type="checkbox" name="onlyEmpty" id="syncOnlyEmpty" value="1">
+            <%- include('partials/field-hint', { fieldKey: 'onlyEmpty' }) %>
+          </label>
+        </div>
+
+        <div class="form-field" style="margin-top:24px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+            <div class="sync-fields-header">
+              <%- include('partials/field-hint', { fieldKey: 'syncFields' }) %>
+            </div>
+            <div class="sync-fields-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="syncSelectAllBtn">Выбрать все</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="syncDeselectAllBtn">Убрать</button>
+            </div>
+          </div>
+          <div id="syncFieldGroups" class="sync-field-groups"></div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px;">
+          <button type="button" class="btn btn-secondary" id="syncPreviewBtn">Предпросмотр</button>
+          <button type="submit" class="btn btn-primary">Запустить обновление</button>
+        </div>
+        <p id="syncStatus" class="form-status" hidden></p>
+        <div id="syncProgress" class="sync-progress" hidden aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="page-card" id="syncReportCard" style="margin-top:24px;" hidden>
+      <h2 class="modal-section-title" style="font-size:14px; margin-bottom:12px;">Отчёт</h2>
+      <div id="syncReportSummary" style="font-size:14px; color:var(--text-muted); margin-bottom:16px;"></div>
+      <div id="syncReportDetails" class="sync-report-details"></div>
+    </div>
+
+    <h2 class="page-title" style="margin-top:32px;">Проверка доступности</h2>
+    <p class="page-subtitle">
+      Быстрая проверка (каталог провайдера, без токенов) или inference (минимальный chat-запрос).
+    </p>
+
+    <div class="page-card">
+      <form id="adminAvailabilityForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="availMode">Режим</label>
+            <select name="mode" id="availMode">
+              <option value="catalog" selected>Быстрая (каталог)</option>
+              <option value="inference">Inference</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="availFilter">Фильтр моделей</label>
+            <select name="filter" id="availFilter">
+              <option value="all" selected>Все модели</option>
+              <option value="empty_description">Только с пустым описанием</option>
+              <option value="provider">По провайдеру</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="availProviderField" hidden>
+            <label for="availProvider">Провайдер</label>
+            <input type="text" name="provider" id="availProvider" value="BotHub" placeholder="BotHub">
+          </div>
+
+          <div class="form-field">
+            <label for="availStaleness">Давность проверки</label>
+            <select name="staleness" id="availStaleness">
+              <option value="" selected>Любая</option>
+              <option value="never">Не проверялась</option>
+              <option value="week">Неделя</option>
+              <option value="month">Месяц</option>
+              <option value="half_year">Полгода</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="availFamily">Семейство</label>
+            <select name="family" id="availFamily">
+              <option value="" selected>Все</option>
+              <% families.forEach((family) => { %>
+                <option value="<%= family %>"><%= family %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px;">
+          <button type="submit" class="btn btn-primary">Запустить проверку</button>
+        </div>
+        <p id="availStatus" class="form-status" hidden></p>
+        <div id="availProgress" class="sync-progress" hidden aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="page-card" id="availReportCard" style="margin-top:24px;" hidden>
+      <h2 class="modal-section-title" style="font-size:14px; margin-bottom:12px;">Отчёт проверки</h2>
+      <div id="availReportSummary" style="font-size:14px; color:var(--text-muted);"></div>
+    </div>
+
+    <h2 class="page-title" style="margin-top:32px;">Автооценка моделей</h2>
+    <p class="page-subtitle">
+      Бенчмарк из 5 критериев через inference-запрос. Результат — в оценку чата; при ответе модели — статус «Инференс».
+    </p>
+
+    <div class="page-card">
+      <form id="adminEvaluationForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="evalFilter">Фильтр моделей</label>
+            <select name="filter" id="evalFilter">
+              <option value="all" selected>Все модели</option>
+              <option value="empty_description">Только с пустым описанием</option>
+              <option value="provider">По провайдеру</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="evalProviderField" hidden>
+            <label for="evalProvider">Провайдер</label>
+            <input type="text" name="provider" id="evalProvider" value="BotHub" placeholder="BotHub">
+          </div>
+
+          <div class="form-field">
+            <label for="evalStaleness">Давность оценки</label>
+            <select name="staleness" id="evalStaleness">
+              <option value="" selected>Любая</option>
+              <option value="never">Не оценивалась</option>
+              <option value="week">Неделя</option>
+              <option value="month">Месяц</option>
+              <option value="half_year">Полгода</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="evalFamily">Семейство</label>
+            <select name="family" id="evalFamily">
+              <option value="" selected>Все</option>
+              <% families.forEach((family) => { %>
+                <option value="<%= family %>"><%= family %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-check-inline" for="evalInferenceOnly">
+              <input type="checkbox" name="inferenceOnly" id="evalInferenceOnly" value="1">
+              Только со статусом «Инференс»
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px;">
+          <button type="submit" class="btn btn-primary">Запустить автооценку</button>
+        </div>
+        <p id="evalStatus" class="form-status" hidden></p>
+        <div id="evalProgress" class="sync-progress" hidden aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="page-card" id="evalReportCard" style="margin-top:24px;" hidden>
+      <h2 class="modal-section-title" style="font-size:14px; margin-bottom:12px;">Отчёт автооценки</h2>
+      <div id="evalReportSummary" style="font-size:14px; color:var(--text-muted);"></div>
+    </div>
+  <%- include('partials/admin-layout-close') %>
+
+  <script src="/authFetch.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

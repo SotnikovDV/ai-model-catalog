@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= provider ? provider.name : 'Новый провайдер' %> — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page providers-page providers-form-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'provider-form' }) %>
+    <%- include('partials/admin-user-bar') %>
+    <div class="detail-toolbar">
+      <a href="/admin/providers" class="back-link">&larr; К списку провайдеров</a>
+    </div>
+
+    <div class="page-title-row">
+      <h1 class="page-title"><%= provider ? 'Редактировать провайдера' : 'Новый провайдер' %></h1>
+      <% if (provider) { %>
+        <span class="provider-status provider-status--<%= provider.enabled ? 'enabled' : 'disabled' %>">
+          <%= provider.enabled ? 'Включён' : 'Отключён' %>
+        </span>
+      <% } %>
+    </div>
+
+    <form id="providerForm" class="page-card provider-form-card">
+      <input type="hidden" name="id" value="<%= provider ? provider.id : '' %>">
+
+      <section class="provider-form-section">
+        <h2 class="provider-form-section__title">Основное</h2>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="providerName">Название</label>
+            <input type="text" id="providerName" name="name" required value="<%= provider ? provider.name : '' %>">
+          </div>
+          <div class="form-field">
+            <label for="providerSlug">Slug</label>
+            <input type="text" id="providerSlug" name="slug" required pattern="[a-z0-9][a-z0-9_-]*" value="<%= provider ? provider.slug : '' %>">
+            <small class="form-hint">Латиница, цифры, дефис, подчёркивание</small>
+          </div>
+        </div>
+
+        <div class="form-field form-switch-field">
+          <label class="form-switch" for="providerEnabled">
+            <input type="checkbox" name="enabled" id="providerEnabled" value="1" <%= !provider || provider.enabled ? 'checked' : '' %>>
+            <span class="form-switch__track" aria-hidden="true"><span class="form-switch__thumb"></span></span>
+            <span class="form-switch__label">Провайдер включён</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="provider-form-section">
+        <h2 class="provider-form-section__title">Тип каталога</h2>
+        <p class="provider-form-section__hint">Определяет адаптер синхронизации и подсказку для URL.</p>
+        <div class="catalog-source-picker" role="radiogroup" aria-label="Тип каталога">
+          <% const sources = ['bothub', 'openrouter', 'routerai', 'custom']; %>
+          <% for (const source of sources) { %>
+            <label class="catalog-source-option">
+              <input
+                type="radio"
+                name="catalog_source"
+                value="<%= source %>"
+                <%= (!provider && source === 'custom') || (provider && provider.catalog_source === source) ? 'checked' : '' %>
+              >
+              <span class="catalog-source-option__box">
+                <span class="provider-badge provider-badge--<%= source %>"><%= catalogSourceLabels[source] %></span>
+                <span class="catalog-source-option__slug"><%= source %></span>
+              </span>
+            </label>
+          <% } %>
+        </div>
+      </section>
+
+      <section class="provider-form-section">
+        <h2 class="provider-form-section__title">Подключение</h2>
+        <p class="provider-form-section__hint">Base URL — для тестового чата моделей; URL каталога — для синхронизации.</p>
+        <div class="form-field">
+          <label for="baseUrl">Base URL</label>
+          <input
+            type="url"
+            id="baseUrl"
+            name="base_url"
+            value="<%= provider ? provider.base_url : '' %>"
+            placeholder="<%= catalogSourceBaseUrlHints.custom %>"
+            data-url-hints='<%- JSON.stringify(catalogSourceBaseUrlHints) %>'
+          >
+          <small class="form-hint">OpenAI-compatible endpoint для чата (BotHub: <code>https://openai.bothub.chat/v1</code>)</small>
+        </div>
+        <div class="form-field">
+          <label for="modelsUrl">URL каталога моделей</label>
+          <input
+            type="url"
+            id="modelsUrl"
+            name="models_url"
+            value="<%= provider ? provider.models_url : '' %>"
+            placeholder="<%= catalogSourceUrlHints.custom %>"
+            data-url-hints='<%- JSON.stringify(catalogSourceUrlHints) %>'
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="apiKey">API-ключ</label>
+          <input
+            type="password"
+            id="apiKey"
+            name="api_key"
+            autocomplete="off"
+            placeholder="<%= provider && provider.apiKeySet ? 'Оставьте пустым, чтобы не менять' : 'Необязательно' %>"
+          >
+          <% if (provider && provider.apiKeySet) { %>
+            <small class="form-hint">Текущий ключ: <%= provider.apiKeyHint %>. Оставьте поле пустым, чтобы сохранить.</small>
+          <% } else { %>
+            <small class="form-hint">Нужен для тестового чата моделей. Для sync BotHub можно оставить пустым — будет использован ключ из блока «AI-ассистент».</small>
+          <% } %>
+        </div>
+      </section>
+
+      <div class="provider-form-actions">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="/admin/providers" class="btn btn-secondary">Отмена</a>
+      </div>
+      <p id="providerFormStatus" class="form-status" hidden></p>
+    </form>
+  <%- include('partials/admin-layout-close') %>
+
+  <script src="/authFetch.js"></script>
+  <script src="/providers-admin.js"></script>
+</body>
+</html>

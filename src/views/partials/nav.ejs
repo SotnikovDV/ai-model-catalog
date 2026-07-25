@@ -1,0 +1,114 @@
+<header class="site-header">
+  <div class="header-inner">
+    <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="mobile-menu-btn-icon" aria-hidden="true"></span>
+    </button>
+
+    <div class="logo">
+      <a href="/">AI Catalog</a>
+      <% if (typeof showStats !== 'undefined' && showStats) { %>
+        <span class="logo-badge">(<strong id="totalCount"><%= totalCount %></strong> моделей)</span>
+      <% } %>
+    </div>
+
+    <nav class="header-nav desktop-only" aria-label="Основная навигация">
+      <a href="/" class="<%= typeof activeNav === 'undefined' || activeNav === 'catalog' ? 'active' : '' %>">Каталог</a>
+      <a href="/compare" data-nav-compare class="<%= activeNav === 'compare' ? 'active' : '' %>">Сравнение</a>
+      <a href="/assistant" class="<%= activeNav === 'assistant' ? 'active' : '' %>">AI-ассистент</a>
+      <a href="https://bothub.ru/profile/for-developers" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">BotHub</a>
+      <a href="/admin" class="<%= activeNav === 'admin' ? 'active' : '' %>">Админ</a>
+    </nav>
+
+    <div class="header-stats desktop-only">
+      <button type="button" class="theme-toggle" id="themeToggle" title="Переключить тему" data-theme-toggle>
+        <span class="theme-icon" id="themeIcon">☀️</span>
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+<aside class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню" aria-hidden="true">
+  <div class="mobile-menu-box">
+    <nav class="mobile-menu-nav" aria-label="Навигация">
+      <a href="/" class="mobile-menu-item<%= typeof activeNav === 'undefined' || activeNav === 'catalog' ? ' active' : '' %>">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">Каталог</span>
+      </a>
+      <a href="/compare" data-nav-compare class="mobile-menu-item<%= activeNav === 'compare' ? ' active' : '' %>">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">Сравнение</span>
+      </a>
+      <a href="/assistant" class="mobile-menu-item<%= activeNav === 'assistant' ? ' active' : '' %>">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">AI-ассистент</span>
+      </a>
+      <a href="https://bothub.ru/profile/for-developers" class="mobile-menu-item" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">BotHub</span>
+      </a>
+      <a href="/admin" class="mobile-menu-item<%= activeNav === 'admin' ? ' active' : '' %>">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">Админ</span>
+      </a>
+      <% if (typeof showAddModelLink !== 'undefined' && showAddModelLink) { %>
+        <a href="/models/new" class="mobile-menu-item">
+          <span class="mobile-menu-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+          </span>
+          <span class="mobile-menu-item-label">Добавить модель</span>
+        </a>
+      <% } %>
+      <% if (typeof showFilterLink !== 'undefined' && showFilterLink) { %>
+        <button type="button" class="mobile-menu-item mobile-menu-filter-btn" id="mobileFilterBtn">
+          <span class="mobile-menu-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+          </span>
+          <span class="mobile-menu-item-label">Фильтры</span>
+        </button>
+      <% } %>
+    </nav>
+
+    <div class="mobile-menu-footer">
+      <div class="mobile-menu-profile-card">
+        <div class="mobile-menu-profile-top">
+          <div class="mobile-menu-avatar" aria-hidden="true">AI</div>
+          <div class="mobile-menu-profile-info">
+            <div class="mobile-menu-profile-name">AI Catalog</div>
+            <% if (typeof showStats !== 'undefined' && showStats) { %>
+              <div class="mobile-menu-profile-meta">
+                <span class="mobile-menu-caps">
+                  <strong id="mobileTotalCount"><%= totalCount %></strong> моделей
+                </span>
+              </div>
+            <% } else { %>
+              <div class="mobile-menu-profile-meta">Каталог нейросетей</div>
+            <% } %>
+          </div>
+        </div>
+        <% if (typeof showStats !== 'undefined' && showStats) { %>
+          <div class="mobile-menu-stats-row">
+            <span>Показано: <strong id="mobileShownCount" data-stat="shown"><%= typeof shownCount !== 'undefined' ? shownCount : totalCount %></strong></span>
+          </div>
+        <% } %>
+        <button type="button" class="mobile-menu-cta" id="mobileThemeToggle" data-theme-toggle>
+          <span class="mobile-menu-theme-icon" id="mobileThemeIcon" aria-hidden="true">☀️</span>
+          <span id="mobileThemeLabel">Светлая тема</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+<script src="/compareBuffer.js"></script>
+<script src="/recommendationStore.js"></script>

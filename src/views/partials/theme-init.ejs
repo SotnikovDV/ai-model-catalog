@@ -1,0 +1,11 @@
+<script>
+(function () {
+  try {
+    if (localStorage.getItem('catalog_theme') === 'dark') {
+      document.documentElement.classList.remove('light');
+    }
+  } catch (e) {
+    // ignore storage errors
+  }
+})();
+</script>

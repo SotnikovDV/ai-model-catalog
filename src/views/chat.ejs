@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чат — <%= model.name %> — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="detail-page-layout chat-page-layout">
+  <%- include('partials/nav', { showStats: true, totalCount, shownCount, activeNav: 'catalog', showFilterLink: true }) %>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="layout">
+    <%- include('partials/sidebar') %>
+
+    <main class="main detail-main">
+      <div class="detail-page chat-page">
+        <div class="detail-toolbar">
+          <a href="<%= backHref %>" class="back-link detail-back-link">&larr; <%= backLabel %></a>
+        </div>
+
+        <header class="detail-hero page-card chat-hero">
+          <div class="detail-hero-top">
+            <div class="detail-hero-main">
+              <div class="detail-hero-kicker"><%= model.family %> · <%= model.provider %></div>
+              <h1 class="detail-hero-title">Чат с <a href="/models/<%= model.id %>" class="detail-hero-title-link"><%= model.name %></a></h1>
+              <div class="detail-badges">
+                <span class="detail-badge accent"><%= model.modality %></span>
+                <span class="detail-badge"><%= model.price_label %></span>
+                <% if (model.supports_streaming) { %>
+                  <span class="detail-badge">Streaming</span>
+                <% } %>
+              </div>
+              <p class="detail-hero-updated muted">Тестовый чат через провайдера модели: <%= model.provider %> (model-id: <%= model.name %>)</p>
+            </div>
+            <div class="detail-hero-actions card-actions">
+              <a href="/models/<%= model.id %>/edit" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
+              <button
+                type="button"
+                class="card-hidden-btn"
+                id="chatHiddenBtn"
+                data-id="<%= model.id %>"
+                title="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"
+                aria-label="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"
+              ></button>
+              <button
+                type="button"
+                class="card-favorite-btn<%= model.is_favorite ? ' active' : '' %>"
+                id="chatFavoriteBtn"
+                data-id="<%= model.id %>"
+                title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
+                aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
+              >★</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="page-card chat-panel" aria-label="Чат с моделью">
+          <div class="chat-messages" id="chatMessages" aria-live="polite">
+            <div class="chat-empty" id="chatEmpty">Напишите сообщение, чтобы начать диалог.</div>
+          </div>
+          <div class="chat-error" id="chatError" hidden role="alert"></div>
+          <form class="chat-form" id="chatForm">
+            <textarea
+              class="chat-input"
+              id="chatInput"
+              rows="3"
+              placeholder="Введите сообщение…"
+              aria-label="Сообщение"
+              required
+            ></textarea>
+            <div class="chat-form-actions">
+              <div class="chat-form-actions-left">
+                <label class="chat-reasoning-toggle" id="chatReasoningToggleWrap" hidden>
+                  <input type="checkbox" id="chatReasoningToggle" checked>
+                  <span>Рассуждения</span>
+                </label>
+                <div class="chat-test-menu-wrap">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    id="chatTestMenuBtn"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
+                    aria-controls="chatTestMenu"
+                    title="Подставить тестовый запрос"
+                  >Тест ▾</button>
+                  <div class="chat-test-menu" id="chatTestMenu" role="menu" hidden>
+                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="logic">Логика</button>
+                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="facts">Факты</button>
+                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="json">JSON</button>
+                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="anti-hallucination">Антигаллюцинация</button>
+                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="inference">Вывод</button>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary" id="chatClearBtn">Очистить</button>
+              <button type="submit" class="btn btn-primary" id="chatSendBtn">Отправить</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.MODELS_DATA = <%- JSON.stringify(models).replace(/</g, '\\u003c') %>;
+    window.USE_CASE_CATEGORIES = <%- JSON.stringify(useCaseCategories).replace(/</g, '\\u003c') %>;
+    window.CHAT_MODEL = <%- JSON.stringify({
+      id: model.id,
+      name: model.name,
+      family: model.family,
+      provider: model.provider,
+      priceLabel: model.price_label,
+      priceCategory: model.price_category,
+      isFavorite: model.is_favorite,
+      isHidden: model.is_hidden,
+      inputPricePerMTok: model.input_price_per_mtok,
+      outputPricePerMTok: model.output_price_per_mtok,
+      tags: model.tags || [],
+    }).replace(/</g, '\\u003c') %>;
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+  <script src="/markdown.js"></script>
+  <script src="/chat-common.js"></script>
+  <script src="/catalog.js"></script>
+  <script src="/app.js"></script>
+  <script src="/chat.js"></script>
+</body>
+</html>

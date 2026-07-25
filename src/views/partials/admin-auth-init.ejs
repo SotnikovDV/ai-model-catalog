@@ -1,0 +1,11 @@
+<%
+  const authEnabled = typeof adminAuthEnabled !== 'undefined' ? adminAuthEnabled : false;
+  const authAuthenticated = typeof isAdminAuthenticated !== 'undefined' ? isAdminAuthenticated : true;
+%>
+<script>
+  window.ADMIN_AUTH = {
+    enabled: <%= authEnabled ? 'true' : 'false' %>,
+    authenticated: <%= authAuthenticated ? 'true' : 'false' %>,
+  };
+</script>
+<script src="/admin-access.js"></script>

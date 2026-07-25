@@ -1,0 +1,6 @@
+<% if (typeof authUser !== 'undefined' && authUser) { %>
+  <div class="admin-user-bar">
+    <span>Вход выполнен как <strong><%= authUser.login %></strong></span>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="logoutAdmin()">Выйти</button>
+  </div>
+<% } %>

@@ -1,0 +1,17 @@
+node_modules
+dist
+/data/
+.docs/
+scripts/
+!src/data/
+.env
+.git
+.gitignore
+backups
+tests
+.cursor
+coverage
+*.log
+.DS_Store
+*.md
+!package.json

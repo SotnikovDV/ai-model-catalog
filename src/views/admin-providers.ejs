@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Провайдеры каталога — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page providers-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'providers' }) %>
+    <%- include('partials/admin-user-bar') %>
+
+    <div class="page-title-row">
+      <h1 class="page-title">Провайдеры каталога</h1>
+    </div>
+    <p class="page-subtitle">Источники синхронизации: URL каталога, API-ключ и тип адаптера.</p>
+
+    <div class="providers-toolbar">
+      <label class="providers-search">
+        <span class="providers-search__icon" aria-hidden="true">⌕</span>
+        <input type="search" id="providersSearch" placeholder="Поиск по названию…" autocomplete="off">
+      </label>
+      <a href="/admin/providers/new" class="btn btn-primary">Добавить провайдера</a>
+    </div>
+
+    <p id="providersStatus" class="form-status providers-status" hidden></p>
+
+    <% if (!providers.length) { %>
+      <div class="page-card providers-empty" id="providersEmpty">
+        <p class="detail-empty">Провайдеров пока нет. Добавьте первый источник каталога для синхронизации моделей.</p>
+        <a href="/admin/providers/new" class="btn btn-primary">Добавить первого провайдера</a>
+      </div>
+    <% } else { %>
+      <div class="providers-grid" id="providersGrid">
+        <% for (const p of providers) { %>
+          <% const sourceLabel = catalogSourceLabels[p.catalog_source] || p.catalog_source; %>
+          <% const searchText = [p.name, p.slug, p.models_url, p.catalog_source, sourceLabel].join(' ').toLowerCase(); %>
+          <article
+            class="provider-card"
+            data-provider-id="<%= p.id %>"
+            data-search-text="<%= searchText %>"
+          >
+            <header class="provider-card__header">
+              <h2 class="provider-card__title"><%= p.name %></h2>
+              <span class="provider-status provider-status--<%= p.enabled ? 'enabled' : 'disabled' %>">
+                <%= p.enabled ? 'Включён' : 'Отключён' %>
+              </span>
+            </header>
+
+            <footer class="provider-card__footer">
+              <span><%= p.modelCount %> <%= p.modelCount === 1 ? 'модель' : (p.modelCount >= 2 && p.modelCount <= 4 ? 'модели' : 'моделей') %></span>
+              <span class="provider-key-hint">
+                <% if (p.apiKeySet) { %>
+                  Ключ: <%= p.apiKeyHint %>
+                <% } else if (p.slug === 'bothub') { %>
+                  Ключ: fallback из AI-настроек
+                <% } else { %>
+                  Ключ: не задан
+                <% } %>
+              </span>
+            </footer>
+
+            <div class="provider-card__actions">
+              <a href="/admin/providers/<%= p.id %>/edit" class="btn btn-secondary btn-sm">Изменить</a>
+              <button
+                type="button"
+                class="btn btn-danger btn-sm provider-card__delete"
+                data-delete-provider="<%= p.id %>"
+                data-provider-name="<%= p.name %>"
+              >Удалить</button>
+            </div>
+          </article>
+        <% } %>
+      </div>
+
+      <div class="page-card providers-empty providers-empty--search" id="providersSearchEmpty" hidden>
+        <p class="detail-empty">Ничего не найдено. Попробуйте другой запрос.</p>
+      </div>
+    <% } %>
+  <%- include('partials/admin-layout-close') %>
+
+  <script src="/authFetch.js"></script>
+  <script src="/providers-admin.js"></script>
+</body>
+</html>

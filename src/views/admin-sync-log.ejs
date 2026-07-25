@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись журнала — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'sync-logs' }) %>
+    <%- include('partials/admin-user-bar') %>
+
+    <h1 class="page-title">Запись журнала</h1>
+    <p class="page-subtitle">
+      <%= kindLabels[log.kind] %>
+      <% if (log.dryRun) { %>· предпросмотр<% } %>
+      · <%= formatSyncLogDate(log.startedAt) %>
+    </p>
+
+    <div class="page-card sync-log-meta">
+      <div class="sync-log-meta-grid">
+        <div>
+          <div class="sync-log-meta-label">Статус</div>
+          <div class="sync-log-meta-value"><span class="sync-log-status sync-log-status--<%= log.status %>"><%= statusLabels[log.status] %></span></div>
+        </div>
+        <div>
+          <div class="sync-log-meta-label">Длительность</div>
+          <div class="sync-log-meta-value"><%= formatDuration(log.durationMs) %></div>
+        </div>
+        <div>
+          <div class="sync-log-meta-label">Обновлено</div>
+          <div class="sync-log-meta-value"><%= log.summary.updated %></div>
+        </div>
+        <div>
+          <div class="sync-log-meta-label">Добавлено</div>
+          <div class="sync-log-meta-value"><%= log.summary.created %></div>
+        </div>
+        <div>
+          <div class="sync-log-meta-label">Пропущено</div>
+          <div class="sync-log-meta-value"><%= log.summary.skipped %></div>
+        </div>
+        <div>
+          <div class="sync-log-meta-label">Ошибок</div>
+          <div class="sync-log-meta-value"><%= log.summary.errors %></div>
+        </div>
+      </div>
+
+      <% if (log.modelName) { %>
+        <p style="margin:16px 0 0; font-size:14px; color:var(--text-muted);">
+          Модель: <strong style="color:var(--text);"><%= log.modelName %></strong>
+          <% if (log.modelId) { %>
+            · <a href="/models/<%= log.modelId %>">Открыть карточку</a>
+          <% } %>
+        </p>
+      <% } %>
+
+      <% if (log.errorMessage) { %>
+        <p class="form-status error" style="margin-top:16px;"><%= log.errorMessage %></p>
+      <% } %>
+
+      <details class="sync-log-options" style="margin-top:16px;">
+        <summary>Параметры запуска</summary>
+        <pre class="sync-log-json"><%= JSON.stringify(log.options, null, 2) %></pre>
+      </details>
+    </div>
+
+    <div class="page-card" style="margin-top:24px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;">
+        <h2 class="modal-section-title" style="font-size:14px; margin:0;">Результаты по моделям</h2>
+        <a href="/api/models/sync/logs/<%= log.id %>" class="btn btn-secondary btn-sm" download>JSON</a>
+      </div>
+
+      <% if (!log.results.length) { %>
+        <p class="detail-empty">Детализация по моделям отсутствует.</p>
+      <% } else { %>
+        <div class="sync-report-details">
+          <% log.results.forEach((item) => { %>
+            <div class="sync-report-item">
+              <h3><%= item.name %></h3>
+              <div class="sync-report-status">
+                <%= item.status %><% if (item.message) { %> — <%= item.message %><% } %>
+              </div>
+              <% if (item.diff && item.diff.length) { %>
+                <% item.diff.forEach((row) => { %>
+                  <div class="sync-diff-row">
+                    <div class="sync-diff-field"><%= row.field %></div>
+                    <div class="sync-diff-before"><%= formatSyncValue(row.before) %></div>
+                    <div class="sync-diff-after"><%= formatSyncValue(row.after) %></div>
+                  </div>
+                <% }) %>
+              <% } else if (item.status !== 'error') { %>
+                <div class="sync-report-status">Без изменений полей</div>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  <%- include('partials/admin-layout-close') %>
+  <script src="/authFetch.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

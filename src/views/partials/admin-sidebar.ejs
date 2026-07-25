@@ -1,0 +1,56 @@
+<%
+  const nav = typeof activeAdminNav !== 'undefined' ? activeAdminNav : '';
+  const isActive = (key) => nav === key ? ' active' : '';
+%>
+<aside class="sidebar admin-sidebar" id="adminSidebar">
+  <div class="sidebar-inner admin-sidebar-inner">
+    <div class="sidebar-mobile-header">
+      <span class="sidebar-mobile-title">Админ-меню</span>
+      <button type="button" class="sidebar-mobile-close" id="adminSidebarCloseBtn" aria-label="Закрыть меню">&times;</button>
+    </div>
+
+    <div class="admin-sidebar-brand">
+      <span class="admin-sidebar-brand-title">Администрирование</span>
+    </div>
+
+    <nav class="admin-nav" aria-label="Навигация админки">
+      <div class="admin-sidebar-section">
+        <a href="/admin" class="admin-nav-item<%= isActive('overview') %>">
+          <span class="admin-nav-icon" aria-hidden="true">⌂</span>
+          Обзор
+        </a>
+      </div>
+
+      <div class="admin-sidebar-section">
+        <div class="sidebar-title">Каталог</div>
+        <div class="admin-nav-list">
+          <a href="/admin#catalog" class="admin-nav-item admin-nav-item--sub<%= isActive('catalog') %>">Импорт и экспорт</a>
+          <a href="/admin/sync" class="admin-nav-item admin-nav-item--sub<%= isActive('sync') %>">Обновить каталог</a>
+          <a href="/admin/sync/logs" class="admin-nav-item admin-nav-item--sub<%= isActive('sync-logs') %>">Журнал обновлений</a>
+        </div>
+      </div>
+
+      <div class="admin-sidebar-section">
+        <div class="sidebar-title">Справочники</div>
+        <div class="admin-nav-list">
+          <a href="/admin/providers" class="admin-nav-item admin-nav-item--sub<%= isActive('providers') || isActive('provider-form') ? ' active' : '' %>">Провайдеры</a>
+          <a href="/admin#exchange-rate" class="admin-nav-item admin-nav-item--sub<%= isActive('exchange') %>">Курс валюты</a>
+        </div>
+      </div>
+
+      <div class="admin-sidebar-section">
+        <div class="sidebar-title">База данных</div>
+        <div class="admin-nav-list">
+          <a href="/admin#database" class="admin-nav-item admin-nav-item--sub<%= isActive('database') %>">Очистить БД</a>
+        </div>
+      </div>
+
+      <div class="admin-sidebar-section">
+        <a href="/admin#ai-assistant" class="admin-nav-item<%= isActive('ai-assistant') %>">
+          <span class="admin-nav-icon" aria-hidden="true">✦</span>
+          AI-ассистент
+        </a>
+      </div>
+    </nav>
+  </div>
+</aside>

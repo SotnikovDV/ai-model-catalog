@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Администратор — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'overview' }) %>
+    <%- include('partials/admin-user-bar') %>
+
+    <header class="admin-page-header">
+      <h1 class="page-title">Администратор</h1>
+      <p class="page-subtitle">Управление каталогом, справочниками и настройками AI-ассистента.</p>
+    </header>
+
+    <section id="catalog" class="page-card admin-section">
+      <header class="admin-section-header">
+        <h2 class="admin-section-title">Каталог</h2>
+        <p class="admin-section-desc">Экспорт, импорт и обновление моделей из внешних источников.</p>
+      </header>
+
+      <div class="admin-stat">
+        В каталоге сейчас <strong id="modelCount"><%= modelCount %></strong> моделей
+      </div>
+
+      <div class="admin-actions">
+        <button type="button" id="exportBtn" class="btn btn-secondary">Экспорт JSON</button>
+        <button type="button" id="importBtn" class="btn btn-primary">Импорт JSON</button>
+        <a href="/admin/sync" class="btn btn-secondary">Обновить каталог</a>
+        <a href="/admin/sync/logs" class="btn btn-secondary">Журнал обновлений</a>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div>
+    </section>
+
+    <section id="references" class="page-card admin-section">
+      <header class="admin-section-header">
+        <h2 class="admin-section-title">Справочники</h2>
+        <p class="admin-section-desc">Провайдеры каталога и параметры синхронизации.</p>
+      </header>
+
+      <div class="admin-subsection">
+        <h3 class="admin-subsection-title">Провайдеры</h3>
+        <p class="admin-subsection-desc">Источники синхронизации: URL каталога, API-ключ и тип адаптера.</p>
+        <a href="/admin/providers" class="btn btn-secondary">Справочник провайдеров</a>
+      </div>
+
+      <div id="exchange-rate" class="admin-subsection admin-subsection--bordered">
+        <h3 class="admin-subsection-title">Курс валюты</h3>
+        <p class="admin-subsection-desc">Курс USD → RUB для конвертации цен из OpenRouter при обновлении каталога.</p>
+        <form id="syncConfigForm">
+          <div class="form-field" style="max-width:280px;">
+            <label for="usdToRubRate">Курс USD → RUB</label>
+            <input type="number" name="usdToRubRate" id="usdToRubRate" min="0.01" step="0.01" required>
+            <small class="form-hint">Цены в БД хранятся в рублях за 1M токенов</small>
+          </div>
+          <div style="margin-top:12px;">
+            <button type="submit" class="btn btn-primary">Сохранить курс</button>
+          </div>
+          <p id="syncConfigStatus" class="form-status" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="database" class="page-card admin-section admin-section--danger">
+      <header class="admin-section-header">
+        <h2 class="admin-section-title">База данных</h2>
+        <p class="admin-section-desc">Опасные операции с локальной базой. Действие необратимо.</p>
+      </header>
+      <button type="button" id="clearDbBtn" class="btn btn-danger">Очистить БД</button>
+    </section>
+
+    <section id="ai-assistant" class="page-card admin-section">
+      <header class="admin-section-header">
+        <h2 class="admin-section-title">AI-ассистент</h2>
+        <p class="admin-section-desc">
+          Подключение OpenAI-совместимого API для интеллектуальной обработки и запросов.
+          Используются две модели: быстрая для простых действий и мощная для аналитики.
+        </p>
+      </header>
+
+      <form id="aiConfigForm">
+        <div class="form-field">
+          <label class="form-check-inline" for="aiEnabled">
+            <input type="checkbox" name="enabled" id="aiEnabled" value="1">
+            <span>Включить AI-ассистент</span>
+          </label>
+        </div>
+
+        <div class="form-field">
+          <label for="aiBaseUrl">Base URL API</label>
+          <input type="url" name="baseUrl" id="aiBaseUrl" placeholder="https://api.openai.com/v1" required>
+          <small class="form-hint">OpenAI, BotHub, OpenRouter, LiteLLM и другие совместимые эндпоинты</small>
+        </div>
+
+        <div class="form-field">
+          <label for="aiApiKey">API-ключ</label>
+          <input type="password" name="apiKey" id="aiApiKey" placeholder="sk-..." autocomplete="off">
+          <small class="form-hint" id="aiApiKeyHint">Ключ не задан</small>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="aiModelSimple">Модель для простых задач</label>
+            <input type="text" name="modelSimple" id="aiModelSimple" placeholder="gpt-4o-mini" required>
+            <small class="form-hint">Классификация, краткие ответы, быстрые действия</small>
+          </div>
+          <div class="form-field">
+            <label for="aiModelAnalytics">Модель для аналитики</label>
+            <input type="text" name="modelAnalytics" id="aiModelAnalytics" placeholder="gpt-4o" required>
+            <small class="form-hint">Сравнение моделей, рекомендации, глубокий анализ</small>
+          </div>
+        </div>
+
+        <div class="admin-actions" style="margin-top:8px;">
+          <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+          <button type="button" id="aiTestSimpleBtn" class="btn btn-secondary">Тест простой модели</button>
+          <button type="button" id="aiTestAnalyticsBtn" class="btn btn-secondary">Тест аналитической модели</button>
+        </div>
+        <p id="aiStatus" class="form-status" hidden></p>
+      </form>
+    </section>
+  <%- include('partials/admin-layout-close') %>
+
+  <script src="/authFetch.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

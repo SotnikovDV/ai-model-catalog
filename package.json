@@ -1,0 +1,60 @@
+{
+  "name": "ai-model-catalog",
+  "version": "0.1.0",
+  "description": "Каталог AI-моделей для обоснованного выбора моделей под сервисы и приложения",
+  "main": "dist/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:init": "tsx src/db/migrate.ts",
+    "db:maintenance": "tsx src/db/maintenance.ts",
+    "db:normalize-use-cases": "tsx src/db/normalizeUseCases.ts",
+    "db:normalize-use-cases:dry": "tsx src/db/normalizeUseCases.ts --dry-run",
+    "db:prune": "tsx src/db/prune-to-export.ts",
+    "clean-db": "tsx src/db/clean-db.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" vitest.config.ts",
+    "lint:fix": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" vitest.config.ts --fix",
+    "format": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\" \"vitest.config.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"vitest.config.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "models",
+    "catalog",
+    "botHub"
+  ],
+  "author": "Dmitry S",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.5.2",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "@types/supertest": "^7.2.0",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.4",
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.63.0",
+    "vitest": "^4.1.10"
+  }
+}
