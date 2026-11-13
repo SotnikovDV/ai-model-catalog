@@ -3,6 +3,10 @@
   let isSending = false;
   let waitingTimerId = null;
   let waitingStartedAt = 0;
+  let availabilityUpgradePromptDismissed = false;
+  let availabilityRevokePromptDismissed = false;
+  let pendingAvailabilityResponseMs = null;
+  let pendingChatErrorMessage = null;
 
   const chatCommon = window.ChatCommon || {};
   const buildMessageHtml = chatCommon.buildMessageHtml
@@ -12,6 +16,27 @@
   const attachMessageRating = chatCommon.attachMessageRating || (() => {});
   const updateFavoriteButtonState = chatCommon.updateFavoriteButtonState || (() => {});
   const updateHiddenButtonState = chatCommon.updateHiddenButtonState || (() => {});
+  const createMessageEditController = chatCommon.createMessageEditController
+    || (() => ({
+      begin: () => {},
+      cancel: () => false,
+      commit: () => {},
+      hasPending: () => false,
+    }));
+  const composeMessageWithAttachments = chatCommon.composeMessageWithAttachments
+    || ((text) => String(text ?? '').trim());
+  const messageContentForApi = chatCommon.messageContentForApi
+    || ((message) => composeMessageWithAttachments(message?.content, message?.attachments || []));
+  const mountAttachmentUi = chatCommon.mountAttachmentUi || (() => ({
+    getAttachments: () => [],
+    clear: () => {},
+    setAttachments: () => {},
+    setError: () => {},
+    setDisabled: () => {},
+  }));
+
+  const messageEdit = createMessageEditController('chatEditCancelBtn');
+  let attachmentUi = null;
 
   function getChatModel() {
     return window.CHAT_MODEL || null;
@@ -93,13 +118,215 @@
     window.CHAT_MODEL.isHidden = Boolean(updated.is_hidden);
     window.CHAT_MODEL.inputPricePerMTok = updated.input_price_per_mtok ?? window.CHAT_MODEL.inputPricePerMTok;
     window.CHAT_MODEL.outputPricePerMTok = updated.output_price_per_mtok ?? window.CHAT_MODEL.outputPricePerMTok;
+    window.CHAT_MODEL.availabilityStatus = updated.availability_status ?? null;
+    window.CHAT_MODEL.availabilityResponseMs = updated.availability_response_ms ?? null;
 
     if (Array.isArray(window.MODELS_DATA)) {
       const index = window.MODELS_DATA.findIndex((item) => item.id === updated.id);
       if (index >= 0) {
-        window.MODELS_DATA[index] = { ...window.MODELS_DATA[index], ...updated };
+        window.MODELS_DATA[index] = {
+          ...window.MODELS_DATA[index],
+          ...updated,
+          availability_status: updated.availability_status ?? null,
+          availability_response_ms: updated.availability_response_ms ?? null,
+          availability_checked_at: updated.availability_checked_at ?? null,
+          availability_error: updated.availability_error ?? null,
+        };
       }
     }
+  }
+
+  function shouldOfferAvailabilityUpdate() {
+    const model = getChatModel();
+    if (!model || availabilityUpgradePromptDismissed) return false;
+
+    const status = model.availabilityStatus ?? null;
+    const responseMs = model.availabilityResponseMs;
+
+    if (status === 'inference' && responseMs != null) return false;
+    if (status === 'unavailable') return true;
+    if (!status) return true;
+    if (responseMs == null) return true;
+
+    return false;
+  }
+
+  function modelHasAvailabilityMarksToRevoke() {
+    const model = getChatModel();
+    if (!model) return false;
+    const status = model.availabilityStatus ?? null;
+    return status === 'inference' || status === 'available';
+  }
+
+  function shouldOfferAvailabilityRevoke() {
+    const model = getChatModel();
+    if (!model || availabilityRevokePromptDismissed) return false;
+    return modelHasAvailabilityMarksToRevoke();
+  }
+
+  function hideAvailabilityUpgradePrompt() {
+    const promptEl = document.getElementById('chatAvailabilityPrompt');
+    if (promptEl) promptEl.hidden = true;
+    pendingAvailabilityResponseMs = null;
+  }
+
+  function hideAvailabilityRevokePrompt() {
+    const promptEl = document.getElementById('chatAvailabilityRevokePrompt');
+    if (promptEl) promptEl.hidden = true;
+    pendingChatErrorMessage = null;
+  }
+
+  function hideAllAvailabilityPrompts() {
+    hideAvailabilityUpgradePrompt();
+    hideAvailabilityRevokePrompt();
+  }
+
+  function showAvailabilityUpgradePrompt() {
+    hideAvailabilityRevokePrompt();
+    const promptEl = document.getElementById('chatAvailabilityPrompt');
+    if (!promptEl) return;
+    promptEl.hidden = false;
+  }
+
+  function showAvailabilityRevokePrompt() {
+    hideAvailabilityUpgradePrompt();
+    const model = getChatModel();
+    const status = model?.availabilityStatus ?? null;
+    const inferenceBtn = document.getElementById('chatAvailabilityRevokeInferenceBtn');
+    const availableBtn = document.getElementById('chatAvailabilityRevokeAvailableBtn');
+    const textEl = document.getElementById('chatAvailabilityRevokePromptText');
+
+    if (inferenceBtn) {
+      inferenceBtn.hidden = status !== 'inference';
+    }
+    if (availableBtn) {
+      availableBtn.hidden = status !== 'inference' && status !== 'available';
+    }
+    if (textEl) {
+      if (status === 'inference') {
+        textEl.textContent = 'Запрос в чате не выполнен. Снять отметку «Инференс»? При необходимости можно также отметить модель как «Недоступна».';
+      } else if (status === 'available') {
+        textEl.textContent = 'Запрос в чате не выполнен. Отметить модель как «Недоступна»?';
+      }
+    }
+
+    const promptEl = document.getElementById('chatAvailabilityRevokePrompt');
+    if (!promptEl) return;
+    promptEl.hidden = false;
+  }
+
+  function maybeOfferAvailabilityUpdate(responseMs) {
+    if (!shouldOfferAvailabilityUpdate()) return;
+    pendingAvailabilityResponseMs = Math.max(0, Math.round(responseMs));
+    showAvailabilityUpgradePrompt();
+  }
+
+  function maybeOfferAvailabilityRevoke(errorMessage) {
+    if (!shouldOfferAvailabilityRevoke()) return;
+    pendingChatErrorMessage = String(errorMessage || '').trim() || null;
+    showAvailabilityRevokePrompt();
+  }
+
+  async function applyAvailabilityFromChat() {
+    const model = getChatModel();
+    if (!model?.id) return;
+
+    const applyBtn = document.getElementById('chatAvailabilityApplyBtn');
+    const dismissBtn = document.getElementById('chatAvailabilityDismissBtn');
+    if (applyBtn) applyBtn.disabled = true;
+    if (dismissBtn) dismissBtn.disabled = true;
+
+    try {
+      const checkedAt = new Date().toISOString();
+      const responseMs = pendingAvailabilityResponseMs ?? model.availabilityResponseMs ?? null;
+      const updated = await patchChatModel({
+        availability_status: 'inference',
+        availability_checked_at: checkedAt,
+        availability_response_ms: responseMs,
+        availability_error: null,
+      });
+      syncChatModel(updated);
+      hideAvailabilityUpgradePrompt();
+      availabilityUpgradePromptDismissed = true;
+    } catch {
+      setError('Не удалось обновить отметки доступности.');
+    } finally {
+      if (applyBtn) applyBtn.disabled = false;
+      if (dismissBtn) dismissBtn.disabled = false;
+    }
+  }
+
+  async function revokeInferenceFromChat() {
+    const model = getChatModel();
+    if (!model?.id) return;
+
+    const inferenceBtn = document.getElementById('chatAvailabilityRevokeInferenceBtn');
+    const availableBtn = document.getElementById('chatAvailabilityRevokeAvailableBtn');
+    const dismissBtn = document.getElementById('chatAvailabilityRevokeDismissBtn');
+    if (inferenceBtn) inferenceBtn.disabled = true;
+    if (availableBtn) availableBtn.disabled = true;
+    if (dismissBtn) dismissBtn.disabled = true;
+
+    try {
+      const checkedAt = new Date().toISOString();
+      const updated = await patchChatModel({
+        availability_status: 'available',
+        availability_checked_at: checkedAt,
+        availability_response_ms: null,
+        availability_error: null,
+      });
+      syncChatModel(updated);
+      hideAvailabilityRevokePrompt();
+      availabilityRevokePromptDismissed = true;
+    } catch {
+      setError('Не удалось снять отметку «Инференс».');
+    } finally {
+      if (inferenceBtn) inferenceBtn.disabled = false;
+      if (availableBtn) availableBtn.disabled = false;
+      if (dismissBtn) dismissBtn.disabled = false;
+    }
+  }
+
+  async function revokeAvailabilityFromChat() {
+    const model = getChatModel();
+    if (!model?.id) return;
+
+    const inferenceBtn = document.getElementById('chatAvailabilityRevokeInferenceBtn');
+    const availableBtn = document.getElementById('chatAvailabilityRevokeAvailableBtn');
+    const dismissBtn = document.getElementById('chatAvailabilityRevokeDismissBtn');
+    if (inferenceBtn) inferenceBtn.disabled = true;
+    if (availableBtn) availableBtn.disabled = true;
+    if (dismissBtn) dismissBtn.disabled = true;
+
+    try {
+      const checkedAt = new Date().toISOString();
+      const errorMessage = pendingChatErrorMessage || 'Ошибка при запросе в чате';
+      const updated = await patchChatModel({
+        availability_status: 'unavailable',
+        availability_checked_at: checkedAt,
+        availability_response_ms: null,
+        availability_error: errorMessage,
+      });
+      syncChatModel(updated);
+      hideAvailabilityRevokePrompt();
+      availabilityRevokePromptDismissed = true;
+    } catch {
+      setError('Не удалось отметить модель как «Недоступна».');
+    } finally {
+      if (inferenceBtn) inferenceBtn.disabled = false;
+      if (availableBtn) availableBtn.disabled = false;
+      if (dismissBtn) dismissBtn.disabled = false;
+    }
+  }
+
+  function dismissAvailabilityUpgradePrompt() {
+    availabilityUpgradePromptDismissed = true;
+    hideAvailabilityUpgradePrompt();
+  }
+
+  function dismissAvailabilityRevokePrompt() {
+    availabilityRevokePromptDismissed = true;
+    hideAvailabilityRevokePrompt();
   }
 
   function updateHeaderButtons() {
@@ -147,6 +374,68 @@
     errorEl.textContent = message;
   }
 
+  function truncateMessagesFrom(message) {
+    const index = messages.indexOf(message);
+    if (index < 0) return -1;
+    messages.splice(index);
+    setError('');
+    return index;
+  }
+
+  function editUserMessage(message) {
+    if (isSending) return;
+    messageEdit.begin({
+      messages: messages.map((item) => ({ ...item })),
+    });
+    const index = truncateMessagesFrom(message);
+    if (index < 0) {
+      messageEdit.commit();
+      return;
+    }
+    renderMessages();
+    const input = document.getElementById('chatInput');
+    if (!input) return;
+    input.value = String(message.content ?? '');
+    attachmentUi?.setAttachments(message.attachments || []);
+    input.focus();
+    const length = input.value.length;
+    input.setSelectionRange(length, length);
+  }
+
+  function cancelEditUserMessage() {
+    if (isSending) return;
+    const restored = messageEdit.cancel((snapshot) => {
+      messages.length = 0;
+      messages.push(...snapshot.messages.map((item) => ({ ...item })));
+    });
+    if (!restored) return;
+    setError('');
+    attachmentUi?.clear();
+    renderMessages();
+    const input = document.getElementById('chatInput');
+    if (input) input.value = '';
+  }
+
+  function repeatUserMessage(message) {
+    if (isSending) return;
+    messageEdit.commit();
+    const content = String(message.content ?? '').trim();
+    const attachments = Array.isArray(message.attachments) ? message.attachments : [];
+    if (!content && attachments.length === 0) return;
+    const index = truncateMessagesFrom(message);
+    if (index < 0) return;
+    renderMessages();
+    void sendMessage(content, attachments);
+  }
+
+  function getUserMessageActionOptions() {
+    return {
+      filePrefix: getChatModel()?.name || 'model-chat',
+      onEdit: editUserMessage,
+      onRepeat: repeatUserMessage,
+    };
+  }
+
   function renderMessages() {
     const container = document.getElementById('chatMessages');
     const emptyEl = document.getElementById('chatEmpty');
@@ -169,7 +458,10 @@
       const ratingHtml = message.role === 'assistant' ? buildMessageRatingHtml(message) : '';
       div.innerHTML = buildMessageHtml(message) + ratingHtml;
       const modelName = getChatModel()?.name || 'model-chat';
-      attachMessageActions(div, message, { filePrefix: modelName });
+      attachMessageActions(div, message, {
+        ...getUserMessageActionOptions(),
+        filePrefix: modelName,
+      });
       if (message.role === 'assistant') {
         attachMessageRating(div, message, { modelId: getChatModel()?.id });
       }
@@ -214,6 +506,7 @@
     if (reasoningToggle) reasoningToggle.disabled = loading;
     const testMenuBtn = document.getElementById('chatTestMenuBtn');
     if (testMenuBtn) testMenuBtn.disabled = loading;
+    attachmentUi?.setDisabled(loading);
     if (loading) closeTestMenu();
 
     const existing = container?.querySelector('.chat-message--loading');
@@ -262,20 +555,34 @@
     textEl.title = plain;
   }
 
-  async function sendMessage(text) {
+  async function sendMessage(text, presetAttachments) {
     const model = getChatModel();
     if (!model?.name) {
       setError('Модель чата не определена.');
       return;
     }
 
-    const trimmed = text.trim();
-    if (!trimmed || isSending) return;
+    const displayText = String(text ?? '').trim();
+    const attachments = Array.isArray(presetAttachments)
+      ? presetAttachments
+      : (attachmentUi?.getAttachments() || []);
+    const apiContent = composeMessageWithAttachments(displayText, attachments);
+    if (!apiContent || isSending) return;
+
+    messageEdit.commit();
 
     isSending = true;
     setError('');
 
-    messages.push({ role: 'user', content: trimmed });
+    const userMessage = { role: 'user', content: displayText };
+    if (attachments.length) {
+      userMessage.attachments = attachments.map((item) => ({
+        name: item.name,
+        text: item.text,
+      }));
+    }
+    messages.push(userMessage);
+    attachmentUi?.clear();
     renderMessages();
     setLoading(true);
 
@@ -284,7 +591,12 @@
 
     try {
       const startedAt = performance.now();
-      const body = { messages };
+      const body = {
+        messages: messages.map((message) => ({
+          role: message.role,
+          content: messageContentForApi(message),
+        })),
+      };
       const includeReasoning = getIncludeReasoning();
       if (includeReasoning !== undefined) {
         body.includeReasoning = includeReasoning;
@@ -303,12 +615,15 @@
           || (Array.isArray(payload?.issues) ? payload.issues.map((i) => i.message).join('\n') : null)
           || 'Не удалось получить ответ от модели';
         setError(message);
+        maybeOfferAvailabilityRevoke(message);
         return;
       }
 
       const reply = payload?.data?.content;
       if (!reply) {
-        setError('Модель вернула пустой ответ.');
+        const message = 'Модель вернула пустой ответ.';
+        setError(message);
+        maybeOfferAvailabilityRevoke(message);
         return;
       }
 
@@ -329,8 +644,11 @@
         elapsedMs,
       });
       renderMessages();
+      maybeOfferAvailabilityUpdate(elapsedMs);
     } catch {
-      setError('Сетевая ошибка при отправке сообщения.');
+      const message = 'Сетевая ошибка при отправке сообщения.';
+      setError(message);
+      maybeOfferAvailabilityRevoke(message);
     } finally {
       isSending = false;
       setLoading(false);
@@ -422,8 +740,10 @@
 
   function clearChat() {
     if (isSending) return;
+    messageEdit.commit();
     messages.length = 0;
     setError('');
+    attachmentUi?.clear();
     closeTestMenu();
     renderMessages();
   }
@@ -432,13 +752,22 @@
     const form = document.getElementById('chatForm');
     const input = document.getElementById('chatInput');
     const clearBtn = document.getElementById('chatClearBtn');
+    const cancelEditBtn = document.getElementById('chatEditCancelBtn');
     const hiddenBtn = document.getElementById('chatHiddenBtn');
     const favoriteBtn = document.getElementById('chatFavoriteBtn');
+    const actionsLeft = form?.querySelector('.chat-form-actions-left');
 
     if (!form || !getChatModel()) return;
 
+    attachmentUi = mountAttachmentUi({
+      form,
+      actionsLeftEl: actionsLeft,
+      onError: setError,
+    });
+
     initReasoningToggle();
     initTestMenu();
+    initAvailabilityPrompt();
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -455,6 +784,7 @@
     });
 
     clearBtn?.addEventListener('click', clearChat);
+    cancelEditBtn?.addEventListener('click', cancelEditUserMessage);
     hiddenBtn?.addEventListener('click', () => {
       void toggleHidden();
     });
@@ -463,6 +793,36 @@
     });
     updateHeaderButtons();
     renderMessages();
+  }
+
+  function initAvailabilityPrompt() {
+    const applyBtn = document.getElementById('chatAvailabilityApplyBtn');
+    const dismissBtn = document.getElementById('chatAvailabilityDismissBtn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', () => {
+        void applyAvailabilityFromChat();
+      });
+    }
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', dismissAvailabilityUpgradePrompt);
+    }
+
+    const revokeInferenceBtn = document.getElementById('chatAvailabilityRevokeInferenceBtn');
+    const revokeAvailableBtn = document.getElementById('chatAvailabilityRevokeAvailableBtn');
+    const revokeDismissBtn = document.getElementById('chatAvailabilityRevokeDismissBtn');
+    if (revokeInferenceBtn) {
+      revokeInferenceBtn.addEventListener('click', () => {
+        void revokeInferenceFromChat();
+      });
+    }
+    if (revokeAvailableBtn) {
+      revokeAvailableBtn.addEventListener('click', () => {
+        void revokeAvailabilityFromChat();
+      });
+    }
+    if (revokeDismissBtn) {
+      revokeDismissBtn.addEventListener('click', dismissAvailabilityRevokePrompt);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', initChat);

@@ -11,15 +11,29 @@
       <% } %>
     </div>
 
+    <% const showBothubBalance = typeof isAdminAuthenticated !== 'undefined' && isAdminAuthenticated; %>
     <nav class="header-nav desktop-only" aria-label="Основная навигация">
       <a href="/" class="<%= typeof activeNav === 'undefined' || activeNav === 'catalog' ? 'active' : '' %>">Каталог</a>
       <a href="/compare" data-nav-compare class="<%= activeNav === 'compare' ? 'active' : '' %>">Сравнение</a>
+      <a href="/lists" class="<%= activeNav === 'lists' ? 'active' : '' %>">Списки</a>
       <a href="/assistant" class="<%= activeNav === 'assistant' ? 'active' : '' %>">AI-ассистент</a>
-      <a href="https://bothub.ru/profile/for-developers" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">BotHub</a>
+      <% if (!showBothubBalance) { %>
+        <a href="https://bothub.ru/profile/for-developers" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">BotHub</a>
+      <% } %>
       <a href="/admin" class="<%= activeNav === 'admin' ? 'active' : '' %>">Админ</a>
     </nav>
 
     <div class="header-stats desktop-only">
+      <% if (showBothubBalance) { %>
+        <a
+          href="https://bothub.ru/profile"
+          class="stat-pill bothub-balance-pill"
+          data-bothub-balance
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Баланс BotHub"
+        >BotHub: <strong data-bothub-balance-value>…</strong> Caps</a>
+      <% } %>
       <button type="button" class="theme-toggle" id="themeToggle" title="Переключить тему" data-theme-toggle>
         <span class="theme-icon" id="themeIcon">☀️</span>
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
@@ -44,18 +58,26 @@
         </span>
         <span class="mobile-menu-item-label">Сравнение</span>
       </a>
+      <a href="/lists" class="mobile-menu-item<%= activeNav === 'lists' ? ' active' : '' %>">
+        <span class="mobile-menu-item-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        </span>
+        <span class="mobile-menu-item-label">Списки</span>
+      </a>
       <a href="/assistant" class="mobile-menu-item<%= activeNav === 'assistant' ? ' active' : '' %>">
         <span class="mobile-menu-item-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </span>
         <span class="mobile-menu-item-label">AI-ассистент</span>
       </a>
-      <a href="https://bothub.ru/profile/for-developers" class="mobile-menu-item" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">
-        <span class="mobile-menu-item-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </span>
-        <span class="mobile-menu-item-label">BotHub</span>
-      </a>
+      <% if (!showBothubBalance) { %>
+        <a href="https://bothub.ru/profile/for-developers" class="mobile-menu-item" target="_blank" rel="noopener noreferrer" title="BotHub — для разработчиков">
+          <span class="mobile-menu-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </span>
+          <span class="mobile-menu-item-label">BotHub</span>
+        </a>
+      <% } %>
       <a href="/admin" class="mobile-menu-item<%= activeNav === 'admin' ? ' active' : '' %>">
         <span class="mobile-menu-item-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -95,6 +117,13 @@
             <% } else { %>
               <div class="mobile-menu-profile-meta">Каталог нейросетей</div>
             <% } %>
+            <% if (showBothubBalance) { %>
+              <div class="mobile-menu-profile-meta" data-bothub-balance>
+                <span class="mobile-menu-caps">
+                  BotHub: <strong data-bothub-balance-value>…</strong> Caps
+                </span>
+              </div>
+            <% } %>
           </div>
         </div>
         <% if (typeof showStats !== 'undefined' && showStats) { %>
@@ -112,3 +141,6 @@
 </aside>
 <script src="/compareBuffer.js"></script>
 <script src="/recommendationStore.js"></script>
+<% if (typeof isAdminAuthenticated !== 'undefined' && isAdminAuthenticated) { %>
+<script src="/bothub-balance.js"></script>
+<% } %>

@@ -54,6 +54,16 @@
                 title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
                 aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
               >★</button>
+              <button
+                type="button"
+                class="card-list-btn"
+                id="chatListBtn"
+                data-id="<%= model.id %>"
+                title="Добавить в список"
+                aria-label="Добавить в список"
+              >
+                <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+              </button>
             </div>
           </div>
         </header>
@@ -63,6 +73,21 @@
             <div class="chat-empty" id="chatEmpty">Напишите сообщение, чтобы начать диалог.</div>
           </div>
           <div class="chat-error" id="chatError" hidden role="alert"></div>
+          <div class="chat-availability-prompt" id="chatAvailabilityPrompt" hidden role="status">
+            <p class="chat-availability-prompt-text">Модель ответила в чате. Обновить отметки «Доступна» и «Инференс»?</p>
+            <div class="chat-availability-prompt-actions">
+              <button type="button" class="btn btn-primary btn-sm" id="chatAvailabilityApplyBtn">Обновить</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="chatAvailabilityDismissBtn">Не сейчас</button>
+            </div>
+          </div>
+          <div class="chat-availability-prompt chat-availability-prompt--revoke" id="chatAvailabilityRevokePrompt" hidden role="status">
+            <p class="chat-availability-prompt-text" id="chatAvailabilityRevokePromptText">Запрос в чате не выполнен. Снять отметку «Инференс»? При необходимости можно также отметить модель как «Недоступна».</p>
+            <div class="chat-availability-prompt-actions">
+              <button type="button" class="btn btn-primary btn-sm" id="chatAvailabilityRevokeInferenceBtn" hidden>Снять инференс</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="chatAvailabilityRevokeAvailableBtn" hidden>Недоступна</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="chatAvailabilityRevokeDismissBtn">Не сейчас</button>
+            </div>
+          </div>
           <form class="chat-form" id="chatForm">
             <textarea
               class="chat-input"
@@ -70,7 +95,6 @@
               rows="3"
               placeholder="Введите сообщение…"
               aria-label="Сообщение"
-              required
             ></textarea>
             <div class="chat-form-actions">
               <div class="chat-form-actions-left">
@@ -78,23 +102,24 @@
                   <input type="checkbox" id="chatReasoningToggle" checked>
                   <span>Рассуждения</span>
                 </label>
-                <div class="chat-test-menu-wrap">
-                  <button
-                    type="button"
-                    class="btn btn-secondary btn-sm"
-                    id="chatTestMenuBtn"
-                    aria-haspopup="menu"
-                    aria-expanded="false"
-                    aria-controls="chatTestMenu"
-                    title="Подставить тестовый запрос"
-                  >Тест ▾</button>
-                  <div class="chat-test-menu" id="chatTestMenu" role="menu" hidden>
-                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="logic">Логика</button>
-                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="facts">Факты</button>
-                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="json">JSON</button>
-                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="anti-hallucination">Антигаллюцинация</button>
-                    <button type="button" class="card-menu-item" role="menuitem" data-test-id="inference">Вывод</button>
-                  </div>
+              </div>
+              <button type="button" class="btn btn-secondary" id="chatEditCancelBtn" hidden>Отмена</button>
+              <div class="chat-test-menu-wrap chat-test-menu-wrap--trailing">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  id="chatTestMenuBtn"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  aria-controls="chatTestMenu"
+                  title="Подставить тестовый запрос"
+                >Тест ▾</button>
+                <div class="chat-test-menu" id="chatTestMenu" role="menu" hidden>
+                  <button type="button" class="card-menu-item" role="menuitem" data-test-id="logic">Логика</button>
+                  <button type="button" class="card-menu-item" role="menuitem" data-test-id="facts">Факты</button>
+                  <button type="button" class="card-menu-item" role="menuitem" data-test-id="json">JSON</button>
+                  <button type="button" class="card-menu-item" role="menuitem" data-test-id="anti-hallucination">Антигаллюцинация</button>
+                  <button type="button" class="card-menu-item" role="menuitem" data-test-id="inference">Вывод</button>
                 </div>
               </div>
               <button type="button" class="btn btn-secondary" id="chatClearBtn">Очистить</button>
@@ -121,11 +146,16 @@
       inputPricePerMTok: model.input_price_per_mtok,
       outputPricePerMTok: model.output_price_per_mtok,
       tags: model.tags || [],
+      availabilityStatus: model.availability_status ?? null,
+      availabilityResponseMs: model.availability_response_ms ?? null,
     }).replace(/</g, '\\u003c') %>;
   </script>
+  <%- include('partials/admin-auth-init') %>
+  <%- include('partials/add-to-list-modal') %>
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
   <script src="/markdown.js"></script>
+  <script src="/add-to-list.js"></script>
   <script src="/chat-common.js"></script>
   <script src="/catalog.js"></script>
   <script src="/app.js"></script>

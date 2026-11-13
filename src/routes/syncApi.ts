@@ -68,7 +68,20 @@ function buildSyncOptions(body: SyncRequestInput, fields: SyncableField[]): Sync
 }
 
 function writeSse(res: Response, event: string, data: unknown): void {
+  if (res.writableEnded || res.destroyed) return;
   res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+}
+
+function createRequestAbortSignal(res: Response): AbortSignal {
+  const controller = new AbortController();
+  const onClose = () => {
+    if (!res.writableEnded) controller.abort();
+  };
+  res.on('close', onClose);
+  res.on('finish', () => {
+    res.off('close', onClose);
+  });
+  return controller.signal;
 }
 
 router.get('/fields', (_req: Request, res: Response) => {
@@ -118,6 +131,7 @@ router.post('/stream', async (req: Request, res: Response) => {
   const startedAt = new Date().toISOString();
   const startedMs = Date.now();
   let options: SyncOptions | null = null;
+  const signal = createRequestAbortSignal(res);
 
   res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -136,7 +150,11 @@ router.post('/stream', async (req: Request, res: Response) => {
     options = buildSyncOptions(body, fields);
     const result = await runSync(options, (progress) => {
       writeSse(res, 'progress', progress);
-    });
+    }, signal);
+
+    if (signal.aborted || res.writableEnded || res.destroyed) {
+      return;
+    }
 
     const finishedAt = new Date().toISOString();
     const log = writeBatchSyncLog({
@@ -150,6 +168,10 @@ router.post('/stream', async (req: Request, res: Response) => {
     writeSse(res, 'done', { data: result, logId: log.id });
     res.end();
   } catch (error) {
+    if (signal.aborted || res.writableEnded || res.destroyed) {
+      return;
+    }
+
     const finishedAt = new Date().toISOString();
     const errorMessage = error instanceof Error ? error.message : 'Ошибка синхронизации';
     const log = writeBatchSyncLog({

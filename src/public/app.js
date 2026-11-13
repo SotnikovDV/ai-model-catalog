@@ -4,6 +4,7 @@ function adminFetch(url, options) {
 }
 
 const COPY_NAME_BTN_ICON = '<svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+const DESCRIBE_NAME_BTN_ICON = '<svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8L12 3z"/><path d="M19.5 14.5l.8 2.4 2.2.9-2.2.9-.8 2.4-.8-2.4-2.2-.9 2.2-.9.8-2.4z"/></svg>';
 
 function escapeCopyNameAttr(value) {
   return String(value ?? '')
@@ -67,15 +68,76 @@ function buildCopyNameButtonHtml(copyText) {
   return `<button type="button" class="rec-copy-name-btn" data-copy-text="${escapeCopyNameAttr(copyText)}" title="Копировать название" aria-label="Копировать название">${COPY_NAME_BTN_ICON}</button>`;
 }
 
+function buildDescribeNameButtonHtml(modelName, modelId = '') {
+  const idAttr = modelId
+    ? ` data-model-id="${escapeCopyNameAttr(modelId)}"`
+    : '';
+  return `<button type="button" class="rec-describe-name-btn" data-model-name="${escapeCopyNameAttr(modelName)}"${idAttr} title="AI-обзор модели" aria-label="AI-обзор модели">${DESCRIBE_NAME_BTN_ICON}</button>`;
+}
+
+function buildModelNameActionsHtml(modelName, modelId = '') {
+  if (!modelName) return '';
+  return `${buildCopyNameButtonHtml(modelName)}${buildDescribeNameButtonHtml(modelName, modelId)}`;
+}
+
+function requireAdminForAiOverview(nextPath) {
+  if (window.ADMIN_AUTH?.enabled && !window.ADMIN_AUTH?.authenticated) {
+    const next = nextPath || `${window.location.pathname}${window.location.search}`;
+    window.location.href = `/login?next=${encodeURIComponent(next)}`;
+    return false;
+  }
+  return true;
+}
+
+function navigateToAssistantOverview(modelName, modelId = '') {
+  const name = String(modelName || '').trim();
+  if (!name) return;
+
+  const params = new URLSearchParams();
+  params.set('mode', 'overview');
+  params.set('name', name);
+  if (modelId) params.set('id', String(modelId));
+
+  const target = `/assistant?${params.toString()}`;
+  if (!requireAdminForAiOverview(target)) return;
+  window.location.href = target;
+}
+
+function bindDescribeNameButton(button) {
+  if (!button || button.dataset.describeBound === '1') return;
+  button.dataset.describeBound = '1';
+
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    navigateToAssistantOverview(button.dataset.modelName || '', button.dataset.modelId || '');
+  });
+}
+
+function bindDescribeNameButtons(root = document) {
+  root.querySelectorAll('.rec-describe-name-btn').forEach((button) => bindDescribeNameButton(button));
+}
+
+function bindModelNameActionButtons(root = document) {
+  bindCopyNameButtons(root);
+  bindDescribeNameButtons(root);
+}
+
 window.CopyModelName = {
   ICON: COPY_NAME_BTN_ICON,
+  DESCRIBE_ICON: DESCRIBE_NAME_BTN_ICON,
   copy: copyTextToClipboard,
   bind: bindCopyNameButton,
-  bindAll: bindCopyNameButtons,
+  bindDescribe: bindDescribeNameButton,
+  bindAll: bindModelNameActionButtons,
   buttonHtml: buildCopyNameButtonHtml,
+  describeButtonHtml: buildDescribeNameButtonHtml,
+  actionsHtml: buildModelNameActionsHtml,
+  openOverview: navigateToAssistantOverview,
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  bindModelNameActionButtons(document);
   initCompareBufferNav();
   initThemeToggle();
   initMobileMenu();
@@ -98,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initDetailDescriptionMarkdown();
   initComparePageBuffer();
   initCompareDiffToggle();
-  bindCopyNameButtons();
 });
 
 function updateCompareNavLinks() {
@@ -288,6 +349,60 @@ function initMobileFilters() {
   });
 }
 
+function scrollToAdminSection(hash) {
+  const id = String(hash || '').replace(/^#/, '');
+  if (!id) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+const ADMIN_HASH_PATHS = ['/admin', '/admin/sync'];
+
+function updateAdminNavActiveFromHash() {
+  const sidebar = document.getElementById('adminSidebar');
+  if (!sidebar || !document.body.classList.contains('admin-page')) return;
+
+  const pathname = window.location.pathname;
+  const currentHash = window.location.hash;
+
+  sidebar.querySelectorAll('a.admin-nav-item').forEach((link) => {
+    const url = new URL(link.href, window.location.origin);
+    if (!ADMIN_HASH_PATHS.includes(url.pathname)) return;
+
+    if (pathname === url.pathname) {
+      const isActive = url.hash ? url.hash === currentHash : !currentHash;
+      link.classList.toggle('active', isActive);
+    } else if (ADMIN_HASH_PATHS.includes(pathname)) {
+      link.classList.remove('active');
+    }
+  });
+}
+
+function applyAdminHashNavigation() {
+  if (!document.body.classList.contains('admin-page')) return;
+  if (!ADMIN_HASH_PATHS.includes(window.location.pathname)) return;
+
+  updateAdminNavActiveFromHash();
+  if (!window.location.hash) return;
+
+  const hash = window.location.hash;
+  const scroll = () => scrollToAdminSection(hash);
+  requestAnimationFrame(() => requestAnimationFrame(scroll));
+  window.setTimeout(scroll, 150);
+}
+
+function initAdminHashNavigation() {
+  if (!document.body.classList.contains('admin-page')) return;
+
+  applyAdminHashNavigation();
+  window.addEventListener('hashchange', applyAdminHashNavigation);
+}
+
 function initAdminSidebar() {
   const sidebar = document.getElementById('adminSidebar');
   const overlay = document.getElementById('adminSidebarOverlay');
@@ -317,7 +432,30 @@ function initAdminSidebar() {
   overlay.addEventListener('click', () => setOpen(false));
 
   sidebar.querySelectorAll('a.admin-nav-item').forEach((link) => {
-    link.addEventListener('click', () => setOpen(false));
+    link.addEventListener('click', (event) => {
+      setOpen(false);
+
+      const url = new URL(link.href, window.location.origin);
+      if (!ADMIN_HASH_PATHS.includes(url.pathname)) return;
+
+      event.preventDefault();
+      const targetUrl = `${url.pathname}${url.hash}`;
+
+      if (window.location.pathname === url.pathname) {
+        if (`${window.location.pathname}${window.location.hash}` !== targetUrl) {
+          history.pushState(null, '', targetUrl);
+        }
+        if (url.hash) {
+          scrollToAdminSection(url.hash);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        updateAdminNavActiveFromHash();
+        return;
+      }
+
+      window.location.href = targetUrl;
+    });
   });
 
   document.addEventListener('keydown', (event) => {
@@ -325,6 +463,8 @@ function initAdminSidebar() {
       setOpen(false);
     }
   });
+
+  initAdminHashNavigation();
 }
 
 function initModelForm() {
@@ -526,19 +666,31 @@ function initAiConfigForm() {
 
   const statusEl = document.getElementById('aiStatus');
   const apiKeyHintEl = document.getElementById('aiApiKeyHint');
+  const searchApiKeyHintEl = document.getElementById('aiSearchApiKeyHint');
   const enabledEl = document.getElementById('aiEnabled');
   const baseUrlEl = document.getElementById('aiBaseUrl');
   const modelSimpleEl = document.getElementById('aiModelSimple');
   const modelAnalyticsEl = document.getElementById('aiModelAnalytics');
+  const searchBaseUrlEl = document.getElementById('aiSearchBaseUrl');
+  const modelSearchEl = document.getElementById('aiModelSearch');
   const apiKeyEl = document.getElementById('aiApiKey');
+  const searchApiKeyEl = document.getElementById('aiSearchApiKey');
   const testSimpleBtn = document.getElementById('aiTestSimpleBtn');
   const testAnalyticsBtn = document.getElementById('aiTestAnalyticsBtn');
+  const testSearchBtn = document.getElementById('aiTestSearchBtn');
 
   const setStatus = (message, type = 'success') => {
     if (!statusEl) return;
     statusEl.hidden = false;
     statusEl.textContent = message;
     statusEl.className = `form-status ${type}`;
+  };
+
+  const updateSearchApiKeyHint = (config) => {
+    if (!searchApiKeyHintEl || !config) return;
+    searchApiKeyHintEl.textContent = config.searchApiKeySet
+      ? `Отдельный ключ задан: ${config.searchApiKeyHint}`
+      : 'Отдельный ключ не задан — будет использован основной (AI_API_KEY)';
   };
 
   const loadConfig = async () => {
@@ -556,11 +708,14 @@ function initAiConfigForm() {
     if (baseUrlEl) baseUrlEl.value = config.baseUrl || '';
     if (modelSimpleEl) modelSimpleEl.value = config.modelSimple || '';
     if (modelAnalyticsEl) modelAnalyticsEl.value = config.modelAnalytics || '';
+    if (searchBaseUrlEl) searchBaseUrlEl.value = config.searchBaseUrl || '';
+    if (modelSearchEl) modelSearchEl.value = config.modelSearch || '';
     if (apiKeyHintEl) {
       apiKeyHintEl.textContent = config.apiKeySet
         ? `Ключ задан: ${config.apiKeyHint}`
         : 'Ключ не задан — укажите новый или задайте AI_API_KEY в .env';
     }
+    updateSearchApiKeyHint(config);
   };
 
   const saveConfig = async (event) => {
@@ -574,11 +729,20 @@ function initAiConfigForm() {
         baseUrl: baseUrlEl?.value?.trim(),
         modelSimple: modelSimpleEl?.value?.trim(),
         modelAnalytics: modelAnalyticsEl?.value?.trim(),
+        searchBaseUrl: searchBaseUrlEl?.value?.trim() ?? '',
+        modelSearch: modelSearchEl?.value?.trim() ?? '',
       };
 
       const apiKey = apiKeyEl?.value?.trim();
       if (apiKey) {
         payload.apiKey = apiKey;
+      }
+
+      // Пустой ввод не трогает ключ; явный пробел/очистка через отдельный сброс не делаем —
+      // если пользователь ввёл значение, сохраняем его (в т.ч. можно перезаписать).
+      const searchApiKey = searchApiKeyEl?.value;
+      if (searchApiKey !== undefined && searchApiKey !== '') {
+        payload.searchApiKey = searchApiKey.trim();
       }
 
       const response = await adminFetch('/api/ai/config', {
@@ -597,11 +761,13 @@ function initAiConfigForm() {
       }
 
       if (apiKeyEl) apiKeyEl.value = '';
+      if (searchApiKeyEl) searchApiKeyEl.value = '';
       if (apiKeyHintEl && result?.data) {
         apiKeyHintEl.textContent = result.data.apiKeySet
           ? `Ключ задан: ${result.data.apiKeyHint}`
           : 'Ключ не задан — укажите новый или задайте AI_API_KEY в .env';
       }
+      updateSearchApiKeyHint(result?.data);
       setStatus('Настройки AI сохранены', 'success');
     } catch {
       setStatus('Не удалось сохранить настройки', 'error');
@@ -611,7 +777,9 @@ function initAiConfigForm() {
   };
 
   const testConnection = async (tier) => {
-    const button = tier === 'analytics' ? testAnalyticsBtn : testSimpleBtn;
+    const button = tier === 'search'
+      ? testSearchBtn
+      : (tier === 'analytics' ? testAnalyticsBtn : testSimpleBtn);
     if (button) button.disabled = true;
 
     try {
@@ -639,6 +807,7 @@ function initAiConfigForm() {
   form.addEventListener('submit', saveConfig);
   testSimpleBtn?.addEventListener('click', () => testConnection('simple'));
   testAnalyticsBtn?.addEventListener('click', () => testConnection('analytics'));
+  testSearchBtn?.addEventListener('click', () => testConnection('search'));
   loadConfig();
 }
 
@@ -967,9 +1136,13 @@ function renderSyncDiff(container, results) {
       </div>
     `).join('');
 
+    const title = item.modelId
+      ? `<a href="/models/${escapeHtml(item.modelId)}" class="sync-report-model-link">${escapeHtml(item.name)}</a>`
+      : escapeHtml(item.name);
+
     return `
       <div class="sync-report-item">
-        <h3>${escapeHtml(item.name)}</h3>
+        <h3>${title}</h3>
         <div class="sync-report-status">${escapeHtml(item.status)}${item.message ? ` — ${escapeHtml(item.message)}` : ''}</div>
         ${diffRows || '<div class="sync-report-status">Без изменений полей</div>'}
       </div>
@@ -1076,7 +1249,7 @@ function parseSseChunk(chunk) {
   return { event: eventName, data: JSON.parse(data) };
 }
 
-async function consumeSsePost(url, payload, handlers) {
+async function consumeSsePost(url, payload, handlers, signal) {
   const response = await adminFetch(url, {
     method: 'POST',
     headers: {
@@ -1084,6 +1257,7 @@ async function consumeSsePost(url, payload, handlers) {
       Accept: 'text/event-stream',
     },
     body: JSON.stringify(payload),
+    signal,
   });
 
   if (!response.ok && (!response.body || !response.headers.get('content-type')?.includes('text/event-stream'))) {
@@ -1098,33 +1272,52 @@ async function consumeSsePost(url, payload, handlers) {
     return null;
   }
 
+  const onAbort = () => {
+    reader.cancel().catch(() => {});
+  };
+  signal?.addEventListener('abort', onAbort, { once: true });
+
   const decoder = new TextDecoder();
   let buffer = '';
   let donePayload = null;
 
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-
-    let boundary = buffer.indexOf('\n\n');
-    while (boundary !== -1) {
-      const part = buffer.slice(0, boundary);
-      buffer = buffer.slice(boundary + 2);
-      const parsed = parseSseChunk(part);
-      if (parsed) {
-        if (parsed.event === 'progress') handlers.onProgress?.(parsed.data);
-        if (parsed.event === 'done') donePayload = parsed.data;
-        if (parsed.event === 'error') {
-          handlers.onError?.(parsed.data);
-          return null;
-        }
+  try {
+    while (true) {
+      if (signal?.aborted) {
+        const error = new Error('Операция отменена');
+        error.name = 'AbortError';
+        throw error;
       }
-      boundary = buffer.indexOf('\n\n');
+
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      let boundary = buffer.indexOf('\n\n');
+      while (boundary !== -1) {
+        const part = buffer.slice(0, boundary);
+        buffer = buffer.slice(boundary + 2);
+        const parsed = parseSseChunk(part);
+        if (parsed) {
+          if (parsed.event === 'progress') handlers.onProgress?.(parsed.data);
+          if (parsed.event === 'done') donePayload = parsed.data;
+          if (parsed.event === 'error') {
+            handlers.onError?.(parsed.data);
+            return null;
+          }
+        }
+        boundary = buffer.indexOf('\n\n');
+      }
     }
+  } finally {
+    signal?.removeEventListener('abort', onAbort);
   }
 
   return donePayload;
+}
+
+function isAbortError(error) {
+  return Boolean(error && (error.name === 'AbortError' || error.code === 20));
 }
 
 function initAdminSync() {
@@ -1137,18 +1330,31 @@ function initAdminSync() {
   const previewBtn = document.getElementById('syncPreviewBtn');
   const selectAllBtn = document.getElementById('syncSelectAllBtn');
   const deselectAllBtn = document.getElementById('syncDeselectAllBtn');
+  const cancelBtn = document.getElementById('syncCancelBtn');
   const statusEl = document.getElementById('syncStatus');
   const progressEl = document.getElementById('syncProgress');
   const progressUi = createSyncProgressUI(progressEl);
   const reportCard = document.getElementById('syncReportCard');
   const reportSummary = document.getElementById('syncReportSummary');
   const reportDetails = document.getElementById('syncReportDetails');
+  let abortController = null;
 
   const setStatus = (message, type = 'success') => {
     if (!statusEl) return;
     statusEl.hidden = false;
     statusEl.textContent = message;
     statusEl.className = `form-status ${type}`;
+  };
+
+  const setRunning = (running) => {
+    form.querySelectorAll('button').forEach((btn) => {
+      if (btn === cancelBtn) {
+        btn.hidden = !running;
+        btn.disabled = false;
+        return;
+      }
+      btn.disabled = running;
+    });
   };
 
   loadSyncFieldMeta()
@@ -1161,6 +1367,10 @@ function initAdminSync() {
   });
 
   initSyncFieldBulkActions(form, selectAllBtn, deselectAllBtn);
+
+  cancelBtn?.addEventListener('click', () => {
+    abortController?.abort();
+  });
 
   const runSync = async (dryRun) => {
     const fields = collectSyncFields(form);
@@ -1189,8 +1399,8 @@ function initAdminSync() {
       return;
     }
 
-    const buttons = form.querySelectorAll('button');
-    buttons.forEach((btn) => { btn.disabled = true; });
+    abortController = new AbortController();
+    setRunning(true);
     if (statusEl) statusEl.hidden = true;
 
     try {
@@ -1201,7 +1411,7 @@ function initAdminSync() {
           progressUi.hide();
           setSyncStatus(statusEl, errorPayload?.error || 'Синхронизация не удалась', 'error', errorPayload?.logId);
         },
-      });
+      }, abortController.signal);
       progressUi.hide();
 
       if (!donePayload) return;
@@ -1211,22 +1421,30 @@ function initAdminSync() {
       const logId = result.logId;
       if (reportCard) reportCard.hidden = false;
       if (reportSummary) {
-        reportSummary.innerHTML = `Обновлено: ${data.updated}, добавлено: ${data.created}, пропущено: ${data.skipped}, ошибок: ${data.errors}${logId ? ` · <a href="/admin/sync/logs/${escapeHtml(logId)}">журнал</a>` : ''}`;
+        const cancelledSuffix = data.cancelled ? ' · отменено' : '';
+        reportSummary.innerHTML = `Обновлено: ${data.updated}, добавлено: ${data.created}, пропущено: ${data.skipped}, ошибок: ${data.errors}${cancelledSuffix}${logId ? ` · <a href="/admin/sync/logs/${escapeHtml(logId)}">журнал</a>` : ''}`;
       }
       renderSyncDiff(reportDetails, data.results.filter((item) => item.diff?.length || item.status === 'error'));
 
-      if (dryRun) {
+      if (data.cancelled) {
+        setSyncStatus(statusEl, 'Синхронизация отменена', 'error', logId);
+      } else if (dryRun) {
         setSyncStatus(statusEl, 'Предпросмотр готов', 'success', logId);
       } else if (data.errors > 0) {
         setSyncStatus(statusEl, 'Синхронизация завершена с ошибками', 'error', logId);
       } else {
         setSyncStatus(statusEl, 'Синхронизация завершена', 'success', logId);
       }
-    } catch {
+    } catch (error) {
       progressUi.hide();
-      setSyncStatus(statusEl, 'Синхронизация не удалась', 'error');
+      if (isAbortError(error)) {
+        setSyncStatus(statusEl, 'Синхронизация отменена', 'error');
+      } else {
+        setSyncStatus(statusEl, 'Синхронизация не удалась', 'error');
+      }
     } finally {
-      buttons.forEach((btn) => { btn.disabled = false; });
+      abortController = null;
+      setRunning(false);
     }
   };
 
@@ -1352,6 +1570,16 @@ async function refreshDetailModelAfterSync(modelId) {
       if (index >= 0) {
         window.MODELS_DATA[index] = { ...window.MODELS_DATA[index], ...model };
       }
+    }
+
+    const createdEl = document.querySelector('.detail-hero-created');
+    if (createdEl) {
+      const createdFormatted = model.created_at_formatted
+        || (model.created_at ? new Date(model.created_at).toLocaleDateString('ru-RU') : null);
+      createdEl.classList.toggle('muted', !createdFormatted);
+      createdEl.textContent = createdFormatted
+        ? `В каталоге с: ${createdFormatted}`
+        : 'Дата добавления не указана';
     }
 
     const updatedEl = document.querySelector('.detail-hero-updated');
@@ -1988,11 +2216,13 @@ function initAdminAvailability() {
 
   const filterEl = document.getElementById('availFilter');
   const providerField = document.getElementById('availProviderField');
+  const cancelBtn = document.getElementById('availCancelBtn');
   const statusEl = document.getElementById('availStatus');
   const progressEl = document.getElementById('availProgress');
   const reportCard = document.getElementById('availReportCard');
   const reportSummary = document.getElementById('availReportSummary');
   const progressUi = createSyncProgressUI(progressEl);
+  let abortController = null;
 
   const setStatus = (message, type = 'success') => {
     if (!statusEl) return;
@@ -2001,9 +2231,24 @@ function initAdminAvailability() {
     statusEl.className = `form-status ${type}`;
   };
 
+  const setRunning = (running) => {
+    form.querySelectorAll('button').forEach((btn) => {
+      if (btn === cancelBtn) {
+        btn.hidden = !running;
+        btn.disabled = false;
+        return;
+      }
+      btn.disabled = running;
+    });
+  };
+
   filterEl?.addEventListener('change', () => {
     if (!providerField) return;
     providerField.hidden = filterEl.value !== 'provider';
+  });
+
+  cancelBtn?.addEventListener('click', () => {
+    abortController?.abort();
   });
 
   form.addEventListener('submit', async (event) => {
@@ -2022,13 +2267,19 @@ function initAdminAvailability() {
     const family = form.family?.value?.trim();
     if (family) payload.family = family;
 
+    const catalogAvailability = form.catalogAvailability?.value?.trim();
+    if (catalogAvailability) payload.catalogAvailability = catalogAvailability;
+
+    const inferenceFilter = form.inferenceFilter?.value?.trim();
+    if (inferenceFilter) payload.inferenceFilter = inferenceFilter;
+
     if (payload.filter === 'provider' && !payload.provider) {
       setStatus('Укажите провайдера для фильтра', 'error');
       return;
     }
 
-    const buttons = form.querySelectorAll('button');
-    buttons.forEach((btn) => { btn.disabled = true; });
+    abortController = new AbortController();
+    setRunning(true);
     if (statusEl) statusEl.hidden = true;
 
     try {
@@ -2053,7 +2304,7 @@ function initAdminAvailability() {
           progressUi.hide();
           setStatus(errorPayload?.error || 'Проверка не удалась', 'error');
         },
-      });
+      }, abortController.signal);
       progressUi.hide();
 
       if (!donePayload) return;
@@ -2061,19 +2312,27 @@ function initAdminAvailability() {
       const data = donePayload.data;
       if (reportCard) reportCard.hidden = false;
       if (reportSummary) {
-        reportSummary.textContent = `Доступна: ${data.available}, инференс: ${data.inference}, недоступна: ${data.unavailable}, ошибок: ${data.errors}`;
+        const cancelledSuffix = data.cancelled ? ' · отменено' : '';
+        reportSummary.textContent = `Доступна: ${data.available}, инференс: ${data.inference}, недоступна: ${data.unavailable}, ошибок: ${data.errors}${cancelledSuffix}`;
       }
 
-      if (data.errors > 0) {
+      if (data.cancelled) {
+        setStatus('Проверка отменена', 'error');
+      } else if (data.errors > 0) {
         setStatus('Проверка завершена с ошибками', 'error');
       } else {
         setStatus('Проверка завершена', 'success');
       }
-    } catch {
+    } catch (error) {
       progressUi.hide();
-      setStatus('Проверка не удалась', 'error');
+      if (isAbortError(error)) {
+        setStatus('Проверка отменена', 'error');
+      } else {
+        setStatus('Проверка не удалась', 'error');
+      }
     } finally {
-      buttons.forEach((btn) => { btn.disabled = false; });
+      abortController = null;
+      setRunning(false);
     }
   });
 }
@@ -2345,11 +2604,13 @@ function initAdminEvaluation() {
 
   const filterEl = document.getElementById('evalFilter');
   const providerField = document.getElementById('evalProviderField');
+  const cancelBtn = document.getElementById('evalCancelBtn');
   const statusEl = document.getElementById('evalStatus');
   const progressEl = document.getElementById('evalProgress');
   const reportCard = document.getElementById('evalReportCard');
   const reportSummary = document.getElementById('evalReportSummary');
   const progressUi = createSyncProgressUI(progressEl);
+  let abortController = null;
 
   const setStatus = (message, type = 'success') => {
     if (!statusEl) return;
@@ -2358,9 +2619,24 @@ function initAdminEvaluation() {
     statusEl.className = `form-status ${type}`;
   };
 
+  const setRunning = (running) => {
+    form.querySelectorAll('button').forEach((btn) => {
+      if (btn === cancelBtn) {
+        btn.hidden = !running;
+        btn.disabled = false;
+        return;
+      }
+      btn.disabled = running;
+    });
+  };
+
   filterEl?.addEventListener('change', () => {
     if (!providerField) return;
     providerField.hidden = filterEl.value !== 'provider';
+  });
+
+  cancelBtn?.addEventListener('click', () => {
+    abortController?.abort();
   });
 
   form.addEventListener('submit', async (event) => {
@@ -2384,8 +2660,8 @@ function initAdminEvaluation() {
       return;
     }
 
-    const buttons = form.querySelectorAll('button');
-    buttons.forEach((btn) => { btn.disabled = true; });
+    abortController = new AbortController();
+    setRunning(true);
     if (statusEl) statusEl.hidden = true;
 
     try {
@@ -2410,7 +2686,7 @@ function initAdminEvaluation() {
           progressUi.hide();
           setStatus(errorPayload?.error || 'Автооценка не удалась', 'error');
         },
-      });
+      }, abortController.signal);
       progressUi.hide();
 
       if (!donePayload) return;
@@ -2418,19 +2694,27 @@ function initAdminEvaluation() {
       const data = donePayload.data;
       if (reportCard) reportCard.hidden = false;
       if (reportSummary) {
-        reportSummary.textContent = `Успешно: ${data.success}, ошибки парсинга: ${data.parseErrors}, ошибок: ${data.errors}`;
+        const cancelledSuffix = data.cancelled ? ' · отменено' : '';
+        reportSummary.textContent = `Успешно: ${data.success}, ошибки парсинга: ${data.parseErrors}, ошибок: ${data.errors}${cancelledSuffix}`;
       }
 
-      if (data.errors > 0) {
+      if (data.cancelled) {
+        setStatus('Автооценка отменена', 'error');
+      } else if (data.errors > 0) {
         setStatus('Автооценка завершена с ошибками', 'error');
       } else {
         setStatus('Автооценка завершена', 'success');
       }
-    } catch {
+    } catch (error) {
       progressUi.hide();
-      setStatus('Автооценка не удалась', 'error');
+      if (isAbortError(error)) {
+        setStatus('Автооценка отменена', 'error');
+      } else {
+        setStatus('Автооценка не удалась', 'error');
+      }
     } finally {
-      buttons.forEach((btn) => { btn.disabled = false; });
+      abortController = null;
+      setRunning(false);
     }
   });
 }

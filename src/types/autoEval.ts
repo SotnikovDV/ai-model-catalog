@@ -93,4 +93,5 @@ export type EvaluationProgressCallback = (event: EvaluationProgressEvent) => voi
 
 export interface EvaluationRunResult extends EvaluationProgressSummary {
   results: EvaluationCheckResult[];
+  cancelled?: boolean;
 }

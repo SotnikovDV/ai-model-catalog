@@ -36,3 +36,11 @@ export const evaluationRateLimit = rateLimit({
   legacyHeaders: false,
   message: { error: 'Слишком много запросов. Повторите позже.' },
 });
+
+export const bothubRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: parseLimit(process.env.BOTHUB_RATE_LIMIT_MAX, 30),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Слишком много запросов. Повторите позже.' },
+});

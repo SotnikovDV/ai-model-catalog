@@ -4,6 +4,7 @@ const CARD_DETAIL_ICON = '<svg class="card-action-icon" viewBox="0 0 24 24" widt
 const CARD_CHAT_ICON = '<svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 const CARD_AVAIL_INFERENCE_ICON = '<svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
 const CARD_SYNC_ICON = '<svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>';
+const CARD_LIST_FALLBACK = '<svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>';
 const REC_COPY_NAME_ICON = '<svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
 
 const REC_SYNC_FIELDS = [
@@ -370,6 +371,7 @@ function renderRecItemActions(model) {
     </a>
     <a href="${editHref}" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
     <a href="${loginDetailHref}" class="card-favorite-btn${model.is_favorite ? ' active' : ''}" title="${favoriteTitle}" aria-label="${favoriteTitle}">★</a>
+    <a href="${loginDetailHref}" class="card-list-btn" title="Добавить в список" aria-label="Добавить в список">${window.AddToList?.LIST_ICON || CARD_LIST_FALLBACK}</a>
     <button
       type="button"
       class="card-compare-btn rec-compare-btn${inCompare ? ' active' : ''}"
@@ -393,6 +395,7 @@ function renderRecItemActions(model) {
     </button>
     <a href="/models/${escId}/edit" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
     <button type="button" class="card-favorite-btn rec-favorite-btn${model.is_favorite ? ' active' : ''}" data-id="${escId}" title="${favoriteTitle}" aria-label="${favoriteTitle}">★</button>
+    <button type="button" class="card-list-btn rec-list-btn" data-id="${escId}" title="Добавить в список" aria-label="Добавить в список">${window.AddToList?.LIST_ICON || CARD_LIST_FALLBACK}</button>
     <button
       type="button"
       class="card-compare-btn rec-compare-btn${inCompare ? ' active' : ''}"
@@ -501,6 +504,24 @@ function renderEmpty(message) {
   `;
 }
 
+function goToCompareChat(result, token) {
+  const max = window.CompareBuffer?.CHAT_MAX_MODELS || 8;
+  const ids = (result.items || [])
+    .map((item) => item.modelId || item.model?.id)
+    .filter(Boolean)
+    .slice(0, max);
+  if (!ids.length) return;
+  if (window.CompareBuffer) {
+    window.CompareBuffer.setIds(ids);
+  }
+  const base = window.CompareBuffer?.getChatUrl(ids)
+    || `/compare/chat?ids=${ids.map(encodeURIComponent).join(',')}`;
+  const params = new URLSearchParams({ from: 'recommendations' });
+  if (token) params.set('rec', token);
+  const url = `${base}${base.includes('?') ? '&' : '?'}${params.toString()}`;
+  window.location.href = window.AdminAccess?.protectedHref(url) || url;
+}
+
 function renderResult(result, token) {
   const container = document.getElementById('recommendationsContent');
   if (!container) return;
@@ -522,8 +543,8 @@ function renderResult(result, token) {
           <div class="rec-item-title-wrap">
             <h2 class="rec-item-title">
               <span class="rec-item-title-row">
-                <a href="/models/${escHtml(item.modelId)}">${escHtml(model.name || item.modelId)}</a>
-                <button type="button" class="rec-copy-name-btn" data-copy-text="${escHtml(model.name || item.modelId)}" title="Копировать название" aria-label="Копировать название">${REC_COPY_NAME_ICON}</button>
+                <a href="/models/${escHtml(item.modelId)}" data-model-modal-id="${escHtml(item.modelId)}" title="Открыть описание модели">${escHtml(model.name || item.modelId)}</a>
+                ${window.CopyModelName?.actionsHtml(model.name || item.modelId, item.modelId) || `<button type="button" class="rec-copy-name-btn" data-copy-text="${escHtml(model.name || item.modelId)}" title="Копировать название" aria-label="Копировать название">${REC_COPY_NAME_ICON}</button>`}
               </span>
             </h2>
             <div class="rec-item-badges detail-badges">${renderRecItemBadges(model)}</div>
@@ -549,6 +570,7 @@ function renderResult(result, token) {
       <p class="rec-summary">${escHtml(result.summary || '')}</p>
       <div class="rec-header-actions">
         <a href="${escHtml(catalogUrl)}" class="btn btn-primary">Показать карточками в каталоге</a>
+        <button type="button" class="btn btn-secondary" id="recCompareChatBtn">Чат-сравнение</button>
         <a href="/assistant" class="btn btn-secondary">Новый запрос</a>
       </div>
     </div>
@@ -557,6 +579,11 @@ function renderResult(result, token) {
 
   bindRecItemActions(container);
   bindRecCopyNameButtons(container);
+  window.ModelModal?.bindNameClicks(container);
+
+  container.querySelector('#recCompareChatBtn')?.addEventListener('click', () => {
+    goToCompareChat(result, token);
+  });
 
   if (window.CompareBuffer) {
     window.CompareBuffer.onChange(() => {

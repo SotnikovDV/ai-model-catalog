@@ -175,3 +175,56 @@ describe('POST /api/models/:id/chat', () => {
     expect(res.body.error).toMatch(/API-ключ провайдера/i);
   });
 });
+
+describe('GET /compare/chat', () => {
+  it('показывает пустое состояние без ids', async () => {
+    const res = await request(app).get('/compare/chat');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Чат-сравнение');
+    expect(res.text).toContain('Модели для сравнения не выбраны');
+  });
+
+  it('рендерит выбранные модели', async () => {
+    const listRes = await request(app).get('/api/models');
+    const models = listRes.body.data.slice(0, 2);
+    expect(models.length).toBeGreaterThan(0);
+
+    const ids = models.map((model: { id: string }) => model.id).join(',');
+    const res = await request(app).get(`/compare/chat?ids=${ids}`);
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Чат-сравнение');
+    expect(res.text).toContain(models[0].name);
+    expect(res.text).toContain('Отправить всем');
+  });
+
+  it('на странице сравнения есть переход в чат-сравнение', async () => {
+    const listRes = await request(app).get('/api/models');
+    const model = listRes.body.data[0];
+    expect(model?.id).toBeTruthy();
+
+    const res = await request(app).get(`/compare?ids=${model.id}`);
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Чат-сравнение');
+    expect(res.text).toContain(`/compare/chat?ids=${model.id}`);
+  });
+
+  it('ограничивает чат-сравнение восемью моделями', async () => {
+    const listRes = await request(app).get('/api/models');
+    const models = listRes.body.data as Array<{ id: string }>;
+    expect(models.length).toBeGreaterThan(0);
+
+    const filler = [
+      '00000000-0000-4000-8000-0000000000a1',
+      '00000000-0000-4000-8000-0000000000a2',
+    ];
+    const ids = [...models.map((model) => model.id), ...filler].slice(0, 9).join(',');
+    const res = await request(app).get(`/compare/chat?ids=${ids}`);
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Показаны первые 8 моделей');
+    expect(res.text).not.toContain('data-model-id="00000000-0000-4000-8000-0000000000a2"');
+  });
+});

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чат-сравнение — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/nav', { activeNav: 'compare' }) %>
+
+  <div class="page-wrap compare-chat-page-wrap">
+    <a href="<%= backHref %>" class="back-link">&larr; <%= backLabel %></a>
+    <h1 class="page-title">Чат-сравнение</h1>
+    <div class="compare-chat-subtitle-row">
+      <p class="page-subtitle">Один запрос уходит сразу во все выбранные модели — так проще сравнить ответы.</p>
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm"
+        id="compareChatExportBtn"
+        hidden
+        title="Сохранить ответы моделей в Markdown"
+      >Выгрузить результаты</button>
+    </div>
+
+    <div class="page-card compare-chat-empty" id="compareChatEmpty"<% if (models.length) { %> hidden<% } %>>
+      <p>Модели для сравнения не выбраны.</p>
+      <p class="muted">Добавьте модели в сравнение на каталоге или откройте подборку ассистента.</p>
+      <a href="/" class="btn btn-primary">Перейти к каталогу</a>
+    </div>
+
+    <section class="page-card chat-panel compare-chat-panel" id="compareChatPanel" aria-label="Чат-сравнение моделей"<% if (!models.length) { %> hidden<% } %>>
+      <% if (omittedCount > 0) { %>
+        <p class="compare-chat-limit-note" role="status">Показаны первые <%= maxModels %> моделей. Ещё <%= omittedCount %> не вошли в чат из‑за лимита.</p>
+      <% } %>
+      <div class="compare-chat-columns" id="compareChatColumns">
+        <% models.forEach(model => { %>
+          <article class="compare-chat-column" data-model-id="<%= model.id %>">
+            <header class="compare-chat-column-header">
+              <div class="compare-chat-column-title">
+                <div class="compare-chat-column-name-row">
+                  <a
+                    href="/models/<%= model.id %>"
+                    class="compare-chat-column-name"
+                    data-model-modal-id="<%= model.id %>"
+                    title="Открыть описание модели"
+                  ><%= model.name %></a>
+                  <button
+                    type="button"
+                    class="rec-copy-name-btn"
+                    data-copy-text="<%= model.name %>"
+                    title="Копировать название"
+                    aria-label="Копировать название"
+                  ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                </div>
+                <div class="compare-chat-column-meta muted"><%= model.family %> · <%= model.provider %></div>
+              </div>
+              <div class="compare-chat-column-actions">
+                <button
+                  type="button"
+                  class="card-list-btn compare-list-btn"
+                  data-id="<%= model.id %>"
+                  title="Добавить в список"
+                  aria-label="Добавить в список"
+                >
+                  <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                </button>
+                <button type="button" class="compare-remove-btn compare-chat-exclude-btn" data-id="<%= model.id %>">Исключить</button>
+              </div>
+              <label class="chat-reasoning-toggle compare-chat-reasoning-toggle" data-reasoning-wrap="<%= model.id %>" hidden>
+                <input type="checkbox" data-reasoning-toggle="<%= model.id %>" checked>
+                <span>Рассуждения</span>
+              </label>
+            </header>
+            <div class="chat-messages compare-chat-messages" data-chat-messages="<%= model.id %>" aria-live="polite">
+              <div class="chat-empty" data-chat-empty="<%= model.id %>">Напишите сообщение, чтобы начать диалог.</div>
+            </div>
+            <div class="chat-error compare-chat-column-error" data-chat-error="<%= model.id %>" hidden role="alert"></div>
+          </article>
+        <% }) %>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <textarea
+          class="chat-input"
+          id="chatInput"
+          rows="3"
+          placeholder="Введите сообщение для всех моделей…"
+          aria-label="Сообщение"
+        ></textarea>
+        <div class="chat-form-actions">
+          <div class="chat-form-actions-left">
+            <div class="chat-test-menu-wrap">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                id="chatTestMenuBtn"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-controls="chatTestMenu"
+                title="Подставить тестовый запрос"
+              >Тест ▾</button>
+              <div class="chat-test-menu" id="chatTestMenu" role="menu" hidden>
+                <button type="button" class="card-menu-item" role="menuitem" data-test-id="logic">Логика</button>
+                <button type="button" class="card-menu-item" role="menuitem" data-test-id="facts">Факты</button>
+                <button type="button" class="card-menu-item" role="menuitem" data-test-id="json">JSON</button>
+                <button type="button" class="card-menu-item" role="menuitem" data-test-id="anti-hallucination">Антигаллюцинация</button>
+                <button type="button" class="card-menu-item" role="menuitem" data-test-id="inference">Вывод</button>
+              </div>
+            </div>
+            <label class="chat-reasoning-toggle" id="compareChatReasoningAllWrap" hidden title="Включить или выключить рассуждения у всех моделей">
+              <input type="checkbox" id="compareChatReasoningAll" checked>
+              <span>Рассуждения</span>
+            </label>
+          </div>
+          <button type="button" class="btn btn-secondary" id="chatEditCancelBtn" hidden>Отмена</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="compareChatReportBtn"
+            hidden
+            title="Скачать отчёт сравнения"
+          >Сохранить отчёт</button>
+          <button type="button" class="btn btn-secondary" id="chatClearBtn">Очистить</button>
+          <button type="submit" class="btn btn-primary" id="chatSendBtn">Отправить всем</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    window.COMPARE_CHAT_MODELS = <%- JSON.stringify(models.map((model) => ({
+      id: model.id,
+      name: model.name,
+      family: model.family,
+      provider: model.provider,
+      priceLabel: model.price_label,
+      inputPricePerMTok: model.input_price_per_mtok,
+      outputPricePerMTok: model.output_price_per_mtok,
+      tags: model.tags || [],
+    }))).replace(/</g, '\\u003c') %>;
+  </script>
+  <%- include('partials/admin-auth-init') %>
+  <%- include('partials/model-modal') %>
+  <%- include('partials/add-to-list-modal') %>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+  <script src="/markdown.js"></script>
+  <script src="/model-modal.js"></script>
+  <script src="/add-to-list.js"></script>
+  <script src="/chat-common.js"></script>
+  <script src="/app.js"></script>
+  <script src="/compare-chat.js"></script>
+</body>
+</html>

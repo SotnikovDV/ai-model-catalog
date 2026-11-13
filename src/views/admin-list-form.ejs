@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= list ? list.name : 'Новый список' %> — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="admin-page lists-admin-page lists-form-page">
+  <%- include('partials/nav', { activeNav: 'admin' }) %>
+
+  <%- include('partials/admin-layout-open', { activeAdminNav: 'list-form' }) %>
+    <%- include('partials/admin-user-bar') %>
+    <div class="detail-toolbar">
+      <a href="/admin/lists" class="back-link">&larr; К спискам</a>
+    </div>
+
+    <div class="page-title-row">
+      <h1 class="page-title"><%= list ? 'Редактировать список' : 'Новый список' %></h1>
+      <% if (list) { %>
+        <a href="/lists?id=<%= list.id %>" class="btn btn-secondary btn-sm">Открыть страницу</a>
+      <% } %>
+    </div>
+
+    <form id="listForm" class="page-card provider-form-card">
+      <input type="hidden" name="id" value="<%= list ? list.id : '' %>">
+
+      <section class="provider-form-section">
+        <h2 class="provider-form-section__title">Основное</h2>
+        <div class="form-field">
+          <label for="listName">Название</label>
+          <input type="text" id="listName" name="name" required maxlength="200" value="<%= list ? list.name : '' %>">
+        </div>
+        <div class="form-field">
+          <label for="listDescription">Описание</label>
+          <textarea id="listDescription" name="description" rows="4" maxlength="5000"><%= list ? list.description : '' %></textarea>
+          <small class="form-hint">Кратко, для каких задач предназначен список</small>
+        </div>
+      </section>
+
+      <div class="provider-form-actions">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="/admin/lists" class="btn btn-secondary">Отмена</a>
+      </div>
+      <p id="listFormStatus" class="form-status" hidden></p>
+    </form>
+
+    <% if (list) { %>
+      <section class="page-card list-items-admin" id="listItemsSection" data-list-id="<%= list.id %>">
+        <div class="page-title-row" style="margin-bottom:12px;">
+          <h2 class="page-title" style="font-size:1.15rem; margin:0;">Состав списка</h2>
+          <span class="muted"><%= items.length %> <%= items.length === 1 ? 'модель' : (items.length >= 2 && items.length <= 4 ? 'модели' : 'моделей') %></span>
+        </div>
+        <p class="page-subtitle" style="margin-top:0;">Добавляйте модели из каталога (кнопка на карточке или меню выбранных). Здесь можно править комментарий и удалять.</p>
+
+        <% if (!items.length) { %>
+          <p class="detail-empty" id="listItemsEmpty">В списке пока нет моделей.</p>
+        <% } else { %>
+          <div class="list-items-table" id="listItemsTable">
+            <% for (const item of items) { %>
+              <% const modelName = item.model?.name || item.modelId; %>
+              <article class="list-item-row" data-model-id="<%= item.modelId %>">
+                <div class="list-item-row__head">
+                  <a href="/models/<%= item.modelId %>" class="list-item-row__title"><%= modelName %></a>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    data-remove-item="<%= item.modelId %>"
+                    data-model-name="<%= modelName %>"
+                  >Удалить</button>
+                </div>
+                <label class="form-field" style="margin:0;">
+                  <span class="muted" style="font-size:0.85rem;">Комментарий</span>
+                  <textarea
+                    class="list-item-comment"
+                    rows="3"
+                    maxlength="5000"
+                    data-model-id="<%= item.modelId %>"
+                  ><%= item.comment || '' %></textarea>
+                </label>
+                <div class="list-item-row__actions">
+                  <button type="button" class="btn btn-secondary btn-sm" data-save-comment="<%= item.modelId %>">Сохранить комментарий</button>
+                  <span class="form-status list-item-status" hidden></span>
+                </div>
+              </article>
+            <% } %>
+          </div>
+        <% } %>
+      </section>
+    <% } %>
+  <%- include('partials/admin-layout-close') %>
+
+  <script src="/authFetch.js"></script>
+  <script src="/lists-admin.js"></script>
+</body>
+</html>

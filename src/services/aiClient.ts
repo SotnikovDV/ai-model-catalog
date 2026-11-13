@@ -1,5 +1,12 @@
-import { assertAiConfigured, getAiConfig, resolveModelForTier } from './aiConfig.js';
+import {
+  assertAiConfigured,
+  assertSearchConfigured,
+  getAiConfig,
+  resolveModelForTier,
+  resolveSearchConnection,
+} from './aiConfig.js';
 import type { AiModelTier, ChatMessage } from '../types/ai.js';
+import { applyCitationsToContent, extractCitationUrls } from '../utils/citations.js';
 
 export interface ChatCompletionOptions {
   messages: ChatMessage[];
@@ -8,6 +15,8 @@ export interface ChatCompletionOptions {
   temperature?: number;
   maxTokens?: number;
   responseFormat?: 'json_object';
+  /** Превращать [n] в ссылки по citations (по умолчанию true) */
+  linkifyCitations?: boolean;
 }
 
 export interface ProviderChatCompletionOptions {
@@ -31,6 +40,8 @@ export interface ChatCompletionResult {
   tier?: AiModelTier;
   /** Текст рассуждений модели (если провайдер вернул отдельно от content) */
   reasoning?: string | null;
+  /** URL источников (Perplexity Sonar и аналоги) */
+  citations?: string[];
   usage?: {
     promptTokens?: number;
     completionTokens?: number;
@@ -48,6 +59,8 @@ interface OpenAiChatResponse {
     };
   }>;
   model?: string;
+  citations?: unknown;
+  search_results?: unknown;
   usage?: {
     prompt_tokens?: number;
     completion_tokens?: number;
@@ -188,27 +201,30 @@ async function executeChatCompletion(
 
   const choice = payload.choices?.[0];
   const message = choice?.message;
-  const content = message?.content?.trim() || '';
+  const rawContent = message?.content?.trim() || '';
   const reasoning = extractReasoningText(message);
+  const citations = extractCitationUrls(payload);
 
-  if (!content && !reasoning) {
+  if (!rawContent && !reasoning) {
     throw new Error('AI-провайдер вернул пустой ответ');
   }
 
   // Если основного текста нет — показываем reasoning как content, без дубля строки
-  if (!content) {
+  if (!rawContent) {
     return {
       content: reasoning,
       reasoning: null,
       model: payload.model ?? model,
+      citations: citations.length ? citations : undefined,
       usage: mapUsage(payload),
     };
   }
 
   return {
-    content,
+    content: rawContent,
     reasoning: reasoning || null,
     model: payload.model ?? model,
+    citations: citations.length ? citations : undefined,
     usage: mapUsage(payload),
   };
 }
@@ -244,25 +260,57 @@ export async function chatCompletionWithConnection(
   }
 }
 
+function defaultTemperatureForTier(tier: AiModelTier): number {
+  if (tier === 'analytics' || tier === 'search') return 0.3;
+  return 0.7;
+}
+
+function defaultMaxTokensForTier(tier: AiModelTier): number {
+  if (tier === 'analytics' || tier === 'search') return 4096;
+  return 1024;
+}
+
 export async function chatCompletion(options: ChatCompletionOptions): Promise<ChatCompletionResult> {
   const config = getAiConfig();
-  assertAiConfigured(config);
-
   const tier = options.tier ?? 'simple';
+
+  if (tier === 'search') {
+    assertSearchConfigured(config);
+  } else {
+    assertAiConfigured(config);
+  }
+
   const model = options.model ?? resolveModelForTier(tier, config);
+  if (!model) {
+    throw new Error(tier === 'search'
+      ? 'Модель с поиском не настроена: укажите AI_MODEL_SEARCH.'
+      : 'AI-провайдер не настроен: укажите модель.');
+  }
+
+  const connection = tier === 'search'
+    ? resolveSearchConnection(config)
+    : { baseUrl: config.baseUrl, apiKey: config.apiKey };
 
   const result = await executeChatCompletion(
-    { baseUrl: config.baseUrl, apiKey: config.apiKey },
+    connection,
     {
       model,
       messages: options.messages,
-      temperature: options.temperature ?? (tier === 'analytics' ? 0.3 : 0.7),
-      max_tokens: options.maxTokens ?? (tier === 'analytics' ? 4096 : 1024),
+      temperature: options.temperature ?? defaultTemperatureForTier(tier),
+      max_tokens: options.maxTokens ?? defaultMaxTokensForTier(tier),
+      // Perplexity Sonar: явный запрос массива citations для сносок [1], [2]…
+      ...(tier === 'search' ? { return_citations: true } : {}),
     },
     options.responseFormat,
   );
 
-  return { ...result, tier };
+  const linkify = options.linkifyCitations !== false;
+  const citations = result.citations ?? [];
+  const content = linkify && citations.length
+    ? applyCitationsToContent(result.content, citations)
+    : result.content;
+
+  return { ...result, content, tier };
 }
 
 export async function testAiConnection(tier: AiModelTier = 'simple'): Promise<ChatCompletionResult> {

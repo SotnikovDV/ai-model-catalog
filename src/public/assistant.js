@@ -2,6 +2,10 @@ const messages = [];
 
 let isSending = false;
 
+let waitingTimerId = null;
+
+let waitingStartedAt = 0;
+
 let lastResult = null;
 
 let lastToken = null;
@@ -9,6 +13,17 @@ let lastToken = null;
 let currentChatId = null;
 
 let chatList = [];
+
+/** @type {'recommend' | 'chat'} */
+let assistantMode = 'recommend';
+
+/** @type {'analytics' | 'search'} */
+let chatTier = 'analytics';
+
+let cachedAiConfig = null;
+
+const RECOMMEND_HERO_DESC = 'Опишите задачу на естественном языке — аналитическая модель из админки подберёт подходящие модели из каталога.';
+const CHAT_HERO_DESC = 'Технический обзор и диалог с моделью поиска (или аналитической, если поиск не настроен). Можно продолжать уточняющими вопросами.';
 
 
 
@@ -25,6 +40,28 @@ const attachMessageActions = chatCommon.attachMessageActions || (() => {});
 const attachContentActions = chatCommon.attachContentActions || (() => {});
 
 const buildCopySaveActions = chatCommon.buildCopySaveActions || (() => '');
+
+const createMessageEditController = chatCommon.createMessageEditController
+  || (() => ({
+    begin: () => {},
+    cancel: () => false,
+    commit: () => {},
+    hasPending: () => false,
+  }));
+const composeMessageWithAttachments = chatCommon.composeMessageWithAttachments
+  || ((text) => String(text ?? '').trim());
+const messageContentForApi = chatCommon.messageContentForApi
+  || ((message) => composeMessageWithAttachments(message?.content, message?.attachments || []));
+const mountAttachmentUi = chatCommon.mountAttachmentUi || (() => ({
+  getAttachments: () => [],
+  clear: () => {},
+  setAttachments: () => {},
+  setError: () => {},
+  setDisabled: () => {},
+}));
+
+const messageEdit = createMessageEditController('assistantEditCancelBtn');
+let attachmentUi = null;
 
 
 
@@ -218,8 +255,8 @@ function buildPreviewItemHtml(item) {
   const safeName = escHtml(name);
 
   const nameHtml = modelId
-    ? `<span class="assistant-preview-title-row"><a href="/models/${escHtml(modelId)}" target="_blank" rel="noopener noreferrer" class="assistant-preview-name">${safeName}</a>${window.CopyModelName?.buttonHtml(name) || ''}</span>`
-    : `<span class="assistant-preview-title-row"><strong class="assistant-preview-name">${safeName}</strong>${window.CopyModelName?.buttonHtml(name) || ''}</span>`;
+    ? `<span class="assistant-preview-title-row"><a href="/models/${escHtml(modelId)}" class="assistant-preview-name" data-model-modal-id="${escHtml(modelId)}" title="Открыть описание модели">${safeName}</a>${window.CopyModelName?.actionsHtml(name, modelId) || ''}</span>`
+    : `<span class="assistant-preview-title-row"><strong class="assistant-preview-name">${safeName}</strong>${window.CopyModelName?.actionsHtml(name) || ''}</span>`;
 
   const metaHtml = buildPreviewMetaBadges(model);
 
@@ -268,6 +305,134 @@ function setError(message) {
   errorEl.hidden = false;
 
   errorEl.textContent = message;
+
+}
+
+
+
+function truncateMessagesFrom(message) {
+
+  const index = messages.indexOf(message);
+
+  if (index < 0) return -1;
+
+  messages.splice(index);
+
+  lastResult = null;
+
+  lastToken = null;
+
+  setError('');
+
+  return index;
+
+}
+
+
+
+function editUserMessage(message) {
+
+  if (isSending) return;
+
+  messageEdit.begin({
+    messages: messages.map((item) => ({ ...item })),
+    lastResult,
+    lastToken,
+  });
+
+  const index = truncateMessagesFrom(message);
+
+  if (index < 0) {
+    messageEdit.commit();
+    return;
+  }
+
+  renderMessages();
+
+  void persistCurrentChat();
+
+  const input = document.getElementById('assistantInput');
+
+  if (!input) return;
+
+  input.value = String(message.content ?? '');
+
+  attachmentUi?.setAttachments(message.attachments || []);
+
+  input.focus();
+
+  const length = input.value.length;
+
+  input.setSelectionRange(length, length);
+
+}
+
+
+
+function cancelEditUserMessage() {
+
+  if (isSending) return;
+
+  const restored = messageEdit.cancel((snapshot) => {
+    messages.length = 0;
+    messages.push(...snapshot.messages.map((item) => ({ ...item })));
+    lastResult = snapshot.lastResult ?? null;
+    lastToken = snapshot.lastToken ?? null;
+  });
+
+  if (!restored) return;
+
+  setError('');
+
+  attachmentUi?.clear();
+
+  renderMessages();
+
+  const input = document.getElementById('assistantInput');
+
+  if (input) input.value = '';
+
+  void persistCurrentChat();
+
+}
+
+
+
+function repeatUserMessage(message) {
+
+  if (isSending) return;
+
+  messageEdit.commit();
+
+  const content = String(message.content ?? '').trim();
+
+  const attachments = Array.isArray(message.attachments) ? message.attachments : [];
+
+  if (!content && attachments.length === 0) return;
+
+  const index = truncateMessagesFrom(message);
+
+  if (index < 0) return;
+
+  renderMessages();
+
+  void sendQuery(content, attachments);
+
+}
+
+
+
+function getUserMessageActionOptions() {
+
+  return {
+
+    filePrefix: 'assistant-response',
+
+    onEdit: editUserMessage,
+
+    onRepeat: repeatUserMessage,
+
+  };
 
 }
 
@@ -328,6 +493,182 @@ function setAnalyticsModelStatus(modelName) {
   }
 
   setStatus(`Используется аналитическая модель: ${modelName}`);
+
+}
+
+
+
+function setSearchModelStatus(modelName) {
+
+  const modelId = window.ASSISTANT_META?.searchModelId;
+
+  const safeName = escHtml(modelName);
+
+  if (modelId) {
+
+    const safeId = escHtml(modelId);
+
+    setStatus(
+
+      `Используется модель с поиском: <a href="/models/${safeId}" target="_blank" rel="noopener noreferrer">${safeName}</a>`,
+
+      { html: true },
+
+    );
+
+    return;
+
+  }
+
+  setStatus(`Используется модель с поиском: ${modelName}`);
+
+}
+
+
+
+function setActiveModelStatus() {
+
+  if (assistantMode === 'chat' && chatTier === 'search') {
+
+    const name = cachedAiConfig?.modelSearch || window.ASSISTANT_META?.searchModelName;
+
+    if (name) {
+
+      setSearchModelStatus(name);
+
+      return;
+
+    }
+
+  }
+
+  const analyticsName = cachedAiConfig?.modelAnalytics || window.ASSISTANT_META?.modelName;
+
+  if (analyticsName) setAnalyticsModelStatus(analyticsName);
+
+}
+
+
+
+function syncAssistantHelpContext() {
+  const context = assistantMode === 'chat' ? 'assistant.overview' : 'assistant.recommend';
+  if (typeof window.Help?.setContext === 'function') {
+    window.Help.setContext(context);
+  } else {
+    const helpBtn = document.getElementById('assistantHelpBtn');
+    if (helpBtn) helpBtn.setAttribute('data-help-context', context);
+  }
+}
+
+function applyAssistantModeUi() {
+
+  const sendBtn = document.getElementById('assistantSendBtn');
+
+  const input = document.getElementById('assistantInput');
+
+  const heroDesc = document.getElementById('assistantHeroDesc');
+
+  const emptyEl = document.getElementById('assistantEmpty');
+
+
+
+  if (assistantMode === 'chat') {
+
+    if (sendBtn) sendBtn.textContent = 'Отправить';
+
+    if (input) {
+
+      input.placeholder = 'Продолжите диалог с ассистентом…';
+
+      input.setAttribute('aria-label', 'Сообщение ассистенту');
+
+    }
+
+    if (heroDesc) heroDesc.textContent = CHAT_HERO_DESC;
+
+    if (emptyEl && !messages.length) {
+
+      emptyEl.textContent = 'Задайте уточняющий вопрос по обзору модели или продолжите диалог.';
+
+    }
+
+  } else {
+
+    if (sendBtn) sendBtn.textContent = 'Подобрать модели';
+
+    if (input) {
+
+      input.placeholder = 'Опишите, какую модель вы ищете…';
+
+      input.setAttribute('aria-label', 'Запрос на подбор моделей');
+
+    }
+
+    if (heroDesc) heroDesc.textContent = RECOMMEND_HERO_DESC;
+
+    if (emptyEl && !messages.length) {
+
+      emptyEl.textContent = 'Например: «Нужна недорогая модель для RAG на русском с большим контекстом» или «Лучшая модель для кодогенерации».';
+
+    }
+
+  }
+
+  syncAssistantHelpContext();
+
+}
+
+
+
+function enterChatMode({ preferSearch = true } = {}) {
+
+  assistantMode = 'chat';
+
+  const searchReady = Boolean(
+
+    cachedAiConfig?.searchConfigured
+
+    || (window.ASSISTANT_META?.searchConfigured && window.ASSISTANT_META?.searchModelName),
+
+  );
+
+  chatTier = preferSearch && searchReady ? 'search' : 'analytics';
+
+  applyAssistantModeUi();
+
+  setActiveModelStatus();
+
+}
+
+
+
+function enterRecommendMode() {
+
+  assistantMode = 'recommend';
+
+  chatTier = 'analytics';
+
+  applyAssistantModeUi();
+
+  setActiveModelStatus();
+
+}
+
+
+
+function toChatApiMessages(list) {
+
+  return list
+
+    .filter((message) => message.role === 'user' || message.role === 'assistant' || message.role === 'system')
+
+    .map((message) => ({
+
+      role: message.role,
+
+      content: messageContentForApi(message),
+
+    }));
 
 }
 
@@ -515,7 +856,37 @@ async function fetchChatList() {
 
 
 
+function inferAssistantModeFromMessages(list) {
+
+  const firstUser = list.find((message) => message.role === 'user');
+
+  if (firstUser && /^Сделай технический обзор модели/i.test(String(firstUser.content || ''))) {
+
+    enterChatMode({ preferSearch: true });
+
+    return;
+
+  }
+
+  if (list.length && !lastResult) {
+
+    // Диалог без блока рекомендаций — продолжаем как чат
+
+    enterChatMode({ preferSearch: true });
+
+    return;
+
+  }
+
+  enterRecommendMode();
+
+}
+
+
+
 function applyChatData(chat) {
+
+  messageEdit.commit();
 
   messages.length = 0;
 
@@ -525,6 +896,8 @@ function applyChatData(chat) {
 
   }
 
+  attachmentUi?.clear();
+
   lastResult = chat.lastResult || null;
 
   restoreRecommendationToken(lastResult);
@@ -532,6 +905,8 @@ function applyChatData(chat) {
   currentChatId = chat.id;
 
   setError('');
+
+  inferAssistantModeFromMessages(messages);
 
   renderMessages();
 
@@ -755,6 +1130,42 @@ async function deleteChat(chatId) {
 
 
 
+function scrollAssistantToLatestMessage() {
+
+  const container = document.getElementById('assistantMessages');
+
+  if (!container) return;
+
+
+
+  const candidates = container.querySelectorAll(
+    '.chat-message:not(.chat-message--loading), .assistant-result-block, .chat-message--loading',
+  );
+
+  const target = candidates[candidates.length - 1];
+
+  if (!target) {
+
+    container.scrollTop = container.scrollHeight;
+
+    return;
+
+  }
+
+
+
+  // Верх последней реплики / блока — к верхней границе панели чата
+
+  const containerRect = container.getBoundingClientRect();
+
+  const targetRect = target.getBoundingClientRect();
+
+  container.scrollTop += targetRect.top - containerRect.top;
+
+}
+
+
+
 function renderMessages() {
 
   const container = document.getElementById('assistantMessages');
@@ -781,7 +1192,7 @@ function renderMessages() {
 
 
 
-  container.querySelectorAll('.chat-message, .assistant-result-block').forEach((el) => el.remove());
+  container.querySelectorAll('.chat-message:not(.chat-message--loading), .assistant-result-block').forEach((el) => el.remove());
 
 
 
@@ -793,7 +1204,7 @@ function renderMessages() {
 
     div.innerHTML = buildMessageHtml(message);
 
-    attachMessageActions(div, message, { filePrefix: 'assistant-response' });
+    attachMessageActions(div, message, getUserMessageActionOptions());
 
     container.appendChild(div);
 
@@ -809,7 +1220,7 @@ function renderMessages() {
 
 
 
-  container.scrollTop = container.scrollHeight;
+  scrollAssistantToLatestMessage();
 
 }
 
@@ -913,6 +1324,46 @@ function goToCompareWithRecommendation(result) {
 
 
 
+function goToCompareChatWithRecommendation(result, extra = {}) {
+
+  const max = window.CompareBuffer?.CHAT_MAX_MODELS || 8;
+
+  const ids = (result.items || [])
+
+    .map((item) => item.modelId || item.model?.id)
+
+    .filter(Boolean)
+
+    .slice(0, max);
+
+  if (!ids.length) return;
+
+  if (window.CompareBuffer) {
+
+    window.CompareBuffer.setIds(ids);
+
+  }
+
+  const base = window.CompareBuffer?.getChatUrl(ids)
+
+    || `/compare/chat?ids=${ids.map(encodeURIComponent).join(',')}`;
+
+  const params = new URLSearchParams();
+
+  if (extra.from) params.set('from', extra.from);
+
+  if (extra.rec) params.set('rec', extra.rec);
+
+  const suffix = params.toString();
+
+  const url = suffix ? `${base}${base.includes('?') ? '&' : '?'}${suffix}` : base;
+
+  window.location.href = window.AdminAccess?.protectedHref(url) || url;
+
+}
+
+
+
 function buildResultBlock(result, token) {
 
   const div = document.createElement('div');
@@ -957,6 +1408,8 @@ function buildResultBlock(result, token) {
 
       <button type="button" class="btn btn-secondary assistant-compare-btn">Сравнить модели</button>
 
+      <button type="button" class="btn btn-secondary assistant-compare-chat-btn">Чат-сравнение</button>
+
     </div>
 
   `;
@@ -969,11 +1422,65 @@ function buildResultBlock(result, token) {
 
   }
 
+  const compareChatBtn = div.querySelector('.assistant-compare-chat-btn');
+
+  if (compareChatBtn) {
+
+    compareChatBtn.addEventListener('click', () => goToCompareChatWithRecommendation(result, { from: 'assistant' }));
+
+  }
+
   attachContentActions(div, () => formatResultAsMarkdown(result), { filePrefix: 'assistant-recommendations' });
 
   window.CopyModelName?.bindAll(div);
 
+  window.ModelModal?.bindNameClicks(div);
+
   return div;
+
+}
+
+
+
+function formatWaitingElapsed(ms) {
+
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+
+  if (totalSec < 60) return `${totalSec} с`;
+
+  const min = Math.floor(totalSec / 60);
+
+  const sec = totalSec % 60;
+
+  return `${min}:${String(sec).padStart(2, '0')}`;
+
+}
+
+
+
+function stopWaitingTimer() {
+
+  if (waitingTimerId != null) {
+
+    window.clearInterval(waitingTimerId);
+
+    waitingTimerId = null;
+
+  }
+
+  waitingStartedAt = 0;
+
+}
+
+
+
+function updateWaitingElapsed() {
+
+  const elapsedEl = document.getElementById('assistantWaitingElapsed');
+
+  if (!elapsedEl || !waitingStartedAt) return;
+
+  elapsedEl.textContent = formatWaitingElapsed(performance.now() - waitingStartedAt);
 
 }
 
@@ -989,9 +1496,17 @@ function setLoading(loading) {
 
 
 
-  if (sendBtn) sendBtn.disabled = loading;
+  if (sendBtn) {
+
+    sendBtn.disabled = loading;
+
+    sendBtn.setAttribute('aria-busy', loading ? 'true' : 'false');
+
+  }
 
   if (input) input.disabled = loading;
+
+  attachmentUi?.setDisabled(loading);
 
 
 
@@ -999,9 +1514,13 @@ function setLoading(loading) {
 
   if (existing) existing.remove();
 
+  stopWaitingTimer();
+
 
 
   if (loading && container) {
+
+    waitingStartedAt = performance.now();
 
     const div = document.createElement('div');
 
@@ -1011,13 +1530,23 @@ function setLoading(loading) {
 
       <div class="chat-message-role">Ассистент</div>
 
-      <div class="chat-message-content"><span class="chat-typing">Подбираю модели…</span></div>
+      <div class="chat-waiting" aria-live="polite">
+
+        <span class="chat-waiting-spinner" aria-hidden="true"></span>
+
+        <span class="chat-waiting-label">${assistantMode === 'chat' ? 'Готовлю ответ…' : 'Подбираю модели…'}</span>
+
+        <span class="chat-waiting-elapsed" id="assistantWaitingElapsed">0 с</span>
+
+      </div>
 
     `;
 
     container.appendChild(div);
 
-    container.scrollTop = container.scrollHeight;
+    scrollAssistantToLatestMessage();
+
+    waitingTimerId = window.setInterval(updateWaitingElapsed, 250);
 
   }
 
@@ -1025,19 +1554,19 @@ function setLoading(loading) {
 
 
 
-async function sendQuery(text) {
+async function sendOverviewRequest(modelName, modelId) {
 
-  const trimmed = text.trim();
+  const name = String(modelName || '').trim();
 
-  if (!trimmed || isSending) return;
+  if (!name || isSending) return;
 
 
+
+  messageEdit.commit();
 
   isSending = true;
 
   setError('');
-
-  setLoading(true);
 
   lastResult = null;
 
@@ -1045,9 +1574,349 @@ async function sendQuery(text) {
 
 
 
-  messages.push({ role: 'user', content: trimmed });
+  const userText = `Сделай технический обзор модели «${name}»`;
+
+  messages.push({ role: 'user', content: userText });
 
   renderMessages();
+
+  setLoading(true);
+
+
+
+  const input = document.getElementById('assistantInput');
+
+  if (input) input.value = '';
+
+
+
+  let hadSuccessfulResult = false;
+
+
+
+  try {
+
+    const startedAt = performance.now();
+
+    const response = await fetch('/api/ai/model-overview', {
+
+      method: 'POST',
+
+      headers: { 'Content-Type': 'application/json' },
+
+      body: JSON.stringify({
+
+        modelName: name,
+
+        ...(modelId ? { modelId } : {}),
+
+      }),
+
+    });
+
+
+
+    const payload = await response.json().catch(() => null);
+
+
+
+    if (!response.ok) {
+
+      const message = payload?.error
+
+        || (Array.isArray(payload?.issues) ? payload.issues.map((i) => i.message).join('\n') : null)
+
+        || 'Не удалось получить обзор модели';
+
+      setError(message);
+
+      await persistCurrentChat();
+
+      return;
+
+    }
+
+
+
+    const data = payload?.data;
+
+    const content = data?.content?.trim();
+
+    if (!content) {
+
+      setError('AI вернул пустой обзор модели.');
+
+      await persistCurrentChat();
+
+      return;
+
+    }
+
+
+
+    hadSuccessfulResult = true;
+
+    messages.push({
+
+      role: 'assistant',
+
+      content,
+
+      usage: data?.usage,
+
+      elapsedMs: performance.now() - startedAt,
+
+    });
+
+    renderMessages();
+
+  } catch {
+
+    setError('Сетевая ошибка при запросе обзора модели.');
+
+    await persistCurrentChat();
+
+  } finally {
+
+    isSending = false;
+
+    setLoading(false);
+
+    if (hadSuccessfulResult) {
+
+      await persistCurrentChat();
+
+    }
+
+  }
+
+}
+
+
+
+async function sendChatFollowUp(text, presetAttachments) {
+
+  const displayText = String(text ?? '').trim();
+
+  const attachments = Array.isArray(presetAttachments)
+
+    ? presetAttachments
+
+    : (attachmentUi?.getAttachments() || []);
+
+  const apiContent = composeMessageWithAttachments(displayText, attachments);
+
+  if (!apiContent || isSending) return;
+
+
+
+  messageEdit.commit();
+
+  isSending = true;
+
+  setError('');
+
+  lastResult = null;
+
+  lastToken = null;
+
+
+
+  const userMessage = { role: 'user', content: displayText };
+
+  if (attachments.length) {
+
+    userMessage.attachments = attachments.map((item) => ({
+
+      name: item.name,
+
+      text: item.text,
+
+    }));
+
+  }
+
+  messages.push(userMessage);
+
+  attachmentUi?.clear();
+
+  renderMessages();
+
+  setLoading(true);
+
+
+
+  const input = document.getElementById('assistantInput');
+
+  if (input) input.value = '';
+
+
+
+  let hadSuccessfulResult = false;
+
+
+
+  try {
+
+    const startedAt = performance.now();
+
+    const response = await fetch('/api/ai/chat', {
+
+      method: 'POST',
+
+      headers: { 'Content-Type': 'application/json' },
+
+      body: JSON.stringify({
+
+        tier: chatTier,
+
+        messages: toChatApiMessages(messages),
+
+        temperature: 0.3,
+
+        maxTokens: 2048,
+
+      }),
+
+    });
+
+
+
+    const payload = await response.json().catch(() => null);
+
+
+
+    if (!response.ok) {
+
+      const message = payload?.error
+
+        || (Array.isArray(payload?.issues) ? payload.issues.map((i) => i.message).join('\n') : null)
+
+        || 'Не удалось получить ответ ассистента';
+
+      setError(message);
+
+      await persistCurrentChat();
+
+      return;
+
+    }
+
+
+
+    const data = payload?.data;
+
+    const content = data?.content?.trim();
+
+    if (!content) {
+
+      setError('AI вернул пустой ответ.');
+
+      await persistCurrentChat();
+
+      return;
+
+    }
+
+
+
+    hadSuccessfulResult = true;
+
+    messages.push({
+
+      role: 'assistant',
+
+      content,
+
+      usage: data?.usage,
+
+      elapsedMs: performance.now() - startedAt,
+
+    });
+
+    renderMessages();
+
+  } catch {
+
+    setError('Сетевая ошибка при отправке сообщения.');
+
+    await persistCurrentChat();
+
+  } finally {
+
+    isSending = false;
+
+    setLoading(false);
+
+    if (hadSuccessfulResult) {
+
+      await persistCurrentChat();
+
+    }
+
+  }
+
+}
+
+
+
+async function sendQuery(text, presetAttachments) {
+
+  if (assistantMode === 'chat') {
+
+    await sendChatFollowUp(text, presetAttachments);
+
+    return;
+
+  }
+
+
+
+  const displayText = String(text ?? '').trim();
+
+  const attachments = Array.isArray(presetAttachments)
+
+    ? presetAttachments
+
+    : (attachmentUi?.getAttachments() || []);
+
+  const apiContent = composeMessageWithAttachments(displayText, attachments);
+
+  if (!apiContent || isSending) return;
+
+  messageEdit.commit();
+
+  isSending = true;
+
+  setError('');
+
+  lastResult = null;
+
+  lastToken = null;
+
+
+
+  const userMessage = { role: 'user', content: displayText };
+
+  if (attachments.length) {
+
+    userMessage.attachments = attachments.map((item) => ({
+
+      name: item.name,
+
+      text: item.text,
+
+    }));
+
+  }
+
+  messages.push(userMessage);
+
+  attachmentUi?.clear();
+
+  renderMessages();
+
+  setLoading(true);
 
 
 
@@ -1071,7 +1940,14 @@ async function sendQuery(text) {
 
       headers: { 'Content-Type': 'application/json' },
 
-      body: JSON.stringify({ query: trimmed, limit: 8 }),
+      body: JSON.stringify({
+        query: apiContent,
+        limit: 8,
+        messages: messages.map((message) => ({
+          role: message.role,
+          content: messageContentForApi(message),
+        })),
+      }),
 
     });
 
@@ -1165,9 +2041,11 @@ async function sendQuery(text) {
 
 
 
-function startNewChat(updateUrl = true) {
+function startNewChat(updateUrl = true, options = {}) {
 
   if (isSending) return;
+
+  messageEdit.commit();
 
   messages.length = 0;
 
@@ -1178,6 +2056,20 @@ function startNewChat(updateUrl = true) {
   currentChatId = null;
 
   setError('');
+
+  attachmentUi?.clear();
+
+  if (options.preserveMode) {
+
+    applyAssistantModeUi();
+
+    setActiveModelStatus();
+
+  } else {
+
+    enterRecommendMode();
+
+  }
 
   renderMessages();
 
@@ -1295,7 +2187,11 @@ async function loadAiStatus() {
 
     const config = payload?.data;
 
-    if (!config?.enabled || !config?.configured) {
+    cachedAiConfig = config || null;
+
+
+
+    if (!config?.enabled || (!config?.configured && !config?.searchConfigured)) {
 
       setStatus('AI-провайдер не настроен. Настройте его в разделе «Админ».');
 
@@ -1311,7 +2207,9 @@ async function loadAiStatus() {
 
     }
 
-    setAnalyticsModelStatus(config.modelAnalytics);
+
+
+    setActiveModelStatus();
 
   } catch {
 
@@ -1331,7 +2229,11 @@ async function initAssistant() {
 
   const clearBtn = document.getElementById('assistantClearBtn');
 
+  const cancelEditBtn = document.getElementById('assistantEditCancelBtn');
+
   const newChatBtn = document.getElementById('assistantNewChatBtn');
+
+  const actionsLeft = document.getElementById('assistantFormActionsLeft');
 
 
 
@@ -1339,11 +2241,27 @@ async function initAssistant() {
 
 
 
+  window.ModelModal?.init({ bindDefaultActions: true });
+
+
+
+  attachmentUi = mountAttachmentUi({
+
+    form,
+
+    actionsLeftEl: actionsLeft,
+
+    onError: setError,
+
+  });
+
+
+
   initAssistantSidebar();
 
-  void loadAiStatus();
-
   await fetchChatList();
+
+  await loadAiStatus();
 
 
 
@@ -1351,9 +2269,37 @@ async function initAssistant() {
 
   const chatId = params.get('chat');
 
+  const overviewMode = params.get('mode') === 'overview';
+
+  const overviewName = params.get('name')?.trim() || '';
+
+  const overviewId = params.get('id')?.trim() || '';
+
+
+
   if (chatId) {
 
     await selectChat(chatId);
+
+  } else if (overviewMode && overviewName) {
+
+    enterChatMode({ preferSearch: true });
+
+    startNewChat(false, { preserveMode: true });
+
+    const cleanUrl = new URL(window.location.href);
+
+    cleanUrl.searchParams.delete('mode');
+
+    cleanUrl.searchParams.delete('name');
+
+    cleanUrl.searchParams.delete('id');
+
+    const qs = cleanUrl.searchParams.toString();
+
+    window.history.replaceState({}, '', cleanUrl.pathname + (qs ? `?${qs}` : ''));
+
+    await sendOverviewRequest(overviewName, overviewId);
 
   } else {
 
@@ -1394,6 +2340,8 @@ async function initAssistant() {
 
 
   clearBtn?.addEventListener('click', clearAssistant);
+
+  cancelEditBtn?.addEventListener('click', cancelEditUserMessage);
 
   newChatBtn?.addEventListener('click', () => startNewChat(true));
 

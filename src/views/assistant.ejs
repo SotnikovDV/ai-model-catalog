@@ -93,13 +93,35 @@
 
               <h1 class="detail-hero-title">AI-ассистент</h1>
 
-              <p class="detail-hero-updated muted">
+              <p class="detail-hero-updated muted" id="assistantHeroDesc">
 
                 Опишите задачу на естественном языке — аналитическая модель из админки подберёт подходящие модели из каталога.
 
               </p>
 
               <p class="assistant-status muted" id="assistantStatus" hidden></p>
+
+            </div>
+
+            <div class="detail-hero-actions">
+
+              <button
+
+                type="button"
+
+                class="btn btn-secondary btn-sm help-open-btn"
+
+                id="assistantHelpBtn"
+
+                data-help-context="assistant.recommend"
+
+                data-help-bind="context"
+
+                title="Справка по текущему режиму"
+
+                aria-label="Открыть справку"
+
+              >Справка</button>
 
             </div>
 
@@ -137,11 +159,13 @@
 
               aria-label="Запрос на подбор моделей"
 
-              required
-
             ></textarea>
 
             <div class="chat-form-actions">
+
+              <div class="chat-form-actions-left" id="assistantFormActionsLeft"></div>
+
+              <button type="button" class="btn btn-secondary" id="assistantEditCancelBtn" hidden>Отмена</button>
 
               <button type="button" class="btn btn-secondary" id="assistantClearBtn">Очистить</button>
 
@@ -173,11 +197,22 @@
 
       outputPricePerMTok: analyticsModel?.output_price_per_mtok ?? null,
 
+      searchModelName: aiConfig.modelSearch || null,
+
+      searchModelId: searchModel?.id ?? null,
+
+      searchConfigured: Boolean(aiConfig.searchConfigured),
+
+      searchBaseUrl: aiConfig.searchBaseUrl || null,
+
     }).replace(/</g, '\\u003c') %>;
 
   </script>
 
   <%- include('partials/admin-auth-init') %>
+
+  <%- include('partials/model-modal') %>
+  <%- include('partials/add-to-list-modal') %>
 
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
 
@@ -185,13 +220,19 @@
 
   <script src="/markdown.js"></script>
 
+  <script src="/model-modal.js"></script>
+
+  <script src="/add-to-list.js"></script>
+
+  <script src="/help.js"></script>
+
   <script src="/chat-common.js"></script>
 
   <script src="/recommendationStore.js"></script>
 
-  <script src="/assistant.js"></script>
-
   <script src="/app.js"></script>
+
+  <script src="/assistant.js"></script>
 
 </body>
 

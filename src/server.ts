@@ -1,9 +1,11 @@
 import app from './app.js';
+import { startBackupScheduler } from './services/backupScheduler.js';
 
 const PORT = Number(process.env.PORT) || 3000;
 
 const server = app.listen(PORT, () => {
   console.log(`AI Model Catalog running on http://localhost:${PORT}`);
+  startBackupScheduler();
 });
 
 server.on('error', (error: NodeJS.ErrnoException) => {

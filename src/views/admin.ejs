@@ -117,10 +117,37 @@
           </div>
         </div>
 
+        <hr class="admin-divider" style="margin: 20px 0; border: none; border-top: 1px solid var(--border, #e2e8f0);">
+
+        <h3 class="admin-section-title" style="font-size: 1.05rem; margin-bottom: 4px;">Модель с поиском</h3>
+        <p class="admin-section-desc" style="margin-bottom: 12px;">
+          Отдельная модель с доступом к интернету (например, Perplexity Sonar).
+          Base URL и API-ключ можно задать независимо; если оставить пустыми — используется основной провайдер выше.
+        </p>
+
+        <div class="form-field">
+          <label for="aiSearchBaseUrl">Base URL API (поиск)</label>
+          <input type="url" name="searchBaseUrl" id="aiSearchBaseUrl" placeholder="https://api.perplexity.ai">
+          <small class="form-hint">По умолчанию Perplexity; пусто — URL основного AI-провайдера</small>
+        </div>
+
+        <div class="form-field">
+          <label for="aiSearchApiKey">API-ключ (поиск)</label>
+          <input type="password" name="searchApiKey" id="aiSearchApiKey" placeholder="Оставьте пустым, чтобы использовать основной ключ" autocomplete="off">
+          <small class="form-hint" id="aiSearchApiKeyHint">Отдельный ключ не задан — будет использован основной</small>
+        </div>
+
+        <div class="form-field">
+          <label for="aiModelSearch">Модель с поиском</label>
+          <input type="text" name="modelSearch" id="aiModelSearch" placeholder="sonar">
+          <small class="form-hint">Опционально. Нужна для задач, где требуется актуальная информация из интернета</small>
+        </div>
+
         <div class="admin-actions" style="margin-top:8px;">
           <button type="submit" class="btn btn-primary">Сохранить настройки</button>
           <button type="button" id="aiTestSimpleBtn" class="btn btn-secondary">Тест простой модели</button>
           <button type="button" id="aiTestAnalyticsBtn" class="btn btn-secondary">Тест аналитической модели</button>
+          <button type="button" id="aiTestSearchBtn" class="btn btn-secondary">Тест модели с поиском</button>
         </div>
         <p id="aiStatus" class="form-status" hidden></p>
       </form>

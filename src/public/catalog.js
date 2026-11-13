@@ -63,6 +63,12 @@ function formatDate(iso) {
   return Number.isNaN(date.getTime()) ? null : date.toLocaleDateString('ru-RU');
 }
 
+function getModelCreatedText(model) {
+  const formatted = formatDate(model.created_at);
+  if (formatted) return `В каталоге с: ${formatted}`;
+  return 'Дата добавления не указана';
+}
+
 function getModelLastUpdateText(model) {
   const sourceDate = model.info_updated_at || model.updated_at;
   if (sourceDate) {
@@ -75,6 +81,7 @@ function getModelLastUpdateText(model) {
 const CARD_EYE_ICON = '<svg class="card-hidden-btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const CARD_EYE_OFF_ICON = '<svg class="card-hidden-btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 const CARD_CHAT_ICON = '<svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+const CARD_LIST_ICON = '<svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>';
 const COMPARE_CHECK_OFF_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>';
 const COMPARE_CHECK_ON_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7.5 12.2l3 3 6-6.4"/></svg>';
 const COMPARE_CHECK_PARTIAL_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8"/></svg>';
@@ -135,6 +142,7 @@ let bulkSelectionMenuOpen = false;
 const BULK_ADMIN_ACTIONS = new Set([
   'favorite-add',
   'favorite-remove',
+  'list-add',
   'hidden-set',
   'hidden-unset',
   'availability-catalog',
@@ -182,6 +190,55 @@ const AVAILABILITY_LABELS = Object.fromEntries(
   AVAILABILITY_FILTERS.map(({ key, label }) => [key, label]),
 );
 
+const CATALOG_AVAILABILITY_FILTER_LABELS = {
+  available: 'Доступна',
+  unavailable: 'Недоступна',
+  unchecked: 'Не проверялась',
+};
+
+const CATALOG_INFERENCE_FILTER_LABELS = {
+  inference: 'Инференс',
+  not_inference: 'Не инференс',
+  unchecked: 'Не замерялась',
+};
+
+function isCatalogAdminMode() {
+  return !window.ADMIN_AUTH?.enabled || window.ADMIN_AUTH?.authenticated;
+}
+
+function modelMatchesCatalogAvailabilityFilter(model) {
+  if (!state.catalogAvailability) return true;
+  if (state.catalogAvailability === 'unchecked') return !model.availability_status;
+  return model.availability_status === state.catalogAvailability;
+}
+
+function modelMatchesCatalogInferenceFilter(model) {
+  if (!state.inferenceFilter) return true;
+  switch (state.inferenceFilter) {
+    case 'inference':
+      return model.availability_status === 'inference';
+    case 'not_inference':
+      return model.availability_status != null && model.availability_status !== 'inference';
+    case 'unchecked':
+      return model.availability_response_ms == null;
+    default:
+      return true;
+  }
+}
+
+function migrateLegacyAvailabilityStatus(saved) {
+  if (saved.catalogAvailability || saved.inferenceFilter) return;
+  const legacy = saved.availabilityStatus;
+  if (!legacy) return;
+  if (legacy === 'inference') {
+    state.inferenceFilter = 'inference';
+    return;
+  }
+  if (legacy === 'available' || legacy === 'unavailable' || legacy === 'unchecked') {
+    state.catalogAvailability = legacy;
+  }
+}
+
 const DEFAULT_QUALITY_RANGE = { min: 0, max: 5 };
 const CHAT_RATING_EMPTY_LABEL = 'Не оценивалась';
 const INFERENCE_SPEED_EMPTY_LABEL = 'Не замерялась';
@@ -210,9 +267,11 @@ let state = {
   favoritesOnly: false,
   showHidden: false,
   availabilityStatus: null,
+  catalogAvailability: null,
+  inferenceFilter: null,
   chatRatingRange: { ...DEFAULT_QUALITY_RANGE },
   inferenceSpeedRange: { ...DEFAULT_QUALITY_RANGE },
-  sort: 'default',
+  sort: 'name_asc',
   view: 'grid',
   page: 1,
   perPage: 24,
@@ -221,6 +280,11 @@ let state = {
   recOrder: [],
   recSummary: '',
   recQuery: '',
+  listMode: false,
+  listId: null,
+  listOrder: [],
+  listName: '',
+  listDescription: '',
 };
 
 const CATALOG_FILTERS_SESSION_KEY = 'catalog_filters';
@@ -242,6 +306,8 @@ function serializeCatalogFilters() {
     favoritesOnly: state.favoritesOnly,
     showHidden: state.showHidden,
     availabilityStatus: state.availabilityStatus,
+    catalogAvailability: state.catalogAvailability,
+    inferenceFilter: state.inferenceFilter,
     chatRatingRange: { ...state.chatRatingRange },
     inferenceSpeedRange: { ...state.inferenceSpeedRange },
     sort: state.sort,
@@ -263,9 +329,12 @@ function applySerializedCatalogFilters(saved) {
   state.favoritesOnly = Boolean(saved.favoritesOnly);
   state.showHidden = Boolean(saved.showHidden);
   state.availabilityStatus = saved.availabilityStatus || null;
+  state.catalogAvailability = saved.catalogAvailability || null;
+  state.inferenceFilter = saved.inferenceFilter || null;
+  migrateLegacyAvailabilityStatus(saved);
   state.chatRatingRange = normalizeQualityRange(saved.chatRatingRange);
   state.inferenceSpeedRange = normalizeQualityRange(saved.inferenceSpeedRange);
-  state.sort = saved.sort || 'default';
+  state.sort = saved.sort || 'name_asc';
   if (saved.view === 'grid' || saved.view === 'list') {
     state.view = saved.view;
   }
@@ -360,23 +429,41 @@ function clearSearchInput() {
   applyFilters();
 }
 
-function clearRecMode() {
+function syncCatalogModeUrl() {
+  if (!isCatalogPage() || !window.history.replaceState) return;
+  const url = new URL(window.location.href);
+  if (!state.recMode) url.searchParams.delete('rec');
+  if (!state.listMode) url.searchParams.delete('list');
+  if (!state.recMode && !state.listMode) url.searchParams.delete('view');
+  window.history.replaceState({}, '', url.pathname + url.search);
+}
+
+function clearCatalogBannerIfIdle() {
+  if (state.recMode || state.listMode) return;
+  const banner = document.getElementById('recBanner');
+  if (!banner) return;
+  banner.hidden = true;
+  banner.innerHTML = '';
+}
+
+function clearRecMode(options = {}) {
   state.recMode = false;
   state.recToken = null;
   state.recOrder = [];
   state.recSummary = '';
   state.recQuery = '';
-  const banner = document.getElementById('recBanner');
-  if (banner) {
-    banner.hidden = true;
-    banner.innerHTML = '';
-  }
-  if (isCatalogPage() && window.history.replaceState) {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('rec');
-    url.searchParams.delete('view');
-    window.history.replaceState({}, '', url.pathname + url.search);
-  }
+  clearCatalogBannerIfIdle();
+  if (!options.skipUrlSync) syncCatalogModeUrl();
+}
+
+function clearListMode(options = {}) {
+  state.listMode = false;
+  state.listId = null;
+  state.listOrder = [];
+  state.listName = '';
+  state.listDescription = '';
+  clearCatalogBannerIfIdle();
+  if (!options.skipUrlSync) syncCatalogModeUrl();
 }
 
 function initRecMode() {
@@ -388,6 +475,7 @@ function initRecMode() {
   const result = window.RecommendationStore.load(token);
   if (!result?.items?.length) return;
 
+  clearListMode({ skipUrlSync: true });
   state.recMode = true;
   state.recToken = token;
   state.recOrder = result.items.map((item) => item.modelId);
@@ -395,11 +483,42 @@ function initRecMode() {
   state.recQuery = result.query || '';
   state.search = '';
   state.page = 1;
+  syncCatalogModeUrl();
 
   const searchInput = document.getElementById('searchInput');
   if (searchInput) searchInput.value = '';
   syncSearchClearButton();
   renderRecBanner();
+}
+
+async function initListMode() {
+  if (!isCatalogPage()) return;
+  const listId = new URLSearchParams(window.location.search).get('list');
+  if (!listId) return;
+
+  try {
+    const response = await fetch(`/api/lists/${encodeURIComponent(listId)}`);
+    const payload = await response.json().catch(() => null);
+    if (!response.ok || !payload?.data) return;
+
+    clearRecMode({ skipUrlSync: true });
+    const list = payload.data;
+    state.listMode = true;
+    state.listId = list.id;
+    state.listOrder = (list.items || []).map((item) => item.modelId).filter(Boolean);
+    state.listName = list.name || '';
+    state.listDescription = list.description || '';
+    state.search = '';
+    state.page = 1;
+    syncCatalogModeUrl();
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    syncSearchClearButton();
+    renderListBanner();
+  } catch {
+    // ignore load errors; catalog stays in normal mode
+  }
 }
 
 function renderRecBanner() {
@@ -430,18 +549,47 @@ function renderRecBanner() {
   });
 }
 
+function renderListBanner() {
+  const banner = document.getElementById('recBanner');
+  if (!banner || !state.listMode || !state.listId) return;
+
+  const listUrl = `/lists?id=${encodeURIComponent(state.listId)}`;
+
+  banner.hidden = false;
+  banner.innerHTML = `
+    <div class="rec-banner-inner">
+      <div class="rec-banner-text">
+        <strong>Список: ${escHtml(state.listName || 'без названия')}</strong>
+        ${state.listDescription ? `<span class="rec-banner-summary">${escHtml(state.listDescription)}</span>` : ''}
+      </div>
+      <div class="rec-banner-actions">
+        <a href="${escHtml(listUrl)}" class="btn btn-secondary btn-sm">К списку</a>
+        <button type="button" class="btn btn-secondary btn-sm" id="listBannerClearBtn">Сбросить</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('listBannerClearBtn')?.addEventListener('click', () => {
+    clearListMode();
+    applyFilters();
+  });
+}
+
 function initCatalog() {
   if (!Array.isArray(window.MODELS_DATA)) return;
 
   catalogModels = window.MODELS_DATA.map(enrichModel);
   restoreCatalogFilters();
   initRecMode();
+  void initListMode().then(() => {
+    applyFilters();
+  });
 
   const searchInput = document.getElementById('searchInput');
   if (searchInput) searchInput.value = state.search;
   syncSearchClearButton();
   const sortSelect = document.getElementById('sortSelect');
-  if (sortSelect) sortSelect.value = state.sort;
+  if (sortSelect) syncSortSelect();
 
   document.getElementById('gridViewBtn')?.classList.toggle('active', state.view === 'grid');
   document.getElementById('listViewBtn')?.classList.toggle('active', state.view === 'list');
@@ -450,6 +598,7 @@ function initCatalog() {
   renderFavoriteFilter();
   renderHiddenFilter();
   renderAvailabilityFilters();
+  initAvailabilityAdminFilters();
   initQualityFilters();
   renderPriceFilters();
   renderFamilyFilters();
@@ -481,8 +630,7 @@ function initCatalog() {
   document.getElementById('resetFiltersBtn')?.addEventListener('click', resetFilters);
   document.getElementById('gridViewBtn')?.addEventListener('click', () => setView('grid'));
   document.getElementById('listViewBtn')?.addEventListener('click', () => setView('list'));
-  document.getElementById('modalClose')?.addEventListener('click', closeModal);
-  document.getElementById('modalOverlay')?.addEventListener('click', handleOverlayClick);
+  window.ModelModal?.init({ bindDefaultActions: false });
   document.getElementById('mDetailLink')?.addEventListener('click', () => {
     if (isCatalogPage()) saveCatalogFilters();
   });
@@ -494,6 +642,16 @@ function initCatalog() {
     if (!id) return;
     if (!window.AdminAccess?.guardAction(event, `/models/${id}`)) return;
     toggleFavorite(id);
+  });
+  document.getElementById('mListBtn')?.addEventListener('click', (event) => {
+    const id = event.currentTarget.dataset.id;
+    if (!id) return;
+    event.stopPropagation();
+    if (window.openAddToListModal) {
+      void window.openAddToListModal([id]);
+      return;
+    }
+    if (!window.AdminAccess?.guardAction(event, `/models/${id}`)) return;
   });
   document.getElementById('mHiddenBtn')?.addEventListener('click', (event) => {
     const id = event.currentTarget.dataset.id;
@@ -586,9 +744,22 @@ function renderHiddenFilter() {
 }
 
 function renderAvailabilityFilters() {
-  const container = document.getElementById('availabilityFilters');
-  if (!container) return;
-  container.innerHTML = '';
+  const chipContainer = document.getElementById('availabilityFilters');
+  const adminContainer = document.getElementById('availabilityAdminFilters');
+  const titleEl = document.getElementById('availabilityFilterTitle');
+  const adminMode = isCatalogAdminMode();
+
+  if (adminContainer) adminContainer.hidden = !adminMode;
+  if (chipContainer) chipContainer.hidden = adminMode;
+  if (titleEl) titleEl.hidden = adminMode;
+
+  if (adminMode) {
+    syncAvailabilityAdminSelects();
+    return;
+  }
+
+  if (!chipContainer) return;
+  chipContainer.innerHTML = '';
 
   AVAILABILITY_FILTERS.forEach(({ key, label }) => {
     const count = catalogModels.filter((model) => {
@@ -614,7 +785,40 @@ function renderAvailabilityFilters() {
       renderAvailabilityFilters();
       applyFilters();
     };
-    container.appendChild(div);
+    chipContainer.appendChild(div);
+  });
+}
+
+function syncAvailabilityAdminSelects() {
+  const catalogEl = document.getElementById('catalogAvailabilityFilter');
+  const inferenceEl = document.getElementById('catalogInferenceFilter');
+  if (catalogEl) catalogEl.value = state.catalogAvailability || '';
+  if (inferenceEl) inferenceEl.value = state.inferenceFilter || '';
+}
+
+function initAvailabilityAdminFilters() {
+  const catalogEl = document.getElementById('catalogAvailabilityFilter');
+  const inferenceEl = document.getElementById('catalogInferenceFilter');
+  if (!catalogEl || !inferenceEl) return;
+
+  catalogEl.addEventListener('change', () => {
+    state.catalogAvailability = catalogEl.value || null;
+    state.page = 1;
+    if (!isCatalogPage()) {
+      navigateToCatalogFromDetail();
+      return;
+    }
+    applyFilters();
+  });
+
+  inferenceEl.addEventListener('change', () => {
+    state.inferenceFilter = inferenceEl.value || null;
+    state.page = 1;
+    if (!isCatalogPage()) {
+      navigateToCatalogFromDetail();
+      return;
+    }
+    applyFilters();
   });
 }
 
@@ -794,10 +998,17 @@ function availabilityCheckedToNum(model) {
 
 function availabilityStatusToNum(model) {
   const status = model.availability_status;
-  if (status === 'available') return 3;
-  if (status === 'inference') return 2;
+  if (status === 'inference') return 3;
+  if (status === 'available') return 2;
   if (status === 'unavailable') return 1;
   return 0;
+}
+
+function createdAtToNum(model) {
+  const raw = model.created_at;
+  if (!raw) return null;
+  const time = Date.parse(String(raw));
+  return Number.isNaN(time) ? null : time;
 }
 
 function compareOptionalAvailability(aModel, bModel, direction) {
@@ -1143,17 +1354,19 @@ function resetFilters() {
   state.favoritesOnly = false;
   state.showHidden = false;
   state.availabilityStatus = null;
+  state.catalogAvailability = null;
+  state.inferenceFilter = null;
   state.chatRatingRange = { ...DEFAULT_QUALITY_RANGE };
   state.inferenceSpeedRange = { ...DEFAULT_QUALITY_RANGE };
   familyFiltersExpanded = false;
   state.page = 1;
-  state.sort = 'default';
+  state.sort = 'name_asc';
 
   const searchInput = document.getElementById('searchInput');
   const sortSelect = document.getElementById('sortSelect');
   if (searchInput) searchInput.value = '';
   syncSearchClearButton();
-  if (sortSelect) sortSelect.value = 'default';
+  if (sortSelect) sortSelect.value = 'name_asc';
 
   if (!isCatalogPage()) {
     navigateToCatalogFromDetail();
@@ -1203,6 +1416,13 @@ function applyFilters() {
       return true;
     });
     filtered.sort((a, b) => orderMap.get(a.id) - orderMap.get(b.id));
+  } else if (state.listMode) {
+    const orderMap = new Map(state.listOrder.map((id, index) => [id, index]));
+    filtered = catalogModels.filter((model) => {
+      if (!orderMap.has(model.id)) return false;
+      if (!state.showHidden && model.is_hidden) return false;
+      return true;
+    });
   } else {
     filtered = catalogModels.filter((model) => {
       if (state.search) {
@@ -1219,9 +1439,14 @@ function applyFilters() {
       if (state.useCase && !modelMatchesUseCaseCategory(model, state.useCase)) return false;
       if (state.favoritesOnly && !model.is_favorite) return false;
       if (!state.showHidden && model.is_hidden) return false;
-      if (state.availabilityStatus === 'unchecked' && model.availability_status) return false;
-      if (state.availabilityStatus && state.availabilityStatus !== 'unchecked'
-        && model.availability_status !== state.availabilityStatus) return false;
+      if (isCatalogAdminMode()) {
+        if (!modelMatchesCatalogAvailabilityFilter(model)) return false;
+        if (!modelMatchesCatalogInferenceFilter(model)) return false;
+      } else {
+        if (state.availabilityStatus === 'unchecked' && model.availability_status) return false;
+        if (state.availabilityStatus && state.availabilityStatus !== 'unchecked'
+          && model.availability_status !== state.availabilityStatus) return false;
+      }
       if (!modelPassesQualityRange(getModelChatRatingLevel(model), state.chatRatingRange)) return false;
       if (!modelPassesQualityRange(getModelInferenceSpeedLevel(model), state.inferenceSpeedRange)) return false;
 
@@ -1236,6 +1461,8 @@ function applyFilters() {
 
   const contextToNum = (value) => modelContextToNum(value);
 
+  // В режиме списка (#list=...) применяем ту же сортировку, что и в каталоге.
+  // В AI-подборе (recMode) порядок остаётся рангом рекомендаций.
   if (!state.recMode) {
     if (state.sort === 'name_asc') filtered.sort((a, b) => a.name.localeCompare(b.name));
     else if (state.sort === 'name_desc') filtered.sort((a, b) => b.name.localeCompare(a.name));
@@ -1261,10 +1488,24 @@ function applyFilters() {
       filtered.sort((a, b) => contextToNum(b.context_window) - contextToNum(a.context_window));
     } else if (state.sort === 'context_asc') {
       filtered.sort((a, b) => contextToNum(a.context_window) - contextToNum(b.context_window));
+    } else if (state.sort === 'chat_rating_desc') {
+      filtered.sort((a, b) => compareOptionalQualityLevel(
+        getModelChatRatingLevel(a),
+        getModelChatRatingLevel(b),
+        'desc',
+      ));
+    } else if (state.sort === 'chat_rating_asc') {
+      filtered.sort((a, b) => compareOptionalQualityLevel(
+        getModelChatRatingLevel(a),
+        getModelChatRatingLevel(b),
+        'asc',
+      ));
     } else if (state.sort === 'release_desc') {
       filtered.sort((a, b) => compareOptionalTimestamps(releaseToNum(a), releaseToNum(b), 'desc'));
     } else if (state.sort === 'release_asc') {
       filtered.sort((a, b) => compareOptionalTimestamps(releaseToNum(a), releaseToNum(b), 'asc'));
+    } else if (state.sort === 'created_at_desc') {
+      filtered.sort((a, b) => compareOptionalTimestamps(createdAtToNum(a), createdAtToNum(b), 'desc'));
     } else if (state.sort === 'info_updated_desc') {
       filtered.sort((a, b) => compareOptionalTimestamps(infoUpdatedToNum(a), infoUpdatedToNum(b), 'desc'));
     } else if (state.sort === 'info_updated_asc') {
@@ -1289,18 +1530,6 @@ function applyFilters() {
       filtered.sort((a, b) => compareOptionalQualityLevel(
         getModelInferenceSpeedLevel(a),
         getModelInferenceSpeedLevel(b),
-        'asc',
-      ));
-    } else if (state.sort === 'chat_rating_desc') {
-      filtered.sort((a, b) => compareOptionalQualityLevel(
-        getModelChatRatingLevel(a),
-        getModelChatRatingLevel(b),
-        'desc',
-      ));
-    } else if (state.sort === 'chat_rating_asc') {
-      filtered.sort((a, b) => compareOptionalQualityLevel(
-        getModelChatRatingLevel(a),
-        getModelChatRatingLevel(b),
         'asc',
       ));
     }
@@ -1406,7 +1635,7 @@ function renderActiveFilters() {
     container.appendChild(tag);
   }
 
-  if (state.availabilityStatus) {
+  if (state.availabilityStatus && !isCatalogAdminMode()) {
     const label = AVAILABILITY_LABELS[state.availabilityStatus] || state.availabilityStatus;
     const tag = document.createElement('div');
     tag.className = 'filter-tag';
@@ -1415,6 +1644,34 @@ function renderActiveFilters() {
       state.availabilityStatus = null;
       state.page = 1;
       renderAvailabilityFilters();
+      applyFilters();
+    });
+    container.appendChild(tag);
+  }
+
+  if (state.catalogAvailability) {
+    const label = CATALOG_AVAILABILITY_FILTER_LABELS[state.catalogAvailability] || state.catalogAvailability;
+    const tag = document.createElement('div');
+    tag.className = 'filter-tag';
+    tag.innerHTML = `Доступность: ${escHtml(label)} <span class="remove">×</span>`;
+    tag.querySelector('.remove')?.addEventListener('click', () => {
+      state.catalogAvailability = null;
+      state.page = 1;
+      syncAvailabilityAdminSelects();
+      applyFilters();
+    });
+    container.appendChild(tag);
+  }
+
+  if (state.inferenceFilter) {
+    const label = CATALOG_INFERENCE_FILTER_LABELS[state.inferenceFilter] || state.inferenceFilter;
+    const tag = document.createElement('div');
+    tag.className = 'filter-tag';
+    tag.innerHTML = `Инференс: ${escHtml(label)} <span class="remove">×</span>`;
+    tag.querySelector('.remove')?.addEventListener('click', () => {
+      state.inferenceFilter = null;
+      state.page = 1;
+      syncAvailabilityAdminSelects();
       applyFilters();
     });
     container.appendChild(tag);
@@ -1526,6 +1783,14 @@ function renderCards(filtered) {
     });
   });
 
+  grid.querySelectorAll('button.card-list-btn').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (!button.dataset.id) return;
+      openAddToListModal([button.dataset.id]);
+    });
+  });
+
   grid.querySelectorAll('.card-model-name').forEach((element) => {
     element.addEventListener('click', () => {
       const id = element.dataset.id;
@@ -1563,7 +1828,8 @@ function syncSortSelect() {
   const sortSelect = document.getElementById('sortSelect');
   if (!sortSelect) return;
   const hasOption = Array.from(sortSelect.options).some((option) => option.value === state.sort);
-  sortSelect.value = hasOption ? state.sort : 'default';
+  sortSelect.value = hasOption ? state.sort : 'name_asc';
+  if (!hasOption) state.sort = 'name_asc';
 }
 
 function getListSortColumnKey(sort) {
@@ -1704,17 +1970,20 @@ function renderCardActions(model) {
   const AA = window.AdminAccess;
   const hiddenTitle = model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель';
   const favoriteTitle = model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное';
+  const listTitle = 'Добавить в список';
 
   if (AA?.needsLogin()) {
     const chatHref = escHtml(AA.protectedHref(`${detailPath}/chat?from=catalog`));
     const editHref = escHtml(AA.protectedHref(`${detailPath}/edit`));
     const loginDetailHref = escHtml(AA.protectedHref(detailPath));
+    const loginListHref = escHtml(AA.protectedHref('/'));
 
     return `
     <a href="${chatHref}" class="card-chat-btn" title="Чат с моделью" aria-label="Чат с моделью">${CARD_CHAT_ICON}</a>
     <a href="${editHref}" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
     <a href="${loginDetailHref}" class="card-hidden-btn" title="${hiddenTitle}" aria-label="${hiddenTitle}">${model.is_hidden ? CARD_EYE_OFF_ICON : CARD_EYE_ICON}</a>
     <a href="${loginDetailHref}" class="card-favorite-btn${model.is_favorite ? ' active' : ''}" title="${favoriteTitle}" aria-label="${favoriteTitle}">★</a>
+    <a href="${loginListHref}" class="card-list-btn" title="${listTitle}" aria-label="${listTitle}">${CARD_LIST_ICON}</a>
     <button
       type="button"
       class="card-compare-btn${inCompare ? ' active' : ''}"
@@ -1732,6 +2001,7 @@ function renderCardActions(model) {
     <a href="/models/${id}/edit" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
     <button type="button" class="card-hidden-btn" data-id="${id}" title="${hiddenTitle}" aria-label="${hiddenTitle}">${model.is_hidden ? CARD_EYE_OFF_ICON : CARD_EYE_ICON}</button>
     <button type="button" class="card-favorite-btn${model.is_favorite ? ' active' : ''}" data-id="${id}" title="${favoriteTitle}" aria-label="${favoriteTitle}">★</button>
+    <button type="button" class="card-list-btn" data-id="${id}" title="${listTitle}" aria-label="${listTitle}">${CARD_LIST_ICON}</button>
     <button
       type="button"
       class="card-compare-btn${inCompare ? ' active' : ''}"
@@ -1778,10 +2048,12 @@ function formatListModelLabel(model) {
 
 function renderModelNameWithCopy(model, displayLabel) {
   const label = displayLabel ?? model.name ?? '';
-  const copyBtn = model.name ? (window.CopyModelName?.buttonHtml(model.name) || '') : '';
+  const actions = model.name
+    ? (window.CopyModelName?.actionsHtml(model.name, model.id) || window.CopyModelName?.buttonHtml(model.name) || '')
+    : '';
   return `<span class="card-model-name-row">
     <span class="card-model-name" data-id="${escHtml(model.id)}" title="Открыть описание модели">${escHtml(label)}</span>
-    ${copyBtn}
+    ${actions}
   </span>`;
 }
 
@@ -1914,116 +2186,14 @@ function goPage(page, total) {
 }
 
 function openModal(model) {
-  const isFree = model.price_category === '🆓 Бесплатные';
-  const promptVal = model.prompt_price === '—' || !model.prompt_price ? '—' : model.prompt_price;
-  const answerVal = model.answer_price === '—' || !model.answer_price ? '—' : model.answer_price;
-
-  document.getElementById('mName').textContent = model.name;
-  document.getElementById('mDeveloper').textContent = `🏢 ${model.family}`;
-
-  const badges = [
-    `<span class="modal-badge type">${escHtml(model.modality)}</span>`,
-    `<span class="modal-badge">${escHtml(PRICE_LABELS[model.price_category] || model.price_category)}</span>`,
-  ];
-  if (model.release_date) badges.push(`<span class="modal-badge">Релиз: ${escHtml(model.release_date)}</span>`);
-  if (model.supports_vision) badges.push('<span class="modal-badge">Vision</span>');
-  if (model.supports_function_calling) badges.push('<span class="modal-badge">Function calling</span>');
-  if (model.supports_json_mode) badges.push('<span class="modal-badge">JSON mode</span>');
-  if (model.supports_streaming) badges.push('<span class="modal-badge">Streaming</span>');
-  if (model.supports_web_search) badges.push('<span class="modal-badge">Поиск в интернете</span>');
-  if (model.is_favorite) badges.push('<span class="modal-badge favorite-badge">⭐ Избранное</span>');
-  document.getElementById('mBadges').innerHTML = badges.join('');
-
-  const descEl = document.getElementById('mDescription');
-  if (descEl) {
-    const description = model.description || 'Описание недоступно.';
-    descEl.innerHTML = typeof formatMarkdownContent === 'function'
-      ? formatMarkdownContent(description)
-      : escHtml(description).replace(/\n/g, '<br>');
+  if (window.ModelModal) {
+    window.ModelModal.open(model);
+    return;
   }
-
-  const updatedEl = document.getElementById('mUpdated');
-  if (updatedEl) {
-    updatedEl.textContent = getModelLastUpdateText(model);
-    updatedEl.classList.toggle('muted', !model.info_updated_at && !model.updated_at);
-  }
-
-  document.getElementById('mSpecs').innerHTML = [
-    ['Контекст', model.context || '—', ''],
-    ['Макс. вывод', model.output_max || '—', ''],
-    ['Промпт / 1M', promptVal !== '—' && !isFree ? `${promptVal} ₽` : promptVal, isFree || promptVal === '—' ? 'free' : 'price'],
-    ['Ответ / 1M', answerVal !== '—' && !isFree ? `${answerVal} ₽` : answerVal, isFree || answerVal === '—' ? 'free' : 'price'],
-  ].map(([label, value, cls]) => `
-    <div class="modal-spec">
-      <div class="modal-spec-label">${label}</div>
-      <div class="modal-spec-value ${cls}">${escHtml(String(value))}</div>
-    </div>`).join('');
-
-  const strengths = model.pros || [];
-  document.getElementById('mStrengths').innerHTML = strengths.map((item) => `<li>${escHtml(item)}</li>`).join('');
-  document.getElementById('mStrengthsSection').style.display = strengths.length ? '' : 'none';
-
-  const bestFor = model.use_cases || [];
-  document.getElementById('mBestFor').innerHTML = bestFor.map((item) => `<li>${escHtml(item)}</li>`).join('');
-  document.getElementById('mBestForSection').style.display = bestFor.length ? '' : 'none';
-
-  const limits = model.cons || [];
-  document.getElementById('mLimits').innerHTML = limits.map((item) => `<li>${escHtml(item)}</li>`).join('');
-  document.getElementById('mLimitsSection').style.display = limits.length ? '' : 'none';
-
-  const catsHtml = (model.use_cases || []).map((item) => `<span class="modal-cat-badge">📌 ${escHtml(item)}</span>`).join('');
-  document.getElementById('mCats').innerHTML = catsHtml;
-  document.getElementById('mCatsSection').style.display = catsHtml ? '' : 'none';
-
-  const detailLink = document.getElementById('mDetailLink');
-  const chatLink = document.getElementById('mChatLink');
-  const editLink = document.getElementById('mEditLink');
-  const AA = window.AdminAccess;
-  if (detailLink) detailLink.href = `/models/${model.id}`;
-  if (chatLink) {
-    chatLink.href = AA
-      ? AA.protectedHref(`/models/${model.id}/chat?from=catalog`)
-      : `/models/${model.id}/chat?from=catalog`;
-  }
-  if (editLink) {
-    editLink.href = AA
-      ? AA.protectedHref(`/models/${model.id}/edit`)
-      : `/models/${model.id}/edit`;
-  }
-
-  const hiddenBtn = document.getElementById('mHiddenBtn');
-  if (hiddenBtn) {
-    hiddenBtn.dataset.id = model.id;
-    updateModalHiddenBtn(model.is_hidden);
-  }
-
-  const favoriteBtn = document.getElementById('mFavoriteBtn');
-  if (favoriteBtn) {
-    favoriteBtn.dataset.id = model.id;
-    updateModalFavoriteBtn(model.is_favorite);
-  }
-
-  const compareBtn = document.getElementById('mCompareBtn');
-  if (compareBtn) {
-    compareBtn.dataset.id = model.id;
-    updateCompareButtonState(compareBtn, window.CompareBuffer?.has(model.id) ?? false);
-  }
-
-  const copyNameBtn = document.getElementById('mCopyNameBtn');
-  if (copyNameBtn) {
-    copyNameBtn.dataset.copyText = model.name || '';
-    copyNameBtn.hidden = !model.name;
-    window.CopyModelName?.bind(copyNameBtn);
-  }
-
-  document.getElementById('modalOverlay')?.classList.add('open');
-  document.getElementById('modalBox').scrollTop = 0;
-  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay')?.classList.remove('open');
-  document.body.style.overflow = '';
+  window.ModelModal?.close();
 }
 
 function handleOverlayClick(event) {
@@ -2161,6 +2331,53 @@ function getFilteredModelIds() {
 
 function getSelectedModelIds() {
   return window.CompareBuffer ? window.CompareBuffer.getIds() : [];
+}
+
+function buildSelectedModelsExportPayload(ids) {
+  const byId = new Map(catalogModels.map((model) => [model.id, model]));
+  const models = ids.map((id) => {
+    const model = byId.get(id);
+    if (!model) {
+      return { id, name: null, provider: null, family: null };
+    }
+    return {
+      id: model.id,
+      name: model.name,
+      provider: model.provider,
+      family: model.family,
+      modality: model.modality,
+      context_window: model.context_window,
+      input_price_per_mtok: model.input_price_per_mtok,
+      output_price_per_mtok: model.output_price_per_mtok,
+      is_favorite: Boolean(model.is_favorite),
+      is_hidden: Boolean(model.is_hidden),
+      availability_status: model.availability_status ?? null,
+    };
+  });
+
+  return {
+    exported_at: new Date().toISOString(),
+    count: models.length,
+    models,
+  };
+}
+
+function exportSelectedModelsJson(ids) {
+  const payload = buildSelectedModelsExportPayload(ids);
+  const stamp = new Date().toISOString().slice(0, 10);
+  const filename = `selected-models-${stamp}.json`;
+  const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], {
+    type: 'application/json;charset=utf-8',
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 function updateListSelectAllCheckbox() {
@@ -2383,12 +2600,14 @@ function updateBulkSelectionMenuState(ids) {
   const selectAll = menu.querySelector('[data-action="select-all"]');
   const selectAllFiltered = menu.querySelector('[data-action="select-all-filtered"]');
   const clearCompare = menu.querySelector('[data-action="clear-compare"]');
+  const exportJson = menu.querySelector('[data-action="export-json"]');
   const update = menu.querySelector('[data-action="update"]');
   const remove = menu.querySelector('[data-action="delete"]');
 
   if (selectAll) selectAll.disabled = visibleIds.length === 0 || allVisibleSelected;
   if (selectAllFiltered) selectAllFiltered.disabled = filteredIds.length === 0 || allFilteredSelected;
   if (clearCompare) clearCompare.disabled = !window.CompareBuffer || window.CompareBuffer.getIds().length === 0;
+  if (exportJson) exportJson.disabled = !hasSelection;
   if (update) update.disabled = !hasSelection;
   if (remove) remove.disabled = !hasSelection;
 
@@ -2432,11 +2651,17 @@ async function handleBulkSelectionAction(action) {
   }
 
   switch (action) {
+    case 'export-json':
+      exportSelectedModelsJson(ids);
+      break;
     case 'favorite-add':
       await bulkPatchModels(ids, { is_favorite: true });
       break;
     case 'favorite-remove':
       await bulkPatchModels(ids, { is_favorite: false });
+      break;
+    case 'list-add':
+      openAddToListModal(ids);
       break;
     case 'hidden-set':
       if (!confirm(`Скрыть ${ids.length} моделей из каталога?`)) return;
@@ -2483,6 +2708,21 @@ async function handleBulkSelectionAction(action) {
     default:
       break;
   }
+}
+
+function closeAddToListModal() {
+  if (window.AddToList?.close) {
+    window.AddToList.close();
+    return;
+  }
+  document.getElementById('addToListOverlay')?.classList.remove('open');
+}
+
+async function openAddToListModal(modelIds, options) {
+  if (window.AddToList?.open) {
+    return window.AddToList.open(modelIds, options);
+  }
+  alert('Модуль добавления в список не загружен');
 }
 
 async function patchModelFields(id, fields) {

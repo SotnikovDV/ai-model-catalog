@@ -24,6 +24,7 @@
       </div>
     <% } else { %>
       <div class="compare-toolbar">
+        <a href="<%= compareChatHref %>" class="btn btn-primary">Чат-сравнение</a>
         <button
           type="button"
           class="btn btn-secondary compare-clear-btn"
@@ -49,7 +50,28 @@
               <% models.forEach(model => { %>
                 <th>
                   <div class="compare-th-name">
-                    <a href="/models/<%= model.id %>" target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none;"><%= model.name %></a>
+                    <a
+                      href="/models/<%= model.id %>"
+                      class="compare-th-model-name"
+                      data-model-modal-id="<%= model.id %>"
+                      title="Открыть описание модели"
+                      style="color:var(--accent); text-decoration:none;"
+                    ><%= model.name %></a>
+                    <button
+                      type="button"
+                      class="rec-copy-name-btn"
+                      data-copy-text="<%= model.name %>"
+                      title="Копировать название"
+                      aria-label="Копировать название"
+                    ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                    <button
+                      type="button"
+                      class="rec-describe-name-btn"
+                      data-model-name="<%= model.name %>"
+                      data-model-id="<%= model.id %>"
+                      title="AI-обзор модели"
+                      aria-label="AI-обзор модели"
+                    ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8L12 3z"/><path d="M19.5 14.5l.8 2.4 2.2.9-2.2.9-.8 2.4-.8-2.4-2.2-.9 2.2-.9.8-2.4z"/></svg></button>
                     <button
                       type="button"
                       class="compare-favorite-btn<%= model.is_favorite ? ' active' : '' %>"
@@ -58,6 +80,15 @@
                       title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
                       aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>"
                     >★</button>
+                    <button
+                      type="button"
+                      class="compare-list-btn card-list-btn"
+                      data-id="<%= model.id %>"
+                      title="Добавить в список"
+                      aria-label="Добавить в список"
+                    >
+                      <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                    </button>
                   </div>
                   <div style="font-size:11px; font-weight:400; color:var(--text-dim); margin-top:4px;"><%= model.family %></div>
                   <button type="button" class="compare-remove-btn" data-id="<%= model.id %>">Исключить</button>
@@ -136,6 +167,17 @@
     <% } %>
   </div>
   <%- include('partials/admin-auth-init') %>
+  <%- include('partials/model-modal') %>
+  <%- include('partials/add-to-list-modal') %>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+  <script src="/markdown.js"></script>
+  <script src="/model-modal.js"></script>
+  <script src="/add-to-list.js"></script>
   <script src="/app.js"></script>
+  <script>
+    window.ModelModal?.init({ bindDefaultActions: true });
+    window.ModelModal?.bindNameClicks(document);
+  </script>
 </body>
 </html>

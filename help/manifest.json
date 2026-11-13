@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "topics": {
+    "assistant.recommend": {
+      "title": "Подбор моделей",
+      "file": "assistant/recommend.md",
+      "page": "assistant",
+      "description": "Как AI-ассистент подбирает модели из каталога по описанию задачи"
+    },
+    "assistant.overview": {
+      "title": "Описание модели",
+      "file": "assistant/overview.md",
+      "page": "assistant",
+      "description": "Как получить технический обзор модели и продолжить диалог"
+    }
+  }
+}

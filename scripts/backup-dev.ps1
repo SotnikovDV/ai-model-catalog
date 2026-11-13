@@ -18,7 +18,7 @@ $ErrorActionPreference = "Stop"
 $rootDir = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 
 # Папка для zip-архивов бэкапа (измените при необходимости)
-$BackupOutputDir = Join-Path $rootDir "backups"
+$BackupOutputDir = "\\192.168.1.105\backup\Develop\DVSt-WD\Node.JS\ai-model-catalog"
 
 function Write-Step([string]$Message) {
     Write-Host "`n=== $Message ===" -ForegroundColor Cyan

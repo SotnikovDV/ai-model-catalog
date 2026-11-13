@@ -43,9 +43,29 @@
       <div class="family-list" id="yearFilters"></div>
     </div>
 
-    <div class="filter-section">
-      <div class="sidebar-title">Доступность</div>
+    <div class="filter-section" id="availabilityFilterSection">
+      <div class="sidebar-title" id="availabilityFilterTitle">Доступность</div>
       <div class="price-chips" id="availabilityFilters"></div>
+      <div id="availabilityAdminFilters" hidden>
+        <div class="quality-filter">
+          <label class="quality-filter-label" for="catalogAvailabilityFilter">Доступность</label>
+          <select class="sidebar-filter-select" id="catalogAvailabilityFilter" aria-label="Доступность">
+            <option value="">Любая</option>
+            <option value="available">Доступна</option>
+            <option value="unavailable">Недоступна</option>
+            <option value="unchecked">Не проверялась</option>
+          </select>
+        </div>
+        <div class="quality-filter">
+          <label class="quality-filter-label" for="catalogInferenceFilter">Инференс</label>
+          <select class="sidebar-filter-select" id="catalogInferenceFilter" aria-label="Инференс">
+            <option value="">Любая</option>
+            <option value="inference">Инференс</option>
+            <option value="not_inference">Не инференс</option>
+            <option value="unchecked">Не замерялась</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="filter-section" id="qualityFilterSection">

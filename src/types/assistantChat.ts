@@ -3,7 +3,16 @@ import type { RecommendationResult } from './ai.js';
 
 export const AssistantStoredMessageSchema = z.object({
   role: z.enum(['user', 'assistant']),
-  content: z.string().min(1),
+  content: z.string(),
+  attachments: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(255),
+        text: z.string().min(1).max(200_000),
+      }),
+    )
+    .max(3)
+    .optional(),
   usage: z
     .object({
       promptTokens: z.number().optional(),
@@ -12,7 +21,10 @@ export const AssistantStoredMessageSchema = z.object({
     })
     .optional(),
   elapsedMs: z.number().optional(),
-});
+}).refine(
+  (message) => message.content.trim().length > 0 || (message.attachments?.length ?? 0) > 0,
+  { message: 'Сообщение не может быть пустым' },
+);
 export type AssistantStoredMessage = z.infer<typeof AssistantStoredMessageSchema>;
 
 export const AssistantChatCreateSchema = z.object({

@@ -36,6 +36,15 @@
               title="Копировать название"
               aria-label="Копировать название"
             ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+            <button
+              type="button"
+              class="rec-describe-name-btn"
+              id="detailDescribeNameBtn"
+              data-model-name="<%= model.name %>"
+              data-model-id="<%= model.id %>"
+              title="AI-обзор модели"
+              aria-label="AI-обзор модели"
+            ><svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8L12 3z"/><path d="M19.5 14.5l.8 2.4 2.2.9-2.2.9-.8 2.4-.8-2.4-2.2-.9 2.2-.9.8-2.4z"/></svg></button>
           </div>
           <div class="detail-badges">
             <span class="availability-badge <%= model.availability_badge_class %>" id="detailAvailabilityBadge"><%= model.availability_status_label %></span>
@@ -63,6 +72,13 @@
               <span class="detail-badge">Релиз: <%= model.release_date %></span>
             <% } %>
           </div>
+          <p class="detail-hero-created<%= model.created_at_formatted ? '' : ' muted' %>">
+            <% if (model.created_at_formatted) { %>
+              В каталоге с: <%= model.created_at_formatted %>
+            <% } else { %>
+              Дата добавления не указана
+            <% } %>
+          </p>
           <p class="detail-hero-updated<%= model.info_updated_formatted || model.updated_at_formatted ? '' : ' muted' %>">
             <% if (model.info_updated_formatted) { %>
               Актуализация: <%= model.info_updated_formatted %>
@@ -110,6 +126,9 @@
           <a href="<%= protectedHrefs.edit %>" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
           <a href="<%= protectedHrefs.detail %>" class="card-hidden-btn" title="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>" aria-label="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"></a>
           <a href="<%= protectedHrefs.detail %>" class="card-favorite-btn<%= model.is_favorite ? ' active' : '' %>" title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>" aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>">★</a>
+          <a href="<%= protectedHrefs.detail %>" class="card-list-btn" title="Добавить в список" aria-label="Добавить в список">
+            <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </a>
           <% } else { %>
           <button type="button" class="card-avail-btn" id="detailAvailCatalogBtn" data-model-id="<%= model.id %>" title="Быстрая проверка доступности" aria-label="Быстрая проверка доступности">
             <svg class="card-action-icon card-avail-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -129,6 +148,9 @@
           <a href="<%= protectedHrefs.edit %>" class="card-edit-btn" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
           <button type="button" class="card-hidden-btn" id="detailHiddenBtn" data-id="<%= model.id %>" title="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>" aria-label="<%= model.is_hidden ? 'Показать в каталоге' : 'Скрыть модель' %>"></button>
           <button type="button" class="card-favorite-btn<%= model.is_favorite ? ' active' : '' %>" id="detailFavoriteBtn" data-id="<%= model.id %>" title="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>" aria-label="<%= model.is_favorite ? 'Убрать из избранного' : 'Добавить в избранное' %>">★</button>
+          <button type="button" class="card-list-btn" id="detailListBtn" data-id="<%= model.id %>" title="Добавить в список" aria-label="Добавить в список">
+            <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </button>
           <% } %>
           <button type="button" class="card-compare-btn detail-compare-btn" id="detailCompareBtn" data-id="<%= model.id %>" title="Добавить к сравнению" aria-label="Добавить к сравнению" aria-pressed="false">
             <span class="compare-btn-icon" aria-hidden="true"></span>
@@ -357,9 +379,11 @@
     };
   </script>
   <%- include('partials/admin-auth-init') %>
+  <%- include('partials/add-to-list-modal') %>
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
   <script src="/markdown.js"></script>
+  <script src="/add-to-list.js"></script>
   <script src="/catalog.js"></script>
   <script src="/app.js"></script>
 </body>

@@ -11,6 +11,7 @@ import { migration as migration008 } from './migrations/008_supports_web_search.
 import { migration as migration009 } from './migrations/009_model_availability.js';
 import { migration as migration010 } from './migrations/010_bothub_chat_base_url.js';
 import { migration as migration011 } from './migrations/011_model_chat_ratings.js';
+import { migration as migration012 } from './migrations/012_model_lists.js';
 
 export interface Migration {
   id: string;
@@ -29,6 +30,7 @@ const MIGRATIONS: Migration[] = [
   migration009,
   migration010,
   migration011,
+  migration012,
 ];
 
 function getAppliedMigrationIds(db: DatabaseSync): Set<string> {

@@ -72,7 +72,7 @@ describe('providerRepository', () => {
     expect(providerRepository.findBySlug('bothub')?.name).toBe('BotHub');
     expect(providerRepository.findBySlug('openrouter')?.name).toBe('OpenRouter');
     expect(providerRepository.findBySlug('routerai')?.name).toBe('RouterAI');
-    expect(providerRepository.findBySlug('bothub')?.base_url).toBe('https://bothub.chat/api/v2/openai/v1');
+    expect(providerRepository.findBySlug('bothub')?.base_url).toBe('https://openai.bothub.chat/v1');
   });
 
   it('выполняет CRUD провайдера', async () => {
@@ -155,7 +155,7 @@ describe('migrations 004–006', () => {
     expect(second).toEqual([]);
 
     const bothub = db.prepare("SELECT base_url FROM providers WHERE slug = 'bothub'").get() as { base_url: string };
-    expect(bothub.base_url).toBe('https://bothub.chat/api/v2/openai/v1');
+    expect(bothub.base_url).toBe('https://openai.bothub.chat/v1');
 
     const providers = db.prepare('SELECT COUNT(*) as count FROM providers').get() as { count: number };
     expect(providers.count).toBe(3);

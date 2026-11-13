@@ -155,6 +155,9 @@ export function enrichModelForView(
     context_formatted: formatTokens(model.context_window),
     output_formatted: formatTokens(model.max_output_tokens),
     is_free: isFree,
+    created_at_formatted: model.created_at
+      ? new Date(model.created_at).toLocaleDateString('ru-RU')
+      : null,
     info_updated_formatted: model.info_updated_at
       ? new Date(model.info_updated_at).toLocaleDateString('ru-RU')
       : null,

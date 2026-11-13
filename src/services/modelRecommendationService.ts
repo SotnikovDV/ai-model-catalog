@@ -6,7 +6,7 @@ import { rankModelsForQuery } from '../utils/modelSearch.js';
 import { extractJsonBlock } from '../utils/extractJsonBlock.js';
 import { formatChatRatingBadgeForView } from '../utils/modelView.js';
 import type { Model } from '../types.js';
-import type { RecommendationItem, RecommendationResult } from '../types/ai.js';
+import type { RecommendationConversationMessage, RecommendationItem, RecommendationResult } from '../types/ai.js';
 
 interface CompactCandidate {
   id: string;
@@ -43,6 +43,34 @@ interface LlmRecommendationResponse {
 
 const PREFILTER_LIMIT = 40;
 const MIN_LLM_RESULTS = 3;
+const MAX_HISTORY_MESSAGES = 30;
+const MAX_MESSAGE_CHARS = 200_000;
+
+export function prepareRecommendationConversation(
+  query: string,
+  messages?: RecommendationConversationMessage[],
+): { priorMessages: RecommendationConversationMessage[]; searchText: string } {
+  const normalizedQuery = query.trim();
+  if (!messages?.length) {
+    return { priorMessages: [], searchText: normalizedQuery };
+  }
+
+  const trimmed = messages
+    .filter((message) => message.content.trim())
+    .slice(-MAX_HISTORY_MESSAGES)
+    .map((message) => ({
+      role: message.role,
+      content: message.content.trim().slice(0, MAX_MESSAGE_CHARS),
+    }));
+
+  const priorMessages = trimmed.length > 0 && trimmed[trimmed.length - 1]?.role === 'user'
+    ? trimmed.slice(0, -1)
+    : trimmed;
+
+  const searchText = trimmed.map((message) => message.content).join('\n') || normalizedQuery;
+
+  return { priorMessages, searchText };
+}
 
 function asStringArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
@@ -153,15 +181,20 @@ function hydrateItems(
   return hydrated;
 }
 
-export async function recommendModels(query: string, limit = 8): Promise<RecommendationResult> {
+export async function recommendModels(
+  query: string,
+  limit = 8,
+  messages?: RecommendationConversationMessage[],
+): Promise<RecommendationResult> {
   const config = getAiConfig();
   const analyticsModel = resolveModelForTier('analytics', config);
+  const { priorMessages, searchText } = prepareRecommendationConversation(query, messages);
 
   const allModels = modelRepository.findAll();
   const inferenceReady = allModels.filter(
     (m) => !m.is_hidden && m.availability_status === 'inference',
   );
-  const candidates = rankModelsForQuery(inferenceReady, query, PREFILTER_LIMIT);
+  const candidates = rankModelsForQuery(inferenceReady, searchText, PREFILTER_LIMIT);
   const candidateMap = new Map(candidates.map((m) => [m.id, m]));
   const ratingsMap = modelRatingRepository.getAverageScoresMap();
 
@@ -199,16 +232,20 @@ ${JSON.stringify(compact, null, 0)}
 - rationale — на русском, конкретно под запрос пользователя
 - учитывай цену, контекст, модальность, рейтинги и use_cases
 - учитывай supports_web_search, если нужен встроенный поиск в интернете
+- учитывай предыдущие сообщения диалога, если пользователь уточняет или ссылается на ранее обсуждённое
 - если запрос неоднозначен — выбери универсальные варианты и упомяни это в summary`;
+
+  const llmMessages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+    { role: 'system', content: 'Ты эксперт по выбору LLM. Отвечай только валидным JSON.' },
+    ...priorMessages,
+    { role: 'user', content: prompt },
+  ];
 
   const llmResult = await chatCompletion({
     tier: 'analytics',
     temperature: 0.2,
     maxTokens: 4096,
-    messages: [
-      { role: 'system', content: 'Ты эксперт по выбору LLM. Отвечай только валидным JSON.' },
-      { role: 'user', content: prompt },
-    ],
+    messages: llmMessages,
   });
 
   let parsed: LlmRecommendationResponse;

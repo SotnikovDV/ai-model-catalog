@@ -1,0 +1,67 @@
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalBox">
+      <div class="modal-header">
+        <div class="modal-header-top">
+          <div class="modal-header-main">
+            <div class="modal-title-row">
+              <div class="modal-model-name" id="mName"></div>
+              <button type="button" class="rec-copy-name-btn" id="mCopyNameBtn" title="Копировать название" aria-label="Копировать название" hidden>
+                <svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+              <button type="button" class="rec-describe-name-btn" id="mDescribeNameBtn" title="AI-обзор модели" aria-label="AI-обзор модели" hidden>
+                <svg class="rec-copy-name-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8L12 3z"/><path d="M19.5 14.5l.8 2.4 2.2.9-2.2.9-.8 2.4-.8-2.4-2.2-.9 2.2-.9.8-2.4z"/></svg>
+              </button>
+            </div>
+            <div class="modal-developer" id="mDeveloper"></div>
+            <div class="modal-badges" id="mBadges"></div>
+            <div class="modal-created" id="mCreated"></div>
+            <div class="modal-updated" id="mUpdated"></div>
+            <div class="modal-header-actions card-actions" id="mActionsSection">
+              <a href="#" class="card-detail-btn" id="mDetailLink" title="Подробнее" aria-label="Подробнее">
+                <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </a>
+              <a href="#" class="card-chat-btn" id="mChatLink" title="Чат с моделью" aria-label="Чат с моделью">
+                <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </a>
+              <a href="#" class="card-edit-btn" id="mEditLink" title="Редактировать модель" aria-label="Редактировать модель">✎</a>
+              <button type="button" class="card-hidden-btn" id="mHiddenBtn" title="Скрыть модель" aria-label="Скрыть модель"></button>
+              <button type="button" class="card-favorite-btn" id="mFavoriteBtn" title="Добавить в избранное" aria-label="Добавить в избранное">★</button>
+              <button type="button" class="card-list-btn" id="mListBtn" title="Добавить в список" aria-label="Добавить в список">
+                <svg class="card-action-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+              </button>
+              <button type="button" class="card-compare-btn" id="mCompareBtn" title="Добавить к сравнению" aria-label="Добавить к сравнению" aria-pressed="false">
+                <span class="compare-btn-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+          <div class="modal-close" id="modalClose" title="Закрыть">×</div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <div class="modal-section-title">О модели</div>
+          <div class="modal-description chat-message-content--markdown" id="mDescription"></div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">Технические характеристики</div>
+          <div class="modal-specs-grid" id="mSpecs"></div>
+        </div>
+        <div class="modal-section" id="mStrengthsSection">
+          <div class="modal-section-title">Сильные стороны</div>
+          <ul class="modal-list" id="mStrengths"></ul>
+        </div>
+        <div class="modal-section" id="mBestForSection">
+          <div class="modal-section-title">Лучше всего подходит для</div>
+          <ul class="modal-list" id="mBestFor"></ul>
+        </div>
+        <div class="modal-section" id="mLimitsSection">
+          <div class="modal-section-title">Особенности и ограничения</div>
+          <ul class="modal-list limits" id="mLimits"></ul>
+        </div>
+        <div class="modal-section" id="mCatsSection">
+          <div class="modal-section-title">Сценарии использования</div>
+          <div class="modal-cats" id="mCats"></div>
+        </div>
+      </div>
+    </div>
+  </div>

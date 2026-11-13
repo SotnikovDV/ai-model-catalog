@@ -30,6 +30,7 @@ import { enrichWithAi } from './aiEnrichmentService.js';
 import { normalizeUseCases } from '../utils/useCaseTaxonomy.js';
 import { ModelSchema } from '../types.js';
 import { normalizeModelName } from '../utils/normalizeModelName.js';
+import { isBatchInferenceModelId } from '../utils/modelIdVariants.js';
 
 let syncInProgress = false;
 
@@ -41,6 +42,14 @@ class SyncAlreadyRunningError extends Error {
   constructor() {
     super('Синхронизация уже выполняется. Дождитесь завершения текущей операции.');
     this.name = 'SyncAlreadyRunningError';
+  }
+}
+
+function throwIfAborted(signal?: AbortSignal): void {
+  if (signal?.aborted) {
+    const error = new Error('Операция отменена');
+    error.name = 'AbortError';
+    throw error;
   }
 }
 
@@ -333,10 +342,15 @@ async function importNewModels(
   options: SyncOptions,
   results: SyncModelResult[],
   onProgress?: SyncProgressCallback,
+  signal?: AbortSignal,
 ): Promise<void> {
   const list = await fetchBotHubList();
+  throwIfAborted(signal);
   const existingNames = modelRepository.getExistingNormalizedNames();
-  const importEntries = list.filter((entry) => !existingNames.has(normalizeModelName(entry.id)));
+  const importEntries = list.filter(
+    (entry) => !isBatchInferenceModelId(entry.id)
+      && !existingNames.has(normalizeModelName(entry.id)),
+  );
   const delayMs = options.delayMs ?? 250;
 
   onProgress?.({
@@ -349,6 +363,7 @@ async function importNewModels(
   });
 
   for (let index = 0; index < importEntries.length; index++) {
+    throwIfAborted(signal);
     const entry = importEntries[index];
 
     const bothub = providerRepository.getBotHub();
@@ -437,9 +452,11 @@ async function importNewModels(
     }
 
     try {
-      if (modelRepository.findByNormalizedName(entry.id)) {
+      const existing = modelRepository.findByNormalizedName(entry.id);
+      if (existing) {
         results.push({
           name: entry.id,
+          modelId: existing.id,
           status: 'skipped',
           message: 'Уже существует',
         });
@@ -504,6 +521,7 @@ async function importNewModels(
 export async function runSync(
   options: SyncOptions,
   onProgress?: SyncProgressCallback,
+  signal?: AbortSignal,
 ): Promise<SyncResult> {
   if (syncInProgress) {
     throw new SyncAlreadyRunningError();
@@ -511,7 +529,7 @@ export async function runSync(
 
   syncInProgress = true;
   try {
-    return await runSyncInternal(options, onProgress);
+    return await runSyncInternal(options, onProgress, signal);
   } finally {
     syncInProgress = false;
   }
@@ -520,10 +538,12 @@ export async function runSync(
 async function runSyncInternal(
   options: SyncOptions,
   onProgress?: SyncProgressCallback,
+  signal?: AbortSignal,
 ): Promise<SyncResult> {
   const mode = options.mode ?? 'update';
   const results: SyncModelResult[] = [];
   const delayMs = options.delayMs ?? 250;
+  let cancelled = false;
 
   if (mode === 'update' || mode === 'both') {
     const models = filterModels(modelRepository.findAll(), options);
@@ -538,6 +558,10 @@ async function runSyncInternal(
     });
 
     for (let index = 0; index < models.length; index++) {
+      if (signal?.aborted) {
+        cancelled = true;
+        break;
+      }
       const model = models[index];
       const result = await enrichSingleModel(model, options);
       results.push(result);
@@ -557,12 +581,21 @@ async function runSyncInternal(
     }
   }
 
-  if (mode === 'import' || mode === 'both') {
-    await importNewModels(options, results, onProgress);
+  if (!cancelled && (mode === 'import' || mode === 'both')) {
+    try {
+      await importNewModels(options, results, onProgress, signal);
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        cancelled = true;
+      } else {
+        throw error;
+      }
+    }
   }
 
   return {
     ...buildResultSummary(results),
     results,
+    cancelled: cancelled || undefined,
   };
 }

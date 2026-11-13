@@ -15,6 +15,26 @@ describe('AssistantStoredMessageSchema', () => {
     expect(result.role).toBe('user');
     expect(result.content).toContain('RAG');
   });
+
+  it('принимает сообщение только с вложениями', () => {
+    const result = AssistantStoredMessageSchema.parse({
+      role: 'user',
+      content: '',
+      attachments: [{ name: 'notes.md', text: '# hello' }],
+    });
+
+    expect(result.attachments).toHaveLength(1);
+    expect(result.attachments?.[0]?.name).toBe('notes.md');
+  });
+
+  it('отклоняет полностью пустое сообщение', () => {
+    expect(() =>
+      AssistantStoredMessageSchema.parse({
+        role: 'user',
+        content: '   ',
+      }),
+    ).toThrow();
+  });
 });
 
 describe('AssistantChatCreateSchema', () => {

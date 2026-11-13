@@ -3,11 +3,13 @@ import { ZodError } from 'zod';
 import { getAiConfigPublic, updateAiConfig, assertAiConfigured } from '../services/aiConfig.js';
 import { chatCompletion, testAiConnection } from '../services/aiClient.js';
 import { recommendModels } from '../services/modelRecommendationService.js';
+import { generateModelOverview } from '../services/modelOverviewService.js';
 import { assistantChatRepository, titleFromQuery } from '../models/assistantChatRepository.js';
 import {
   AiChatRequestSchema,
   AiConfigInputSchema,
   AiModelTierSchema,
+  ModelOverviewRequestSchema,
   RecommendationRequestSchema,
 } from '../types/ai.js';
 import {
@@ -92,6 +94,31 @@ router.post('/chat', requireAdminAuth, async (req: Request, res: Response) => {
   }
 });
 
+router.post('/model-overview', requireAdminAuth, async (req: Request, res: Response) => {
+  try {
+    const input = ModelOverviewRequestSchema.parse(req.body);
+    const publicConfig = getAiConfigPublic();
+    if (!publicConfig.enabled) {
+      res.status(503).json({ error: 'AI-провайдер отключён. Включите его в админке.' });
+      return;
+    }
+    if (!publicConfig.searchConfigured && !publicConfig.configured) {
+      res.status(503).json({
+        error: 'AI не настроен: задайте модель с поиском или аналитическую модель в админке / .env.',
+      });
+      return;
+    }
+    const data = await generateModelOverview(input);
+    res.json({ data });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      sendValidationError(res, error);
+      return;
+    }
+    sendAiError(res, error);
+  }
+});
+
 router.post('/recommend', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const input = RecommendationRequestSchema.parse(req.body);
@@ -101,7 +128,7 @@ router.post('/recommend', requireAdminAuth, async (req: Request, res: Response) 
       return;
     }
     assertAiConfigured();
-    const result = await recommendModels(input.query, input.limit);
+    const result = await recommendModels(input.query, input.limit, input.messages);
     res.json({ data: result });
   } catch (error) {
     if (error instanceof ZodError) {

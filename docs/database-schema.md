@@ -130,6 +130,8 @@ Key-value хранилище конфигурации (AI-провайдер, sy
 
 Журнал batch- и single-синхронизаций. DDL: `src/db/syncLogSchema.ts`.
 
+**Восстановление при порче:** `src/db/recoverSyncLogs.ts` (вызывается из `syncLogRepository` при ошибках чтения, похожих на corruption). Сначала `REINDEX`, при неуспехе — `DROP` + пересоздание пустой таблицы. **История журнала при recreate теряется.** Перед обслуживанием БД на NAS держите свежий снимок (`BACKUP_ENABLED` / `npm run db:backup`).
+
 | Поле | Тип | Описание |
 |------|-----|----------|
 | `id` | `TEXT PRIMARY KEY` | UUID записи журнала |
@@ -151,6 +153,47 @@ Key-value хранилище конфигурации (AI-провайдер, sy
 - `idx_sync_logs_started_at`
 - `idx_sync_logs_kind`
 - `idx_sync_logs_status`
+
+---
+
+## Таблица `model_lists`
+
+Пользовательские коллекции моделей. DDL: `src/db/modelListSchema.ts`. Миграция `012_model_lists`.
+
+**Публичный API** (`GET /api/lists`, `GET /api/lists/:id`): модели с `is_hidden = 1` не входят в `items` и не учитываются в `itemCount`. Админка `/admin/lists` показывает полный состав.
+
+| Поле | Тип | Описание |
+|------|-----|----------|
+| `id` | `TEXT PRIMARY KEY` | UUID |
+| `name` | `TEXT NOT NULL` | Название списка |
+| `description` | `TEXT NOT NULL` | Описание назначения |
+| `created_at` | `TEXT NOT NULL` | ISO-8601 |
+| `updated_at` | `TEXT NOT NULL` | ISO-8601 |
+
+### Индексы `model_lists`
+
+- `idx_model_lists_name`
+
+---
+
+## Таблица `model_list_items`
+
+Состав списка: модель + комментарий + порядок добавления.
+
+| Поле | Тип | Описание |
+|------|-----|----------|
+| `list_id` | `TEXT NOT NULL` | FK → `model_lists(id)` ON DELETE CASCADE |
+| `model_id` | `TEXT NOT NULL` | FK → `models(id)` ON DELETE CASCADE |
+| `comment` | `TEXT NOT NULL` | Комментарий к включению в список |
+| `sort_order` | `INTEGER NOT NULL` | Порядок (порядок добавления) |
+| `created_at` | `TEXT NOT NULL` | ISO-8601 |
+
+PK: `(list_id, model_id)`.
+
+### Индексы `model_list_items`
+
+- `idx_model_list_items_list_sort`
+- `idx_model_list_items_model`
 
 ---
 
@@ -189,12 +232,14 @@ Key-value хранилище конфигурации (AI-провайдер, sy
 | `src/db/schema.ts` | SQL-определение `models` и индексов, column migrations |
 | `src/db/settingsSchema.ts` | DDL `settings` |
 | `src/db/syncLogSchema.ts` | DDL `sync_logs` и индексов |
+| `src/db/modelListSchema.ts` | DDL `model_lists` / `model_list_items` |
 | `src/db/migrate.ts` | `ensureSchema()`: миграции + seed |
 | `src/db/maintenance.ts` | Дедуп, prune, backfill (`db:maintenance`) |
 | `src/db/migrationRunner.ts` | Версионированные миграции |
 | `src/db/seeds.ts` | Начальный набор моделей |
 | `src/models/modelRepository.ts` | CRUD, фильтрация, сортировка, поиск |
 | `src/models/providerRepository.ts` | CRUD справочника провайдеров |
+| `src/models/modelListRepository.ts` | CRUD списков моделей |
 | `src/models/settingsRepository.ts` | Чтение/запись settings |
 | `src/models/syncLogRepository.ts` | Журнал sync |
 

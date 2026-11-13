@@ -181,6 +181,74 @@ describe('Admin auth', () => {
     expect(res.headers.location).toContain('/login');
   });
 
+  it('GET /compare/chat без credentials → redirect на /login', async () => {
+    const res = await request(app).get('/compare/chat');
+
+    expect(res.status).toBe(302);
+    expect(res.headers.location).toContain('/login');
+  });
+
+  it('GET /api/bothub/balance без credentials → 401', async () => {
+    const res = await request(app).get('/api/bothub/balance');
+
+    expect(res.status).toBe(401);
+  });
+
+  it('GET /api/lists без credentials → 200', async () => {
+    const res = await request(app).get('/api/lists');
+
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body.data)).toBe(true);
+  });
+
+  it('POST /api/lists без credentials → 401', async () => {
+    const res = await request(app).post('/api/lists').send({
+      name: 'Список без auth',
+      description: '',
+    });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('PUT /api/lists/:id без credentials → 401', async () => {
+    const res = await request(app)
+      .put('/api/lists/00000000-0000-0000-0000-000000000001')
+      .send({ name: 'x' });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('DELETE /api/lists/:id без credentials → 401', async () => {
+    const res = await request(app).delete('/api/lists/00000000-0000-0000-0000-000000000001');
+
+    expect(res.status).toBe(401);
+  });
+
+  it('POST /api/lists/:id/items без credentials → 401', async () => {
+    const res = await request(app)
+      .post('/api/lists/00000000-0000-0000-0000-000000000001/items')
+      .send({ items: [{ modelId: '00000000-0000-0000-0000-000000000001' }] });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('POST /api/lists с сессией → 201', async () => {
+    const cookie = await loginCookie();
+    const res = await request(app)
+      .post('/api/lists')
+      .set('Cookie', cookie)
+      .send({
+        name: `Security list ${Date.now()}`,
+        description: 'auth smoke',
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data?.id).toBeTruthy();
+
+    const listId = res.body.data.id as string;
+    await request(app).delete(`/api/lists/${listId}`).set('Cookie', cookie);
+  });
+
   it('PUT /api/ai/config с metadata URL → 400', async () => {
     const cookie = await loginCookie();
     const res = await request(app)

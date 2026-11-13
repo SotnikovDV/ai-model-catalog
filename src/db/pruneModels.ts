@@ -1,5 +1,6 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { normalizeModelName } from '../utils/normalizeModelName.js';
+import { isBatchInferenceModelId } from '../utils/modelIdVariants.js';
 
 interface BotHubNode {
   id: string;
@@ -27,6 +28,22 @@ export function pruneProviderContainers(db: DatabaseSync, containerIds: Set<stri
 
   for (const row of rows) {
     if (containerIds.has(normalizeModelName(row.name))) {
+      deleteStmt.run(row.id);
+      removed++;
+    }
+  }
+
+  return removed;
+}
+
+/** Удаляет batch-варианты BotHub (`model:batch`) — не для интерактивного inference. */
+export function pruneBatchInferenceModels(db: DatabaseSync): number {
+  const rows = db.prepare('SELECT id, name FROM models').all() as { id: string; name: string }[];
+  const deleteStmt = db.prepare('DELETE FROM models WHERE id = ?');
+  let removed = 0;
+
+  for (const row of rows) {
+    if (isBatchInferenceModelId(row.name)) {
       deleteStmt.run(row.id);
       removed++;
     }

@@ -14,6 +14,13 @@ export function getDb(): DatabaseSync {
   if (!dbInstance) {
     dbInstance = new DatabaseSync(DB_PATH);
     dbInstance.exec('PRAGMA journal_mode = WAL;');
+    dbInstance.exec('PRAGMA busy_timeout = 5000;');
+    dbInstance.exec('PRAGMA synchronous = NORMAL;');
+    try {
+      dbInstance.exec('PRAGMA wal_checkpoint(TRUNCATE);');
+    } catch {
+      // WAL sidecar может отсутствовать или быть недоступен на сетевом томе
+    }
   }
   return dbInstance;
 }

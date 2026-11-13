@@ -46,6 +46,9 @@ export interface BotHubPageData {
   contextWindow?: number;
   maxTokens?: number;
   features?: string[];
+  /** Цена на странице BotHub в рублях (уже RUB/MTok, без конвертации). */
+  inputRubPerMtok?: number;
+  outputRubPerMtok?: number;
   inputUsdPerMtok?: number;
   outputUsdPerMtok?: number;
 }

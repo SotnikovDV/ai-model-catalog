@@ -80,7 +80,13 @@
         <div class="sync-report-details">
           <% log.results.forEach((item) => { %>
             <div class="sync-report-item">
-              <h3><%= item.name %></h3>
+              <h3>
+                <% if (item.modelId) { %>
+                  <a href="/models/<%= item.modelId %>" class="sync-report-model-link"><%= item.name %></a>
+                <% } else { %>
+                  <%= item.name %>
+                <% } %>
+              </h3>
               <div class="sync-report-status">
                 <%= item.status %><% if (item.message) { %> — <%= item.message %><% } %>
               </div>

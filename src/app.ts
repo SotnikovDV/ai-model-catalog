@@ -6,9 +6,12 @@ import aiApiRoutes from './routes/aiApi.js';
 import healthRoutes from './routes/health.js';
 import pageRoutes from './routes/pages.js';
 import providerApiRoutes from './routes/providerApi.js';
+import listApiRoutes from './routes/listApi.js';
 import authApiRoutes from './routes/authApi.js';
+import bothubApiRoutes from './routes/bothubApi.js';
+import helpApiRoutes from './routes/helpApi.js';
 import { requireAdminPageAuth } from './middleware/adminAuth.js';
-import { aiRateLimit } from './middleware/rateLimit.js';
+import { aiRateLimit, bothubRateLimit } from './middleware/rateLimit.js';
 import { ensureSchema } from './db/migrate.js';
 
 const projectRoot = process.cwd();
@@ -36,7 +39,10 @@ app.use('/health', healthRoutes);
 app.use('/api/auth', authApiRoutes);
 app.use('/api/models', apiRoutes);
 app.use('/api/providers', providerApiRoutes);
+app.use('/api/lists', listApiRoutes);
 app.use('/api/ai', aiRateLimit, aiApiRoutes);
+app.use('/api/bothub', bothubRateLimit, bothubApiRoutes);
+app.use('/api/help', helpApiRoutes);
 app.use('/admin', requireAdminPageAuth);
 app.use('/', pageRoutes);
 

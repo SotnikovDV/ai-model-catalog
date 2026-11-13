@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Списки — AI Model Catalog</title>
+  <%- include('partials/theme-init') %>
+  <%- include('partials/favicon') %>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/nav', { activeNav: 'lists' }) %>
+
+  <div class="page-wrap recommendations-page-wrap lists-page-wrap">
+    <h1 class="page-title">Списки</h1>
+    <p class="page-subtitle">Подборки моделей под конкретные задачи с комментариями.</p>
+
+    <div id="listsContent">
+      <div class="page-card" style="text-align:center; color:var(--text-muted);">Загрузка…</div>
+    </div>
+  </div>
+
+  <%- include('partials/admin-auth-init') %>
+  <%- include('partials/model-modal') %>
+  <%- include('partials/add-to-list-modal') %>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+  <script src="/markdown.js"></script>
+  <script src="/model-modal.js"></script>
+  <script src="/add-to-list.js"></script>
+  <script src="/app.js"></script>
+  <script src="/lists.js"></script>
+  <script>
+    window.ModelModal?.init({ bindDefaultActions: true });
+  </script>
+</body>
+</html>

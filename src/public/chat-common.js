@@ -2,6 +2,8 @@
   const CARD_EYE_ICON = '<svg class="card-hidden-btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
   const CARD_EYE_OFF_ICON = '<svg class="card-hidden-btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
   const CHAT_COPY_ICON = '<svg class="chat-message-action-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  const CHAT_EDIT_ICON = '<svg class="chat-message-action-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>';
+  const CHAT_REPEAT_ICON = '<svg class="chat-message-action-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
   const CHAT_SAVE_MD_ICON = '<svg class="chat-message-action-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>';
   const CHAT_COMMENT_ICON = '<svg class="chat-message-action-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 
@@ -23,7 +25,8 @@
     return escHtml(content).replace(/\n/g, '<br>');
   }
 
-  function getChatPricing() {
+  function getChatPricing(message) {
+    if (message?.pricing) return message.pricing;
     return window.CHAT_MODEL || window.ASSISTANT_META || null;
   }
 
@@ -46,8 +49,8 @@
     })} ₽`;
   }
 
-  function calculateUsageCost(usage) {
-    const pricing = getChatPricing();
+  function calculateUsageCost(usage, message) {
+    const pricing = getChatPricing(message);
     if (!usage || !pricing) return null;
 
     const inputRate = Number(pricing.inputPricePerMTok);
@@ -73,7 +76,7 @@
       stats.push(`<span>Токены: <strong>${escHtml(formatNumber(message.usage.totalTokens))}</strong></span>`);
     }
 
-    const cost = calculateUsageCost(message.usage);
+    const cost = calculateUsageCost(message.usage, message);
     if (cost != null) {
       stats.push(`<span>Стоимость: <strong>${escHtml(formatMoney(cost))}</strong></span>`);
     }
@@ -88,12 +91,18 @@
     return `<div class="chat-message-actions">${copyBtn}${saveBtn}</div>`;
   }
 
+  function buildUserMessageActions() {
+    const editBtn = `<button type="button" class="chat-message-action-btn" data-action="edit" title="Редактировать запрос" aria-label="Редактировать запрос">${CHAT_EDIT_ICON}</button>`;
+    const repeatBtn = `<button type="button" class="chat-message-action-btn" data-action="repeat" title="Повторить запрос" aria-label="Повторить запрос">${CHAT_REPEAT_ICON}</button>`;
+    const copyBtn = `<button type="button" class="chat-message-action-btn" data-action="copy" title="Копировать запрос" aria-label="Копировать запрос">${CHAT_COPY_ICON}</button>`;
+    return `<div class="chat-message-actions">${editBtn}${repeatBtn}${copyBtn}</div>`;
+  }
+
   function buildMessageActions(message) {
     if (message.role === 'assistant') {
       return buildCopySaveActions();
     }
-    const copyBtn = `<button type="button" class="chat-message-action-btn" data-action="copy" title="Копировать" aria-label="Копировать">${CHAT_COPY_ICON}</button>`;
-    return `<div class="chat-message-actions">${copyBtn}</div>`;
+    return buildUserMessageActions();
   }
 
   function buildMessageReasoningHtml(message) {
@@ -103,15 +112,36 @@
     return `<div class="chat-reasoning-line" title="${escHtml(plain)}"><span class="chat-reasoning-label">Рассуждение</span><span class="chat-reasoning-text">${escHtml(plain)}</span></div>`;
   }
 
+  function getMessageAttachments(message) {
+    return Array.isArray(message?.attachments) ? message.attachments : [];
+  }
+
+  function buildMessageAttachmentsHtml(message) {
+    const attachments = getMessageAttachments(message);
+    if (!attachments.length) return '';
+    const chips = attachments
+      .map((item) => {
+        const name = String(item?.name || 'файл').trim() || 'файл';
+        return `<span class="chat-attachment-chip chat-attachment-chip--static" title="${escHtml(name)}"><span class="chat-attachment-chip-name">${escHtml(name)}</span></span>`;
+      })
+      .join('');
+    return `<div class="chat-message-attachments" aria-label="Прикреплённые файлы">${chips}</div>`;
+  }
+
   function buildMessageHtml(message) {
     const roleLabel = message.role === 'user' ? 'Вы' : 'Ассистент';
+    const text = String(message.content ?? '').trim();
+    const contentHtml = text
+      ? `<div class="chat-message-content chat-message-content--markdown">${formatMessageContent(message.content, message.role)}</div>`
+      : '';
     return `
       <div class="chat-message-header">
         <div class="chat-message-role">${roleLabel}</div>
         ${buildMessageActions(message)}
       </div>
       ${buildMessageReasoningHtml(message)}
-      <div class="chat-message-content chat-message-content--markdown">${formatMessageContent(message.content, message.role)}</div>
+      ${contentHtml}
+      ${buildMessageAttachmentsHtml(message)}
       ${buildMessageStats(message)}
     `;
   }
@@ -383,7 +413,40 @@
     });
   }
 
+  function attachUserMessageActions(messageEl, message, options = {}) {
+    const actionsEl = messageEl.querySelector('.chat-message-actions');
+    if (!actionsEl) return;
+
+    actionsEl.addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-action]');
+      if (!button || button.disabled) return;
+
+      const action = button.dataset.action;
+      const text = String(message.content ?? '');
+
+      if (action === 'copy') {
+        if (!text) return;
+        const copied = await copyToClipboard(text);
+        if (copied) showActionFeedback(button, 'Скопировано');
+        return;
+      }
+
+      if (action === 'edit' && typeof options.onEdit === 'function') {
+        options.onEdit(message);
+        return;
+      }
+
+      if (action === 'repeat' && typeof options.onRepeat === 'function') {
+        options.onRepeat(message);
+      }
+    });
+  }
+
   function attachMessageActions(messageEl, message, options = {}) {
+    if (message.role === 'user') {
+      attachUserMessageActions(messageEl, message, options);
+      return;
+    }
     attachContentActions(messageEl, () => String(message.content ?? ''), options);
   }
 
@@ -404,6 +467,303 @@
     button.setAttribute('aria-label', title);
   }
 
+  function createMessageEditController(cancelButtonId) {
+    let snapshot = null;
+
+    function setCancelVisible(visible) {
+      if (!cancelButtonId) return;
+      const btn = document.getElementById(cancelButtonId);
+      if (btn) btn.hidden = !visible;
+    }
+
+    return {
+      begin(data) {
+        if (snapshot) return;
+        snapshot = data;
+        setCancelVisible(true);
+      },
+      cancel(onRestore) {
+        if (!snapshot) return false;
+        const data = snapshot;
+        snapshot = null;
+        setCancelVisible(false);
+        if (typeof onRestore === 'function') onRestore(data);
+        return true;
+      },
+      commit() {
+        snapshot = null;
+        setCancelVisible(false);
+      },
+      hasPending() {
+        return snapshot !== null;
+      },
+    };
+  }
+
+  const ATTACH_MAX_FILES = 3;
+  const ATTACH_MAX_BYTES = 200 * 1024;
+  const ATTACH_ALLOWED_EXT = new Set(['.txt', '.md', '.json']);
+  const ATTACH_ALLOWED_MIME = new Set([
+    'text/plain',
+    'text/markdown',
+    'application/json',
+    'application/octet-stream',
+    '',
+  ]);
+
+  function getFileExtension(name) {
+    const base = String(name || '').trim();
+    const dot = base.lastIndexOf('.');
+    if (dot < 0) return '';
+    return base.slice(dot).toLowerCase();
+  }
+
+  function isAllowedAttachmentFile(file) {
+    if (!file || typeof file.name !== 'string') return false;
+    const ext = getFileExtension(file.name);
+    if (!ATTACH_ALLOWED_EXT.has(ext)) return false;
+    const mime = String(file.type || '').toLowerCase();
+    if (mime && !ATTACH_ALLOWED_MIME.has(mime) && !mime.startsWith('text/')) {
+      return false;
+    }
+    return true;
+  }
+
+  async function readTextAttachments(fileList) {
+    const files = Array.from(fileList || []).filter(Boolean);
+    if (files.length === 0) {
+      return { attachments: [], error: null };
+    }
+    if (files.length > ATTACH_MAX_FILES) {
+      return {
+        attachments: [],
+        error: `Можно прикрепить не более ${ATTACH_MAX_FILES} файлов за раз.`,
+      };
+    }
+
+    const attachments = [];
+    for (const file of files) {
+      if (!isAllowedAttachmentFile(file)) {
+        return {
+          attachments: [],
+          error: `Файл «${file.name}» не поддерживается. Допустимы: .txt, .md, .json.`,
+        };
+      }
+      if (file.size > ATTACH_MAX_BYTES) {
+        return {
+          attachments: [],
+          error: `Файл «${file.name}» слишком большой (макс. 200 КБ).`,
+        };
+      }
+      if (file.size === 0) {
+        return {
+          attachments: [],
+          error: `Файл «${file.name}» пустой.`,
+        };
+      }
+
+      let text;
+      try {
+        text = await file.text();
+      } catch {
+        return {
+          attachments: [],
+          error: `Не удалось прочитать файл «${file.name}».`,
+        };
+      }
+
+      const normalized = String(text ?? '').replace(/^\uFEFF/, '');
+      if (!normalized.trim()) {
+        return {
+          attachments: [],
+          error: `Файл «${file.name}» пустой.`,
+        };
+      }
+
+      attachments.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        name: file.name,
+        text: normalized,
+      });
+    }
+
+    return { attachments, error: null };
+  }
+
+  function formatAttachmentsBlock(attachments) {
+    if (!Array.isArray(attachments) || attachments.length === 0) return '';
+    return attachments
+      .map((item) => `--- файл: ${item.name} ---\n${item.text}`)
+      .join('\n\n');
+  }
+
+  function composeMessageWithAttachments(userText, attachments) {
+    const text = String(userText ?? '').trim();
+    const block = formatAttachmentsBlock(attachments);
+    if (text && block) return `${text}\n\n${block}`;
+    if (block) return block;
+    return text;
+  }
+
+  function messageContentForApi(message) {
+    return composeMessageWithAttachments(
+      message?.content,
+      getMessageAttachments(message),
+    );
+  }
+
+  function mountAttachmentUi(options = {}) {
+    const form = options.form;
+    const actionsLeftEl = options.actionsLeftEl;
+    const onError = typeof options.onError === 'function' ? options.onError : null;
+    if (!form || !actionsLeftEl) {
+      return {
+        getAttachments() {
+          return [];
+        },
+        clear() {},
+        setAttachments() {},
+        setError() {},
+        setDisabled() {},
+      };
+    }
+
+    let attachments = [];
+
+    const chips = document.createElement('div');
+    chips.className = 'chat-attachments';
+    chips.hidden = true;
+    chips.setAttribute('aria-live', 'polite');
+
+    const actions = form.querySelector('.chat-form-actions');
+    if (actions) {
+      form.insertBefore(chips, actions);
+    } else {
+      form.appendChild(chips);
+    }
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.className = 'chat-attach-input';
+    fileInput.accept = '.txt,.md,.json,text/plain,text/markdown,application/json';
+    fileInput.multiple = true;
+    fileInput.hidden = true;
+    fileInput.setAttribute('aria-hidden', 'true');
+    fileInput.tabIndex = -1;
+
+    const attachBtn = document.createElement('button');
+    attachBtn.type = 'button';
+    attachBtn.className = 'btn btn-secondary btn-sm chat-attach-btn';
+    attachBtn.textContent = 'Файл';
+    attachBtn.title = 'Прикрепить текстовый файл (.txt, .md, .json)';
+    attachBtn.setAttribute('aria-label', 'Прикрепить текстовый файл');
+
+    actionsLeftEl.prepend(attachBtn);
+    actionsLeftEl.appendChild(fileInput);
+
+    function setError(message) {
+      if (onError) onError(message);
+    }
+
+    function renderChips() {
+      chips.innerHTML = '';
+      if (attachments.length === 0) {
+        chips.hidden = true;
+        return;
+      }
+      chips.hidden = false;
+      attachments.forEach((item) => {
+        const chip = document.createElement('span');
+        chip.className = 'chat-attachment-chip';
+        chip.dataset.id = item.id;
+
+        const label = document.createElement('span');
+        label.className = 'chat-attachment-chip-name';
+        label.textContent = item.name;
+        label.title = item.name;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'chat-attachment-chip-remove';
+        removeBtn.setAttribute('aria-label', `Удалить файл ${item.name}`);
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+          attachments = attachments.filter((entry) => entry.id !== item.id);
+          renderChips();
+        });
+
+        chip.appendChild(label);
+        chip.appendChild(removeBtn);
+        chips.appendChild(chip);
+      });
+    }
+
+    function clear() {
+      attachments = [];
+      fileInput.value = '';
+      renderChips();
+    }
+
+    function setAttachments(items) {
+      attachments = (Array.isArray(items) ? items : [])
+        .filter((item) => item && item.name && item.text)
+        .slice(0, ATTACH_MAX_FILES)
+        .map((item) => ({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          name: String(item.name),
+          text: String(item.text),
+        }));
+      fileInput.value = '';
+      renderChips();
+    }
+
+    attachBtn.addEventListener('click', () => {
+      if (attachBtn.disabled) return;
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+      void (async () => {
+        const selected = Array.from(fileInput.files || []);
+        fileInput.value = '';
+        if (selected.length === 0) return;
+
+        const remaining = ATTACH_MAX_FILES - attachments.length;
+        if (remaining <= 0) {
+          setError(`Можно прикрепить не более ${ATTACH_MAX_FILES} файлов.`);
+          return;
+        }
+        if (selected.length > remaining) {
+          setError(`Можно прикрепить ещё ${remaining} файл(ов) (макс. ${ATTACH_MAX_FILES}).`);
+          return;
+        }
+
+        const result = await readTextAttachments(selected);
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
+
+        setError('');
+        attachments = attachments.concat(result.attachments);
+        renderChips();
+      })();
+    });
+
+    return {
+      getAttachments() {
+        return attachments.map((item) => ({ name: item.name, text: item.text }));
+      },
+      clear,
+      setAttachments,
+      setError,
+      setDisabled(disabled) {
+        attachBtn.disabled = Boolean(disabled);
+        fileInput.disabled = Boolean(disabled);
+      },
+    };
+  }
+
   window.ChatCommon = {
     escHtml,
     formatMessageContent,
@@ -411,10 +771,23 @@
     buildMessageHtml,
     buildMessageRatingHtml,
     buildCopySaveActions,
+    buildUserMessageActions,
     attachContentActions,
+    attachUserMessageActions,
     attachMessageActions,
     attachMessageRating,
     updateFavoriteButtonState,
     updateHiddenButtonState,
+    createMessageEditController,
+    ATTACH_MAX_FILES,
+    ATTACH_MAX_BYTES,
+    readTextAttachments,
+    formatAttachmentsBlock,
+    composeMessageWithAttachments,
+    messageContentForApi,
+    getMessageAttachments,
+    downloadMarkdown,
+    buildExportFilename,
+    mountAttachmentUi,
   };
 })();

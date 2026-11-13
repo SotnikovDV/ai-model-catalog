@@ -105,12 +105,16 @@ export function normalizeBotHubPageData(data: BotHubPageData): NormalizedCatalog
     ...caps,
     context_window: data.contextWindow,
     max_output_tokens: data.maxTokens,
-    input_price_per_mtok: data.inputUsdPerMtok !== undefined
-      ? usdPerMtokToRubPerMtok(data.inputUsdPerMtok, usdToRubRate)
-      : undefined,
-    output_price_per_mtok: data.outputUsdPerMtok !== undefined
-      ? usdPerMtokToRubPerMtok(data.outputUsdPerMtok, usdToRubRate)
-      : undefined,
+    input_price_per_mtok: data.inputRubPerMtok !== undefined
+      ? Math.round(data.inputRubPerMtok)
+      : data.inputUsdPerMtok !== undefined
+        ? usdPerMtokToRubPerMtok(data.inputUsdPerMtok, usdToRubRate)
+        : undefined,
+    output_price_per_mtok: data.outputRubPerMtok !== undefined
+      ? Math.round(data.outputRubPerMtok)
+      : data.outputUsdPerMtok !== undefined
+        ? usdPerMtokToRubPerMtok(data.outputUsdPerMtok, usdToRubRate)
+        : undefined,
     sources: ['bothub-page'],
   };
 }

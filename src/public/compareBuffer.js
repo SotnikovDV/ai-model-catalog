@@ -23,9 +23,17 @@ function writeIds(ids) {
   document.dispatchEvent(new CustomEvent(COMPARE_BUFFER_EVENT, { detail: { ids: unique } }));
 }
 
+const COMPARE_CHAT_MAX_MODELS = 8;
+
 function getCompareUrl(ids = readIds()) {
   if (!ids.length) return '/compare';
   return `/compare?ids=${ids.map(encodeURIComponent).join(',')}`;
+}
+
+function getChatUrl(ids = readIds()) {
+  const limited = [...new Set(ids.filter(Boolean))].slice(0, COMPARE_CHAT_MAX_MODELS);
+  if (!limited.length) return '/compare/chat';
+  return `/compare/chat?ids=${limited.map(encodeURIComponent).join(',')}`;
 }
 
 window.CompareBuffer = {
@@ -56,7 +64,9 @@ window.CompareBuffer = {
     writeIds(ids);
     return readIds();
   },
+  CHAT_MAX_MODELS: COMPARE_CHAT_MAX_MODELS,
   getUrl: getCompareUrl,
+  getChatUrl,
   syncFromUrl(search = window.location.search) {
     const raw = new URLSearchParams(search).get('ids');
     if (!raw) return readIds();

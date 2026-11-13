@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getDb } from '../db/db.js';
+import { recoverSyncLogs } from '../db/recoverSyncLogs.js';
 import type {
   CreateSyncLogInput,
   SyncLog,
@@ -7,6 +8,7 @@ import type {
   SyncLogSummary,
 } from '../types/syncLog.js';
 import type { SyncModelResult } from '../types/sync.js';
+import { isSqliteCorruptError } from '../utils/sqliteErrors.js';
 
 function parseJson<T>(value: string, fallback: T): T {
   try {
@@ -49,7 +51,21 @@ function rowToLog(row: Record<string, unknown>): SyncLog {
 export class SyncLogRepository {
   private db = getDb();
 
+  private withReadableLogs<T>(fn: () => T): T {
+    try {
+      return fn();
+    } catch (error) {
+      if (!isSqliteCorruptError(error)) throw error;
+      recoverSyncLogs(this.db);
+      return fn();
+    }
+  }
+
   create(input: CreateSyncLogInput): SyncLog {
+    return this.withReadableLogs(() => this.createInternal(input));
+  }
+
+  private createInternal(input: CreateSyncLogInput): SyncLog {
     const id = randomUUID();
     const summary = input.summary ?? { updated: 0, created: 0, skipped: 0, errors: 0 };
     const stmt = this.db.prepare(`
@@ -83,31 +99,37 @@ export class SyncLogRepository {
   }
 
   findRecent(limit = 50, offset = 0): SyncLogListItem[] {
-    const stmt = this.db.prepare(`
-      SELECT id, kind, status, dry_run, started_at, finished_at, duration_ms,
-             model_id, model_name, summary_json, error_message
-      FROM sync_logs
-      ORDER BY started_at DESC
-      LIMIT ? OFFSET ?
-    `);
-    const rows = stmt.all(limit, offset) as Record<string, unknown>[];
-    return rows.map(rowToListItem);
+    return this.withReadableLogs(() => {
+      const stmt = this.db.prepare(`
+        SELECT id, kind, status, dry_run, started_at, finished_at, duration_ms,
+               model_id, model_name, summary_json, error_message
+        FROM sync_logs
+        ORDER BY started_at DESC
+        LIMIT ? OFFSET ?
+      `);
+      const rows = stmt.all(limit, offset) as Record<string, unknown>[];
+      return rows.map(rowToListItem);
+    });
   }
 
   count(): number {
-    const row = this.db.prepare('SELECT COUNT(*) as count FROM sync_logs').get() as { count: number };
-    return row.count;
+    return this.withReadableLogs(() => {
+      const row = this.db.prepare('SELECT COUNT(*) as count FROM sync_logs').get() as { count: number };
+      return row.count;
+    });
   }
 
   findById(id: string): SyncLog | null {
-    const row = this.db.prepare(`
-      SELECT id, kind, status, dry_run, started_at, finished_at, duration_ms,
-             model_id, model_name, options_json, summary_json, error_message, results_json
-      FROM sync_logs
-      WHERE id = ?
-    `).get(id) as Record<string, unknown> | undefined;
+    return this.withReadableLogs(() => {
+      const row = this.db.prepare(`
+        SELECT id, kind, status, dry_run, started_at, finished_at, duration_ms,
+               model_id, model_name, options_json, summary_json, error_message, results_json
+        FROM sync_logs
+        WHERE id = ?
+      `).get(id) as Record<string, unknown> | undefined;
 
-    return row ? rowToLog(row) : null;
+      return row ? rowToLog(row) : null;
+    });
   }
 }
 

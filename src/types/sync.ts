@@ -113,6 +113,7 @@ export interface SyncResult {
   skipped: number;
   errors: number;
   results: SyncModelResult[];
+  cancelled?: boolean;
 }
 
 export interface SyncProgressSummary {

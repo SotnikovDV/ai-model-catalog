@@ -3,8 +3,13 @@ import { fileURLToPath } from 'node:url';
 import { readFileSync, existsSync } from 'node:fs';
 import { getDb } from './db.js';
 import { deduplicateModels } from './deduplicateModels.js';
-import { getProviderContainerIds, pruneProviderContainers } from './pruneModels.js';
+import {
+  getProviderContainerIds,
+  pruneBatchInferenceModels,
+  pruneProviderContainers,
+} from './pruneModels.js';
 import { inferFamily } from '../utils/inferFamily.js';
+import { recoverSyncLogs } from './recoverSyncLogs.js';
 
 const catalogPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../docs/bothub-catalog.json');
 
@@ -29,6 +34,16 @@ export function runMaintenance(): void {
       updateFamily.run(inferFamily(row.name), row.id);
     }
     console.log(`Backfilled family for ${emptyFamilyRows.length} models.`);
+  }
+
+  const syncLogsRecover = recoverSyncLogs(db);
+  if (syncLogsRecover !== 'ok') {
+    console.log(`sync_logs recovery: ${syncLogsRecover}.`);
+  }
+
+  const removedBatch = pruneBatchInferenceModels(db);
+  if (removedBatch > 0) {
+    console.log(`Removed ${removedBatch} batch-inference pseudo-model(s).`);
   }
 
   const removed = deduplicateModels(db);

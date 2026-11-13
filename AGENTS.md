@@ -26,10 +26,11 @@ src/
   types.ts, types/      — Zod-схемы (Model, AI, Sync)
   db/                   — схема, migrate, seed, утилиты
   models/               — репозитории (model, settings, syncLog)
-  routes/               — api, aiApi, pages, syncApi, singleModelSync
-  services/             — sync, AI, catalog sources, recommendations
+  routes/               — api, aiApi, pages, syncApi, listApi, bothubApi, helpApi, singleModelSync
+  services/             — sync, AI, catalog sources, recommendations, help
   utils/, data/         — helpers, fieldMeta
   views/, public/       — EJS + клиентский JS/CSS
+help/                   — пользовательская справка (Markdown + manifest.json)
 docs/                   — справочные JSON-каталоги, database-schema.md
 .docs/                  — проектная документация (требования, планы, задачи)
 data/                   — SQLite (models.db, в .gitignore)
@@ -42,12 +43,14 @@ npm run dev          # разработка
 npm run build        # сборка
 npm start            # production
 npm run db:init      # миграция + seed (если БД пуста)
+npm run db:maintenance  # дедуп, prune, backfill
+npm run db:backup    # снимок SQLite в BACKUP_DIR
 npm run typecheck    # проверка типов
 npm run db:prune     # prune по docs/bothub_models.json
 npm run clean-db     # очистка БД
 ```
 
-`migrate()` вызывается **при каждом старте** в `src/app.ts` как `ensureSchema()` — только схема и seed. Дедуп/prune/backfill — `npm run db:maintenance`.
+`migrate()` вызывается **при каждом старте** в `src/app.ts` как `ensureSchema()` — только схема и seed. Дедуп/prune/backfill — `npm run db:maintenance`. На Docker: `BACKUP_ENABLED=true`, volume `./backups`; ручной снимок — `docker compose run --rm app node dist/db/backup.js`.
 
 ## Ключевые соглашения
 

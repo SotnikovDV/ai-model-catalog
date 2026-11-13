@@ -128,6 +128,30 @@ function filterModelsForAvailability(models: Model[], options: AvailabilityOptio
     result = result.filter((m) => matchesAvailabilityStaleness(m, options.staleness));
   }
 
+  if (options.catalogAvailability) {
+    if (options.catalogAvailability === 'unchecked') {
+      result = result.filter((m) => !m.availability_status);
+    } else {
+      result = result.filter((m) => m.availability_status === options.catalogAvailability);
+    }
+  }
+
+  if (options.inferenceFilter) {
+    switch (options.inferenceFilter) {
+      case 'inference':
+        result = result.filter((m) => m.availability_status === 'inference');
+        break;
+      case 'not_inference':
+        result = result.filter((m) => m.availability_status != null && m.availability_status !== 'inference');
+        break;
+      case 'unchecked':
+        result = result.filter((m) => m.availability_response_ms == null);
+        break;
+      default:
+        break;
+    }
+  }
+
   return result;
 }
 
@@ -233,6 +257,7 @@ function buildResultSummary(results: AvailabilityCheckResult[]): AvailabilityPro
 export async function runAvailabilityCheck(
   options: AvailabilityOptions,
   onProgress?: AvailabilityProgressCallback,
+  signal?: AbortSignal,
 ): Promise<AvailabilityRunResult> {
   if (availabilityCheckInProgress) {
     throw new AvailabilityAlreadyRunningError();
@@ -243,6 +268,7 @@ export async function runAvailabilityCheck(
     const models = filterModelsForAvailability(modelRepository.findAll(), options);
     const results: AvailabilityCheckResult[] = [];
     const delayMs = options.delayMs ?? 200;
+    let cancelled = false;
 
     onProgress?.({
       type: 'start',
@@ -253,6 +279,11 @@ export async function runAvailabilityCheck(
     });
 
     for (let index = 0; index < models.length; index += 1) {
+      if (signal?.aborted) {
+        cancelled = true;
+        break;
+      }
+
       const model = models[index];
       let checkResult: AvailabilityCheckResult;
 
@@ -294,6 +325,7 @@ export async function runAvailabilityCheck(
     return {
       ...buildResultSummary(results),
       results,
+      cancelled: cancelled || undefined,
     };
   } finally {
     availabilityCheckInProgress = false;

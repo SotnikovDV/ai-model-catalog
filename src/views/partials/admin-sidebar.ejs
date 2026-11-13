@@ -27,6 +27,8 @@
           <a href="/admin#catalog" class="admin-nav-item admin-nav-item--sub<%= isActive('catalog') %>">Импорт и экспорт</a>
           <a href="/admin/sync" class="admin-nav-item admin-nav-item--sub<%= isActive('sync') %>">Обновить каталог</a>
           <a href="/admin/sync/logs" class="admin-nav-item admin-nav-item--sub<%= isActive('sync-logs') %>">Журнал обновлений</a>
+          <a href="/admin/sync#availability" class="admin-nav-item admin-nav-item--sub<%= isActive('availability') %>">Проверка доступности</a>
+          <a href="/admin/sync#evaluation" class="admin-nav-item admin-nav-item--sub<%= isActive('evaluation') %>">Автооценка моделей</a>
         </div>
       </div>
 
@@ -34,6 +36,7 @@
         <div class="sidebar-title">Справочники</div>
         <div class="admin-nav-list">
           <a href="/admin/providers" class="admin-nav-item admin-nav-item--sub<%= isActive('providers') || isActive('provider-form') ? ' active' : '' %>">Провайдеры</a>
+          <a href="/admin/lists" class="admin-nav-item admin-nav-item--sub<%= isActive('lists') || isActive('list-form') ? ' active' : '' %>">Списки</a>
           <a href="/admin#exchange-rate" class="admin-nav-item admin-nav-item--sub<%= isActive('exchange') %>">Курс валюты</a>
         </div>
       </div>

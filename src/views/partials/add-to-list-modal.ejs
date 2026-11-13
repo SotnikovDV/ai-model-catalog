@@ -1,0 +1,32 @@
+  <div class="modal-overlay" id="addToListOverlay">
+    <div class="modal sync-modal" role="dialog" aria-labelledby="addToListTitle">
+      <div class="modal-header">
+        <div class="modal-header-top">
+          <div class="modal-header-text">
+            <h2 class="modal-title" id="addToListTitle">Добавить в список</h2>
+            <p class="sync-modal-model-name" id="addToListCount">Выбрано: 0</p>
+          </div>
+          <button type="button" class="modal-close" id="addToListClose" aria-label="Закрыть">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label for="addToListSelect">Список</label>
+          <select id="addToListSelect" class="list-picker-select" style="max-width:none; margin-bottom:0;"></select>
+        </div>
+        <div class="form-field" style="margin-top:12px;">
+          <label for="addToListComment">Комментарий (общий для выбранных)</label>
+          <textarea id="addToListComment" rows="3" maxlength="5000" placeholder="Почему эти модели в списке…"></textarea>
+        </div>
+        <p id="addToListStatus" class="form-status" hidden></p>
+        <p class="form-hint" style="margin-top:8px;">
+          Нет нужного списка?
+          <a href="/admin/lists/new" id="addToListCreateLink">Создать в админке</a>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="addToListApplyBtn">Добавить</button>
+        <button type="button" class="btn btn-secondary" id="addToListCancelBtn">Отмена</button>
+      </div>
+    </div>
+  </div>

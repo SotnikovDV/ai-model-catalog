@@ -25,11 +25,26 @@ function buildAvailabilityOptions(body: AvailabilityRequestInput): AvailabilityO
     family: body.family || undefined,
     staleness: body.staleness,
     delayMs: body.delayMs,
+    catalogAvailability: body.catalogAvailability,
+    inferenceFilter: body.inferenceFilter,
   };
 }
 
 function writeSse(res: Response, event: string, data: unknown): void {
+  if (res.writableEnded || res.destroyed) return;
   res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+}
+
+function createRequestAbortSignal(res: Response): AbortSignal {
+  const controller = new AbortController();
+  const onClose = () => {
+    if (!res.writableEnded) controller.abort();
+  };
+  res.on('close', onClose);
+  res.on('finish', () => {
+    res.off('close', onClose);
+  });
+  return controller.signal;
 }
 
 function availabilityBusyResponse(res: Response): boolean {
@@ -40,6 +55,8 @@ function availabilityBusyResponse(res: Response): boolean {
 
 router.post('/stream', async (req: Request, res: Response) => {
   if (availabilityBusyResponse(res)) return;
+
+  const signal = createRequestAbortSignal(res);
 
   res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -57,11 +74,19 @@ router.post('/stream', async (req: Request, res: Response) => {
     const options = buildAvailabilityOptions(body);
     const result = await runAvailabilityCheck(options, (progress) => {
       writeSse(res, 'progress', progress);
-    });
+    }, signal);
+
+    if (signal.aborted || res.writableEnded || res.destroyed) {
+      return;
+    }
 
     writeSse(res, 'done', { data: result });
     res.end();
   } catch (error) {
+    if (signal.aborted || res.writableEnded || res.destroyed) {
+      return;
+    }
+
     if (error instanceof ZodError) {
       writeSse(res, 'error', {
         error: 'Некорректные параметры',

@@ -44,7 +44,7 @@
     const html = marked.parse(text);
     return DOMPurify.sanitize(html, {
       USE_PROFILES: { html: true },
-      ADD_ATTR: ['target', 'rel'],
+      ADD_ATTR: ['target', 'rel', 'class', 'title'],
     });
   }
 

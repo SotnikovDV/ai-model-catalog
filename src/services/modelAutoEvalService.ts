@@ -237,6 +237,7 @@ function buildResultSummary(results: EvaluationCheckResult[]): EvaluationProgres
 export async function runEvaluationCheck(
   options: EvaluationOptions,
   onProgress?: EvaluationProgressCallback,
+  signal?: AbortSignal,
 ): Promise<EvaluationRunResult> {
   if (evaluationInProgress) {
     throw new EvaluationAlreadyRunningError();
@@ -247,6 +248,7 @@ export async function runEvaluationCheck(
     const models = filterModelsForEvaluation(modelRepository.findAll(), options);
     const results: EvaluationCheckResult[] = [];
     const delayMs = options.delayMs ?? 750;
+    let cancelled = false;
 
     onProgress?.({
       type: 'start',
@@ -257,6 +259,11 @@ export async function runEvaluationCheck(
     });
 
     for (let index = 0; index < models.length; index += 1) {
+      if (signal?.aborted) {
+        cancelled = true;
+        break;
+      }
+
       const model = models[index];
       const outcome = await runModelBenchmark(model);
 
@@ -289,6 +296,7 @@ export async function runEvaluationCheck(
     return {
       ...buildResultSummary(results),
       results,
+      cancelled: cancelled || undefined,
     };
   } finally {
     evaluationInProgress = false;
